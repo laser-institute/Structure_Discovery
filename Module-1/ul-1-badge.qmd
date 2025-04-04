@@ -1,0 +1,30 @@
+---
+title: "Module 1 Badge: Discovering Patterns Without Labels"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+jupyter: python3
+bibliography: lit/references.bib
+---
+
+## Discovering Patterns Without Labels
+
+Please write a short essay in response to the following question. How could you apply unsupervised machine learning to solve (just one) real problem in your research or in practice?
+
+Imagine you're a teacher in a classroom with 100 students. Each student has taken multiple assessments, participated in discussions, and completed projects. You notice some students excel in certain tasks but struggle in others.
+
+Without prior labels or categories, how might you group students to better tailor your teaching strategies?
+
+What kind of data might you collect? How would grouping (clustering) these students help you as a teacher? What challenges might arise without predefined labels?
+
+How can unsupervised machine learning help educators make decisions?
+
+What risks or ethical considerations exist (e.g., misinterpreted groupings)?

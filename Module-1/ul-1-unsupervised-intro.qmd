@@ -1,0 +1,84 @@
+---
+title: "Module 1: Unsupervised machine learning"
+subtitle: "Introduction"
+format:
+  revealjs: 
+    slide-number: c/t
+    progress: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/LASERLogoB.png
+    theme: [default, css/laser.scss]
+    width: 1920
+    height: 1080
+    margin: 0.05
+    footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
+resources:
+  - demo.pdf
+bibliography: lit/references.bib
+editor: visual
+csl: apa/apa-6th-edition.csl
+title-slide-attributes: 
+  data-notes: 
+---
+
+## Unsupervised Learning
+
+-   A framework in machine learning where, in contrast to supervised learning, algorithms learn patterns exclusively from **unlabeled data**.
+
+<!-- -->
+
+-   Other frameworks include weak- or semi-supervision, and a small portion are considered self-supervision (but many scientists consider this unsupervised learning).
+
+## Why Unsupervised Learning?
+
+-   Discover hidden structures or data groupings
+
+<!-- -->
+
+-   Ideal for exploratory data analysis
+
+## Clustering
+
+-   Data mining technique used to form groupings
+
+## Factor Analysis
+
+-   Dimension reduction when we have lots of variables
+
+## Q-Matrix
+
+-   Knowledge inference
+
+-   Skill-item mapping or knowledge component (KC) models
+
+## This week
+
+-   We will go in depth on clustering, factor analysis, and Q-matrix methods
+
+<!-- -->
+
+-   How to use them to discover insights from data
+
+-   How to avoid obtaining meaningless findings
+
+<!-- -->
+
+-   We will cover examples of each of these three forms of unsupervised learning
+
+## What applications are you interested in?
+
+-   Who here has already used clustering, factor analysis, or Q-Matrix (or something like it)?
+
+## What applications are you interested in?
+
+-   Who here has already used clustering, factor analysis, or Q-Matrix (or something like it)?
+
+<!-- -->
+
+-   Tell us more – about the data, about the goal of your analysis
+
+## First Up
+
+Clustering

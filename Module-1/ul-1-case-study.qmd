@@ -1,0 +1,317 @@
+---
+title: "Unsupervised learning activity - student performance with ASSISTments"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+bibliography: lit/references.bib
+---
+
+# Introduction to Unsupervised Learning
+
+In this activity, we'll explore student learning patterns using **unsupervised machine learning**. We have a dataset of student interactions and performance while they used ASSISTments, a web-based homework tool that gives immediate feedback and hints to students during homework tasks. The open data set we are using can be found here: https://drive.google.com/file/d/0B_hO8cnpcIMgUGZzRnh3bHJrSjQ/view?resourcekey=0-dGtan-IMFc3IjQ749-FgQA
+
+Collected in 2015, the variables are the following:
+
+-   `user_id`: Unique student identifier
+-   `log_id`: Interaction timestamp
+-   `sequence_id`: Learning activity identifier
+-   `correct`: Whether the answer was correct (0=incorrect, 1=correct)
+
+Unsupervised machine learning is a powerful technique used to uncover hidden patterns in data without predefined labels. In this tutorial, we will explore three popular unsupervised learning methods:
+
+-   **K-Means Clustering**
+-   **Factor Analysis**
+-   **Principal Component Analysis (PCA)**
+
+Before we start, let's ensure we have the following R packages installed:
+
+```{r, warning=FALSE}
+#| label: load-data
+#| warning: false
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+install.packages(c("tidyverse", "googledrive", "cluster", "factoextra", "psych"))
+```
+
+Next, we will pull in the open-data set from Google drive and downloaded to our local machine.
+
+```{r}
+library(googledrive)
+library(tidyverse)
+
+# Deauthorize to access public files without authentication
+drive_deauth()
+
+# Specify the file ID from the Google Drive link
+file_id <- "0B_hO8cnpcIMgUGZzRnh3bHJrSjQ"
+
+# Download the file
+drive_download(as_id(file_id), path = "user_interactions.csv", overwrite = TRUE)
+```
+
+```{r}
+# Read the CSV file
+data <- read_csv("user_interactions.csv")
+
+# Display the first few rows of the dataset
+head(data)
+```
+
+## Data Preparation
+
+Next, we should check for any missing data points such that they are removed before clustering. Then we will summarize the data, such that we have the total number of attempts, total number of correct attempts, and total number of incorrect attempts per user_id (learner) and sequence_id (learning activity) to prepare it for clustering.
+
+```{r}
+# Check for missing values
+sum(is.na(data))
+```
+
+Since there are no missing data, we will proceed without removing any data point.
+
+Next, we will create features by focusing on specific variables, in which case we will count the total number of attempts (overall) and the total number of correct attempts. From these new variables, we will calculate the proportion of accuracy by dividing total correct attempts over total attempts overall.
+
+```{r}
+# Create meaningful features
+data_summary <- data %>%
+  group_by(user_id, sequence_id) %>%
+  summarise(
+    total_attempts = n(),
+    correct_attempts = sum(correct),
+    .groups = 'drop'
+  ) %>%
+  mutate(
+    incorrect_attempts = total_attempts - correct_attempts,
+    accuracy = correct_attempts / total_attempts
+  )
+head(data_summary)
+```
+
+In clustering, it is good practice to scale your numerical features so that they are on equal footing in the cluster analysis. A common scale (standardization or normalization) in k-means ensures each feature has an equal voice in determining cluster centers, leading to more balanced and meaningful clusters.
+
+```{r}
+features <- data_summary %>%
+  select(total_attempts, accuracy, incorrect_attempts) %>%
+  scale()
+head(features)
+```
+
+# K-Means Clustering
+
+This analysis groups data points based on their similarities, such that we can identify which students demonstrate similar performance metrics across learning activities. For example, you cluster students (rows) by their answer patterns across test questions (columns).
+
+Because of this, clustering groups rows and factors in ways that cut across columns, allowing us to identify underlying constructs that explain why columns (variables) may correlate. For example, a “reading comprehension” factor might influence several reading-related questions (columns).
+
+First, we need to determine the optimal number of clusters for k-means clustering, which we will do using the Elbow Method, a common practice. Let’s break it down step-by-step:
+
+This first code chunk will calculate Within-Cluster Sum of Squares (WSS), measuring the total "compactness" of clusters for different values of k (number of clusters; e.g., k = 1, 2, 3, 4, 5).
+
+For each k, we run the k-means algorithms, where k specifies the number of clusters, and nstart = 10 runs k-means 10 times with different random initializations and pick the best results (avoids suboptimal solutions). We do this because it ensures that the k-means result is stable and not sensitive to random initialization.
+
+From that process, we extract the WSS to determine how "tight" the clusters are (lower = better).
+
+```{r}
+library(factoextra)
+
+# Determine optimal number of clusters
+wss <- map_dbl(1:5, function(k) {
+  kmeans(features, centers = k, nstart = 10)$tot.withinss
+})
+wss
+```
+
+Of the values we gathered, it appears that five clusters produced the lowest WSS compared to the other k values.
+
+Next, we will plot the number of clusters against their WSS. The plot shows how WSS changes as k increases.
+
+```{r}
+tibble(k = 1:5, wss = wss) %>%
+  ggplot(aes(k, wss)) +
+  geom_line(color = "steelblue", size = 1.2) +
+  geom_point(color = "darkred", size = 3) +
+  labs(title = "Elbow Method for Optimal K",
+       x = "Number of Clusters",
+       y = "Total Within-Cluster Sum of Squares") +
+  theme_minimal()
+```
+
+Key insights we can gather from this plot is that as k increases, WSS decreases (more clusters make data points "tighter"). The "elbow" (point where the rate of decrease sharply slows) indicates the optimal number of k. This balances cluster compactness and simplicity.
+
+We can see that at three clusters, the line bends (like an elbow) indicating that this may be the best number of clusters to use based on our sample. So now we move forward with our cluster analysis by setting k=3.
+
+First, we will set a random seed to ensure reproducibility by fixing the random number generator. This is important for clustering, as K-means starts with random centroids.
+
+```{r}
+#| label: clustering
+set.seed(42)
+```
+
+Next, we run the k-means function using the features we scaled. We set our centroids to 3 and increase our nstart to 20. This will run K-means 20 times with different starting points and picks the best result (to avoid bad local minima).
+
+```{r}
+kmeans_result <- kmeans(features, centers = 3, nstart = 20)
+```
+
+This chunk of code will ensure that the cluster labels are treated as categories, and then we create a scatter plot to visualize the clusters we created better.
+
+-   X-axis (total_attempts): Total number of attempts students made.
+-   Y-axis (accuracy): Accuracy of student responses.
+-   Color (color = cluster): Each cluster is assigned a different color.
+
+```{r}
+data_summary <- data_summary %>%
+  mutate(cluster = factor(kmeans_result$cluster))
+
+ggplot(data_summary, aes(x = total_attempts, y = accuracy, color = cluster)) +
+  geom_point(size = 3) +
+  labs(title = "Student Performance Clusters",
+       x = "Total Attempts",
+       y = "Accuracy") +
+  theme_minimal()
+```
+
+Now we can visualize students incorrect attempts over their total attempts:
+
+-   X-axis (total_attempts): Total number of attempts students made.
+-   Y-axis (Incorrect): Total number of incorrect responses.
+-   Color (color = cluster): Each cluster is assigned a different color.
+
+```{r}
+ggplot(data_summary, aes(x = total_attempts, y = incorrect_attempts, color = cluster)) +
+  geom_point(size = 3) +
+  labs(title = "Student Performance Clusters",
+       x = "Total Attempts",
+       y = "Incorreact Attempts") +
+  theme_minimal()
+```
+
+::: callout-important
+### What can we gather from the visualizations of the three clusters based on students' data?
+:::
+
+```{r}
+data_summary %>%
+  group_by(cluster) %>%
+  summarise(
+    avg_attempts = mean(total_attempts),
+    avg_accuracy = mean(accuracy),
+    avg_incorrect = mean(incorrect_attempts),
+    n_students = n()
+  )
+```
+
+-   Cluster 1: students who attempt many problem but have low accuracy.
+-   Cluster 2: students with moderate attempts and moderate accuracy.
+-   Cluster 3: students with few attempts but high accuracy.
+
+::: callout-important
+### What do the clusters tell us about different student learning behaviors?
+:::
+
+::: callout-important
+### How might the number of clusters affect the interpretation?
+:::
+
+# Factor Analysis
+
+Next, we will use the same dataset but with factor analysis. Factor analysis is different from clustering because it helps identifying underlying latent variables (factors) that *explain* correlations among observed variables. In contrast, clustering groups observations into clusters based on similarity.
+
+Factor analysis can be used when you want to understand latent traits or dimensions in a dataset (e.g., underlying skills, personality traits). Clustering is used when you want to group data points into meaningful clusters. In this way, factor analysis can be used to reduce the number of variables you are working with, only capturing essential dimensions. These factors can be used as inputs into clustering (instead of raw variables), to improve the quality of clustering.
+
+Similar to clustering, we first need to determine the Optimal Number of Factors to use. Parallel Analysis is a statistical method used to determine how many factors to retain in Factor Analysis (FA). It helps prevent over-extraction (keeping too many factors) and under-extraction (keeping too few factors). What it does is:
+
+1.  Compute Eigenvalues from Real Data: The dataset’s variables are analyzed, and eigenvalues (amount of variance explained by each factor/component) are calculated.
+2.  Generate random data: A dataset of the same size is randomly generated.
+3.  Compare the real vs. random eigenvalues: If the factor's real eigenvalue is larger than the random eigenvalue, it is likely a meaningful factor and should be retained. In contrast, if the real eigenvalue is smaller or close to the random eigenvalue, then it should be ignored (likely random noise).
+
+```{r}
+library(psych)
+fa_parallel <- fa.parallel(features, fa = "fa")
+fa_parallel
+```
+
+As you can see, the results suggest that there are two factors within our dataset.
+
+::: callout-note
+The number of factors differs from the number of clusters (k=3) we found in K-means. Remember that k-means is designed to *minimize* within-cluster variability, while factor analysis is designed to *maximize* variance explained by factors (correlation-based). Even if both methods use the same variables, their purpose differences, leading to different numbers of groupings.
+:::
+
+```{r}
+factor_result <- fa(features, nfactors = 2, rotate = "varimax")
+print(factor_result$loadings)
+```
+
+The 'MR1' and 'MR2' represent latent factors. The values represent the factor loadings, which indicate how strongly each variable correlates with the factor.
+
+### Potential Factors:
+
+-   Factor 1: may represent *Engagement* (or gaming the system) (high attempts, both correct and incorrect)
+    -   Total attempts: strong positive loading
+    -   Accuracy: Weak negative loading (suggesting accuracy is not strongly associated with this factor)
+    -   Incorrect attempts: strongly positive
+-   Factor 2: may represent *Mastery* (high attempts, few incorrect attempts)
+    -   Total attempts: Weak, negative loading
+    -   Accuracy: Strong, positive loading
+    -   Incorrect attempts: Moderate to strong, negative loading
+
+The 'SS loadings' measures the total variance explained by each factor. We can see more variance is explained by factor 1 compared to factor 2, indicating the MR1 is a stronger factor. - Proportion Var: proportion of variance explained per factor. Again, we see that factor 1 has higher proportion variance explained (54%) compared to factor 2 (28%) - Cumulative Var: cumulative variance. Together, we can see that the total variance explained is 82.8% in the dataset, which is relatively good, suggesting that most of the information can be explained by the two factors (missing about 18% unexplained variance left).
+
+::: callout-important
+### What can this analysis tell us that clustering does not?
+:::
+
+::: callout-important
+### How could this analysis be used to tailor support for students?
+:::
+
+# Principal Component Analysis (PCA)
+
+PCA is a technique used to reduce the dimensionality of data, while keeping as much information as possible. PCA is more similar to FA than clustering. Specifically, it transform the original variables used into a new set of uncorrelated variables called Principal Components (PCs), which capture the most important variations within the data.
+
+You should use PCA when you want to reduce the number of variables while keeping most of the variance.
+
+In this code chunk, we calculate PCA on the same features used in k-means and factor analysis. Let's see what principal components PCA reveals.
+
+```{r}
+pca_result <- prcomp(features, scale. = TRUE)
+pca_result
+```
+
+The results should be interpreted using the Standard deviation of PCs (related to variance explained) and the rotation matrix (loadings), which shows how the original variables map onto each PC.
+
+We can interpret the standard deviation values as representing the square root of the eigenvalues. They indicate how much variance each PC captures, such that higher values indicate the PC capture more variance compared to smaller values. We can see that the first PC explains the most variance, while the second explains a moderate amount, and the last PC explains the least amount of variance.
+
+In contrast, the rotation matrix reveals how much each feature (total attempts, accuracy, total incorrect attempts) contributes to each PC. Higher absolute values (closer to 1 or -1) mean the feature has a strong influence on the PC.
+
+```{r}
+library(factoextra)
+fviz_contrib(pca_result, choice = "var", axes = 1, top = 5)  # Contributions to PC1
+```
+
+```{r}
+library(factoextra)
+fviz_contrib(pca_result, choice = "var", axes = 2, top = 5)  # Contributions to PC2
+```
+
+```{r}
+library(factoextra)
+fviz_contrib(pca_result, choice = "var", axes = 3, top = 5)  # Contributions to PC3
+```
+
+::: callout-important
+### How does PCA differ from clustering?
+:::
+
+::: callout-important
+### Why might dimensionality reduction be useful for educational data?
+:::
+
+# Conclusion
+
+We explored three unsupervised learning methods using user interaction data from ASSISTments: k-means clustering, factor analysis, and PCA. Each method offers unique insights into hidden patterns and user behaviors.
