@@ -52,7 +52,7 @@ By the end of this module, you should be able to:
 
 ## 
 
-![Structure discovery methods](images/structure_methods.png){width=70% align=center}
+![Structure discovery methods](images/mod_1_image.jpg){width=70% align=center}
 
 ## Why Unsupervised Learning?
 
