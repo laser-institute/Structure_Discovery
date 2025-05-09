@@ -85,7 +85,7 @@ By the end of this module, you should be able to:
 
 <!-- -->
 
-![Structure discovery methods](images/module_1_image_2.jpg){width=70% align=center}
+![Structure discovery methods](images/module_1_image_2.png){width=70% align=center}
 
 
 ## Q-Matrix
@@ -93,6 +93,11 @@ By the end of this module, you should be able to:
 -   Knowledge inference
 
 -   Skill-item mapping or knowledge component (KC) models
+
+<!-- -->
+
+![Structure discovery methods](images/mod_1_image.jpg){width=70% align=center}
+
 
 ## This week
 
@@ -106,7 +111,7 @@ By the end of this module, you should be able to:
 
 <!-- -->
 
--   We will cover examples of each of these three forms of unsupervised learning in the codealong
+-   We will cover examples of each of these three forms of unsupervised learning in the code along
 
 ## What applications are you interested in?
 
