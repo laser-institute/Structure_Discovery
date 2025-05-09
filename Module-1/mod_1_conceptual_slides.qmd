@@ -64,7 +64,11 @@ By the end of this module, you should be able to:
 
 <!-- -->
 
--   Data preparation for supervised learning:
+-   Data preparation for supervised learning
+
+<!-- -->
+
+-   Reduce dimensionality (simplify data while retaining meaning)
 
 
 ## Clustering
