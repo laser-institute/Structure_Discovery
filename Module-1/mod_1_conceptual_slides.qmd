@@ -16,7 +16,7 @@ format:
     footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
 resources:
   - demo.pdf
-bibliography: lit/references.bib
+bibliography: references.bib
 editor: visual
 csl: apa/apa-6th-edition.csl
 title-slide-attributes: 
@@ -91,13 +91,13 @@ By the end of this module, you should be able to:
 
 <!-- -->
 
--   How to use them to discover insights from data
+-   How to use them to discover insights from educational data
 
 -   How to avoid obtaining meaningless findings
 
 <!-- -->
 
--   We will cover examples of each of these three forms of unsupervised learning
+-   We will cover examples of each of these three forms of unsupervised learning in the codealong
 
 ## What applications are you interested in?
 
