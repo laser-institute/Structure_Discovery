@@ -83,7 +83,9 @@ By the end of this module, you should be able to:
 
 -   Dimension reduction when we have lots of variables
 
-![Structure discovery methods](images/mod_1_image_2.jpg){width=70% align=center}
+<!-- -->
+
+![Structure discovery methods](images/module_1_image_2.jpg){width=70% align=center}
 
 
 ## Q-Matrix
