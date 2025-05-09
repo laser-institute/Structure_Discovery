@@ -1,0 +1,23 @@
+---
+title: "Module 1: Readings and Reflections"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+bibliography: lit/references.bib
+---
+
+# Structure Discovery
+The overall objectives are to introduce you to learning analytics and the different purposes of learning analytics in educational research across different STEM topics.
+An important area we will focus on is structure discovery. Once you have read through this chapter [@baker2014learning], especially upon gaining an understanding of structured discovery in relation to other approaches (e.g., relation mining), reflect on the questions presented below:
+
+1) How might structure discovery be useful in your own research and/or teaching practice compared to other approaches? Please compare structure discovery to 1 other learning analytics approach.
+2) Select 1 approach in structure discovery discussed in [@baker2014learning]'s chapter and reflect on whether it would be relevant and/or helpful for answering questions you have in research and/or practice.
+
