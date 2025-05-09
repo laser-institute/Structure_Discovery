@@ -75,9 +75,16 @@ By the end of this module, you should be able to:
 
 -   Data mining technique used to form groupings
 
+<!-- -->
+
+![Structure discovery methods](images/mod_1_image.jpg){width=70% align=center}
+
 ## Factor Analysis
 
 -   Dimension reduction when we have lots of variables
+
+![Structure discovery methods](images/mod_1_image_2.jpg){width=70% align=center}
+
 
 ## Q-Matrix
 
