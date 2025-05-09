@@ -23,13 +23,36 @@ title-slide-attributes:
   data-notes: 
 ---
 
+## Welcome
+
+Welcome to the **LASER Institute**!
+
+- This module introduces structure discovery in learning analytics.
+- Let’s explore key techniques and tools.
+
+## Learning Objectives
+
+By the end of this module, you should be able to:
+
+- Define structure discovery in the context of learning analytics.
+- Identify methods such as clustering and factor analysis.
+- Apply structure discovery to educational data.
+
 ## Structure Discovery
 
 -   A framework in unsupervised machine learning where, in contrast to supervised learning, algorithms learn patterns exclusively from **unlabeled data**.
 
 <!-- -->
 
+-   These models explore the data to discover hidden patterns, structures, and relationships on their own. 
+
+<!-- -->
+
 -   Other frameworks include weak- or semi-supervision, and a small portion are considered self-supervision (but many scientists consider this unsupervised learning).
+
+## 
+
+![Structure discovery methods](images/structure_methods.png){width=70% align=center}
 
 ## Why Unsupervised Learning?
 
@@ -38,6 +61,11 @@ title-slide-attributes:
 <!-- -->
 
 -   Ideal for exploratory data analysis
+
+<!-- -->
+
+-   Data preparation for supervised learning:
+
 
 ## Clustering
 
@@ -55,7 +83,7 @@ title-slide-attributes:
 
 ## This week
 
--   We will go in depth on clustering, factor analysis, and Q-matrix methods
+-   We will go in-depth on clustering, factor analysis, and Q-matrix methods
 
 <!-- -->
 
