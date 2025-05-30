@@ -1,0 +1,293 @@
+---
+title: "Module 7: Unsupervised machine learning"
+subtitle: "Clustering Analysis"
+format:
+  revealjs: 
+    slide-number: c/t
+    progress: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/LASERLogoB.png
+    theme: [default, css/laser.scss]
+    width: 1920
+    height: 1080
+    margin: 0.05
+    footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
+resources:
+  - demo.pdf
+bibliography: lit/references.bib
+editor: visual
+csl: apa/apa-6th-edition.csl
+title-slide-attributes: 
+  data-notes: 
+---
+
+## Clustering
+
+-   A type of **Structure Discovery** algorithm
+
+-   This type of method is also referred to as **Dimensionality Reduction**, based on a common application
+
+## Clustering
+
+-   You have a large number of data points
+
+-   You want to find what structure there is among the data points
+
+-   You don’t know anything a priori about the structure 
+
+-   Clustering tries to find data points that “group together”
+
+## Trivial Example
+
+-   Let’s say your data has two variables
+
+    -   Number of video interactions
+
+    -   Unitized Time
+
+\
+Note: clustering works for (and is effective in)\
+large feature spaces
+
+## Example
+
+![](images/clipboard-1931002701.png)
+
+## Example
+
+![](images/clipboard-2076597479.png)
+
+## Not the only clustering algorithm
+
+-   Just the simplest
+
+-   We’ll talk about fancier ones soon
+
+## How did we get these clusters?
+
+-   First we decided how many clusters we wanted: 5
+
+    -   How did we do that? More on this in just a few slides.
+
+-   We picked starting values for the “centroids” of the clusters…
+
+    -   Usually chosen randomly
+
+    -   Sometimes there are good reasons to start with specific initial values…
+
+## Example
+
+![](images/clipboard-3450141135.png)
+
+## Then…
+
+-   We classify every point as to which centroid it’s closest to
+
+    -   This defines the clusters
+
+    -   Typically visualized as a voronoi diagram
+
+## Example
+
+![](images/clipboard-3370150073.png)
+
+## Then…
+
+-   We re-fit the centroids as the center of the points in each cluster
+
+## Result
+
+## Then...
+
+-   Repeat the process until the centroids stop moving
+
+-   “Convergence”
+
+## Result
+
+![](images/clipboard-2269082755.png)
+
+## Then..
+
+![](images/clipboard-1578864945.png)
+
+## Result
+
+![](images/clipboard-3933824623.png)
+
+## Example
+
+![](images/clipboard-3659919062.png)
+
+## Example
+
+![](images/clipboard-374188952.png)
+
+## Example
+
+![](images/clipboard-408782288.png)
+
+## Result
+
+![](images/clipboard-1258975428.png)
+
+## Result
+
+![](images/clipboard-1258975428.png)
+
+## Result
+
+![](images/clipboard-2077223518.png)
+
+## What happens?
+
+-   What happens if your starting points are in strange places?
+
+-   Not trivial to avoid, considering the full span of possible data distributions
+
+## One Solution
+
+-   Run several times, involving different starting points
+
+-   cf. Conati & Amershi (2009)
+
+::: columns
+::: {.column width="50%"}
+![](images/clipboard-1313312322.png){width="272"}
+:::
+
+::: {.column width="50%"}
+:::
+:::
+
+## Exercises
+
+-   Take the following examples
+
+-   And execute k-means for them
+
+-   Do this by hand…
+
+-   Focus on getting the concept rather than the exact right answer…
+
+-   (Solutions are by hand rather than actually using code, and are not guaranteed to be perfect)
+
+## Questions? Comments?
+
+## Exercise
+
+![](images/clipboard-1874222503.png)
+
+## Solution Step 1
+
+![](images/clipboard-2161112867.png)
+
+## Solution Step 2
+
+![](images/clipboard-3066135220.png)
+
+## Solution Step 3
+
+![](images/clipboard-3064832346.png)
+
+## Solution Step 4
+
+![](images/clipboard-747237576.png)
+
+## Solution Step 5
+
+![](images/clipboard-502149451.png)
+
+## No points switched -- convergence
+
+![](images/clipboard-1477530102.png)
+
+## Notes
+
+-   K-Means did pretty reasonable here
+
+## Exercise
+
+![](images/clipboard-3148618175.png)
+
+## Solution Step 1
+
+![](images/clipboard-3617594761.png)
+
+## Solution Step 2
+
+![](images/clipboard-3929420004.png)
+
+## Solution Step 3
+
+![](images/clipboard-2471008245.png)
+
+## Solution Step 4
+
+![](images/clipboard-2679724777.png)
+
+## Solution Step 5
+
+![](images/clipboard-2388608535.png)
+
+## Notes
+
+-   The bottom-right cluster is actually empty!
+
+-   There was never a point where that centroid was actually closest to any point
+
+## Exercise
+
+## Solution Step 1
+
+![](images/clipboard-3291472313.png)
+
+## Solution Step 2
+
+![](images/clipboard-2099743122.png)
+
+## Solution Step 3
+
+![](images/clipboard-526636562.png)
+
+## Solution Step 4
+
+![](images/clipboard-1863268490.png)
+
+## Solution Step 5
+
+![](images/clipboard-3596438138.png)
+
+## Solution Step 6
+
+![](images/clipboard-2086868136.png)
+
+## Solution Step 7
+
+## ![](images/clipboard-200724290.png)
+
+## Approximate Solution
+
+![](images/clipboard-148488759.png)
+
+## Notes
+
+-   Kind of a weird outcome
+
+-   By unlucky initial positioning
+
+    -   One data lump at left became three clusters
+
+    -   Two clearly distinct data lumps at right became one cluster
+
+## Questions? Comments?
+
+## Exercise
+
+![](images/clipboard-1427759649.png)
+
+## Exercise
+
+![](images/clipboard-825312414.png)

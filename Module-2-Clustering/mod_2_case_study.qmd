@@ -1,0 +1,216 @@
+---
+title: "Module 2 case review activity: Clustering"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+bibliography: lit/references.bib
+---
+
+In our case paper review, [@rodriguez2021using] examined a fully online Chemistry course with a sample of 312 students (70% were first-generation college students). Data were gathered on students' lecture video clickstream data via learner management system, where they created two self-regulated learning (SRL) variables:
+
+1)  lecture video completion: Proportion of the assigned lecture video students visited across 4 modules (before the due date) and
+2)  time management: proportion of late video visits (as the module due date neared) across 4 modules.
+
+The learning outcome was measured using the students' final grade in the course. Their first research question,
+
+*Does clustering clickstream measures of SRL reveal meaningful learning patterns?*
+
+was answered using K-means clustering, which we will replicate in our case review by generating random data using the same data structure and variables as [@rodriguez2021using]. The authors used a combination of cluster validation techniques (which we have yet to cover extensively) to identify the number of centroids to use. Specifically, they used 1) elbow plot and 2) Bayesian Inference Criterion (BIC).
+
+The elbow plot evaluates the proportion of variance explained based on the number of clusters, and the authors evaluated the point at which including an additional centroid (K) explained little to no variance (in which case the number of K stopped increasing). In contrast, BIC is a statistical metric used to evaluate how well a model fits the data while penalizing complexity (i.e., the number of clusters). It helps determine the optimal number of clusters by balancing goodness-of-fit and model simplicity.
+
+First, we must ensure we have the correct packages properly installed and loaded.
+
+```{r}
+if(!require("tidyverse")){install.packages("tidyverse")}
+library(tidyverse)
+if(!require("cluster")){install.packages("cluster")}
+library(cluster)
+if(!require("factoextra")){install.packages("factoextra")}
+library(factoextra)
+if(!require("mclust")){install.packages("mclust")}
+library(mclust)
+```
+
+```{r, include=FALSE}
+set.seed(42)
+
+# Number of students
+N <- 312
+
+# For demonstration, let's do 3 equal groups of size N/3 each
+cluster_labels <- rep(1:3, each = N/3)
+
+# We'll store final results here
+weighted_proportion_visits <- numeric(N)
+weighted_proportion_late_visits <- numeric(N)
+
+for (i in 1:N) {
+  # Pick the sub-pop for this student
+  grp <- cluster_labels[i]
+  
+  # We define distinct parameter ranges for each group
+  if (grp == 1) {
+    # Low usage
+    # Weighted proportion visits around 0.2
+    weighted_proportion_visits[i] <- runif(1, 0.1, 0.3) 
+    weighted_proportion_late_visits[i] <- runif(1, 0.0, 0.2) 
+  } else if (grp == 2) {
+    # Medium usage
+    weighted_proportion_visits[i] <- runif(1, 0.4, 0.6)
+    weighted_proportion_late_visits[i] <- runif(1, 0.2, 0.4)
+  } else {
+    # High usage
+    weighted_proportion_visits[i] <- runif(1, 0.7, 0.9)
+    weighted_proportion_late_visits[i] <- runif(1, 0.5, 0.8)
+  }
+}
+```
+
+Next, we will generate a random data set with a set seed.
+
+```{r}
+# Generate demographic and prior achievement data
+gender <- sample(c("Man", "Woman"), N, replace = TRUE)
+first_gen <- sample(c("Non-First-Gen", "First-Gen"), N, replace = TRUE)
+low_income <- sample(c("Not Low Income", "Low Income"), N, replace = TRUE)
+URM <- sample(c("Non-URM", "URM"), N, replace = TRUE)
+SAT_scores <- pmax(pmin(round(rnorm(N, 1613.33, 132.94)), 2040), 1260)
+
+# Generate final course grades (1 = F to 13 = A+)
+final_grades <- pmax(pmin(round(rnorm(N, 9.34, 2.32)), 13), 1)
+
+
+student_data <- data.frame(
+  Student_ID = 1:N,
+  Gender = gender,
+  First_Gen = first_gen,
+  Low_Income = low_income,
+  URM = URM,
+  SAT_Score = SAT_scores,
+  Proportion_Video_Visits = weighted_proportion_visits,
+  Proportion_Late_Video_Visits = weighted_proportion_late_visits,
+  Final_Grade = final_grades,
+  True_Cluster = cluster_labels  # store the actual cluster assignment
+)
+
+head(student_data)
+```
+
+The authors reported that they scaled their data, and so we will do the same in the code chunk below.
+
+::: callout-important
+### Question: Similar to Case study 1 in our K-means analysis, why is it good practice to scale data before clustering? What are the possibly implications of the findings if we do not scale numerical data before clustering?
+:::
+
+```{r}
+# Select and scale the two SRL clickstream measures
+clickstream_data <- student_data %>%
+  select(Proportion_Video_Visits, Proportion_Late_Video_Visits) %>%
+  scale()
+
+head(clickstream_data)
+psych::describe(clickstream_data)
+```
+
+In this case, we center an scale the columns, making each have a mean of 0 and SD of 1.
+
+Next, the authors reported that they chose a grouping of K=4 with 24 initial random centroids. Let's think about this more before moving forward.
+
+::: callout-important
+### Question: Why do you think the authors selected K=4 instead of another value? How might choosing a different K affect the interpretation of student learning behaviors?
+:::
+
+::: callout-important
+### Question: What assumptions are being made by forcing the model to group students into exactly 4 clusters?
+:::
+
+Now we will run the k-means algorithm in the code chunk below.
+
+```{r}
+# Run k-means clustering with K = 4 and 24 initial random centroids
+kmeans_result <- kmeans(clickstream_data, centers = 4, nstart = 24)
+kmeans_result
+```
+
+Take note of the clustering output. The cluster sizes appear to be well distributed into 4 groups: 104, 54, 104, and 50.
+
+Another important measure is the within-cluster sum of squares (WCSS), which indicates how tightly grouped the data points are within each cluster. It is the sum of squared distances between each data point and its cluster centroid. Clusters with higher WCSS values are more dispersed (spread), while those with lower WCSS are more tightly packed (compact). This means:
+
+-   Cluster 1 has a WCSS of 12.5 → The data points in this cluster collectively deviate from their centroid by 12.5.
+-   Cluster 2 has a WCSS of 3.88 → This smaller value indicates the data points in this cluster are closer together relative to their centroid; hence it's a more compact cluster.
+-   Cluster 3 has a WCSS of 12.18 → Similar to Cluster 1, a larger WCSS means the points in this cluster are more spread out, increasing the total squared distance.
+-   Cluster 4 has a WCSS of 4.78 → Another relatively compact cluster, meaning most of its data points lie closer to their centroid (and to one another).
+
+We should also refer to the between-cluster sum of squares (between_SS). 'between_SS' measures the variance between clusters -- i.e., how far apart cluster centroids are. In contrast, the total sum of squares (total_SS) measures the total variance in the dataset before clustering. From these values, we can calculate the degree of variance explained by the four identified clusters by dividing between_SS over total_SS = 94.6%, in this case.
+
+What does this tell us? We know that 95% of the total variance is explained by the clusters, meaning the clustering model does a *great* job of separating groups using the two SRL variables we have... A higher percentage (e.g., 80-90%) indicates strong separation between clusters compared to lower total_SS.
+
+::: callout-important
+### Question: What percent variance explained was reported by [@rodriguez2021using]? Are the clusters well separated? Are some clusters too dispersed?
+:::
+
+## Elbow Method
+
+Next, we implement the elbow method to determine the optimal number of centroids.
+
+Unfortunately, the authors did not report the range of K they used to evaluated changes in variance explained by different K values. However, we can still apply this method by using the Elbow Method, with a wider range of centroids. As a result, we apply a minimum of 2 and a maximum of 14, a range that has been proposed in prior studies as suitable to identifying the optimal number of K [@ferguson2015examining] [@kizilcec2013deconstructing].
+
+```{r}
+# Elbow Method
+fviz_nbclust(clickstream_data, kmeans, method = "wss") +
+  ggtitle("Elbow Method for Optimal K")
+```
+
+An elbow plot (or scree plot) is a visual method used to determine the optimal number of clusters. It helps identify the point at which adding more clusters no longer significantly reduces the variance within clusters.
+
+Similar to [@rodriguez2021using], we found that the optimal number of K is 4.
+
+Next, we will apply BIC using the 'mclust' library.
+
+```{r}
+# Bayesian Information Criterion (BIC) for k-means
+bic_results <- Mclust(clickstream_data, G = 1:6) # Test clusters from 1 to 6
+print(bic_results$BIC)
+```
+
+BIC values are negative because they represent a log-likelihood function with penalties for complexity. Higher (less negative) BIC is better (i.e., -816 is better than -820).
+
+Models EII,6 and EII,4 are tied as the best models (both have the highest BIC scores).
+
+Let's reflect on our case review paper results.
+
+"Our data showed this occurred between clusters K = 3 and K = 4. The BIC criterion generated 3 choice models, two of which K = 4 (VVI,4 = -1428.62, VVE,4 = -1433.36, VVI,5 = -1439.32)." (p. 317) [@rodriguez2021using].
+
+Our results suggest that 4 or 6 clusters may best fit our data.
+
+## What can we conclude?
+
+Base on the graph, there are likely 4 clusters in our data.
+
+```{r}
+# Visualize clustering results
+fviz_cluster(kmeans_result, data = clickstream_data, geom = "point") +
+  ggtitle("K-Means Clustering of Clickstream Measures (K = 4)")
+
+# Print cluster means for interpretation
+print(aggregate(clickstream_data, by = list(Cluster = kmeans_result$cluster), mean))
+```
+
+::: callout-important
+### Question: What can we see regarding the distinction of the clusters in the visualization?
+:::
+
+Make note of data points within clusters that are *close* to data points from other clusters. Clusters 2 and 4 are nearly touching at some points.
+
+::: callout-important
+### Question: What kind of interpretation might we make about the groupings regarding students' SRL?
+:::
