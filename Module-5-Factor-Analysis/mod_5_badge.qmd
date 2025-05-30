@@ -1,0 +1,60 @@
+---
+title: "Module 5 Badge Activity"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+jupyter: python3
+bibliography: lit/references.bib
+---
+
+Imagine you’ve just collected survey data using an existing multi-item scale (like the Academic Motivation Scale). Based on your goals and what you know about your scale:
+
+\
+
+1.  Which type of factor analysis should will you use — Exploratory Factor Analysis (EFA) or Confirmatory Factor Analysis (CFA)? Or both?
+
+\
+\
+\
+
+2.  Clearly justify your choice: Are you exploring an unknown structure, or testing a theory-based structure?
+
+\
+\
+\
+\
+
+3.  What are the key steps you would follow in your chosen analysis? Describe how you would prepare your data (e.g., ordinal items → polychoric correlations, missing data handling, etc.)
+
+\
+\
+\
+
+4.  State how many factors you expect (and why), or how you’d determine that (e.g., parallel analysis, theoretical basis).
+
+\
+\
+\
+
+5.  Explain how you would interpret the factor loadings — what values are acceptable, what would raise concern?
+
+\
+\
+\
+
+6.  Explain how factor analysis is different than clustering analysis. When would you choose to do one over the other?
+
+\
+\
+\
+\
+\
+\

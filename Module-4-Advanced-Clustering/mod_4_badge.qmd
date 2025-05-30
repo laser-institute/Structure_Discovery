@@ -1,0 +1,56 @@
+---
+title: "Module 4 Badge Activity"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+jupyter: python3
+bibliography: lit/references.bib
+---
+
+In this activity, you will reflect on the use of advanced clustering methods, such as Gaussian Mixture Models (GMM) and other techniques, to analyze educational data. Please provide a thoughtful response to the following questions.
+
+\
+\
+
+1.  What are some potential challenges in applying clustering methods to educational datasets? How might issues like small datasets or noisy (high variance) measurements affect clustering results?
+
+\
+\
+\
+\
+\
+\
+\
+
+2.  What are some advantages of using probabilistic clustering methods (like GMM) over categorical clustering techniques (like K-means) when analyzing educational data?
+
+\
+\
+\
+\
+\
+\
+
+3.  Imagine you are an instructor and you are using ASSISTments to administer homework assignments to your class of students. You want to assess how well students understood the lectures of the week to prepare for the next lecture. You gather the following variables:
+
+\
+
+-   Correct answers
+
+-   Number of attempts
+
+-   Number of incorrect attempts
+
+\
+
+```         
+You want to identify meaningful groups using these variables using clustering. Select a clustering method and explain your justification for the method of choice. This explanation should expand on the advantages and limitations of the method of choice. Discuss how you will then evaluate the confidence in your model’s clustering results by selecting a validation method (e.g., entropy, elbow, silhouette, etc.).
+```

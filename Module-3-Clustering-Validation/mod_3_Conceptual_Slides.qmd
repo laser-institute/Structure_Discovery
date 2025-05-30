@@ -1,0 +1,326 @@
+---
+title: "Module 3: Clustering Validation"
+subtitle: ""
+format:
+  revealjs: 
+    slide-number: c/t
+    progress: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/LASERLogoB.png
+    theme: [default, css/laser.scss]
+    width: 1920
+    height: 1080
+    margin: 0.05
+    footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
+resources:
+  - demo.pdf
+bibliography: lit/references.bib
+editor: visual
+csl: apa/apa-6th-edition.csl
+title-slide-attributes: 
+  data-notes: 
+---
+
+## How do we choose?
+
+-   A value for k
+
+-   Which set of clusters to use, after 17 randomized restarts
+
+## First…
+
+-   Let’s take the case where we have 17 randomized restarts, each involving the same number of clusters
+
+## Distortion (Also called Mean Squared Deviation)
+
+-   Take each point P
+
+-   Find the centroid of P’s cluster C
+
+-   Find the distance D from C to P
+
+-   Square D to get D’
+
+\
+
+-   Sum all D’ to get Distortion
+
+::: notes
+The metric that is often used to select the best number of clusters. 
+:::
+
+## Distance
+
+-   Usually Euclidean distance
+
+-   Distance from A to B in two dimensions
+
+$\sqrt{(A_{x}-B_{x})^{2}-(A_{y}-B_{y})^{2}}$
+
+::: notes
+There are a lot of distance functions that you could use. For example, there is the manhatten distance. But most people do the standard distance metric, euclidean distance. 
+
+\
+
+You take each point and you take the distance of that point to the centroid, on each dimension, and then you square each. Then you add all of those squares together and then you take the square root of the whole thing.
+:::
+
+## Distance
+
+-   Euclidean distance can be computed for an arbitrary number of dimensions
+
+$\sqrt{\sum_{}^{}(A_{i}-B_{i})^{2}}$
+
+::: notes
+And that generalizes. You can compute the Euclidean distances for an arbitrary number of dimensions and all it is the distance between the points in the centroid among each of the dimensions, squared, and added together and then square rooted.
+:::
+
+## Distortion
+
+-   Works for choosing between randomized restarts
+
+-   Does not work for choosing cluster size
+
+## Why not?
+
+-   More clusters almost always leads to smaller Distortion
+
+    -   Distance to nearest cluster center should almost always be smaller with more clusters 
+
+    -   It only isn’t when you have bad luck in your randomization
+
+::: notes
+When you have more centers, there’s going to be some center every point is probably closer to, unless they all end up in one place in which case you don’t really have more center anyways.
+:::
+
+## Cross-validation can’t solve this problem
+
+-   A different problem than prediction modeling
+
+    -   You’re not trying to predict specific values
+
+    -   You’re determining whether **any** center is close to a given point
+
+\
+
+-   More clusters cover the space more thoroughly
+
+\
+
+-   So Distortion will often be smaller with more clusters, even if you cross-validate
+
+## An Example 
+
+-   14 centers, ill-chosen (you might get this by conducting cross-validation with too many centers)
+
+\
+
+-   2 centers, well-chosen (you might get this by conducting cross-validation with not enough centers)
+
+##  Example
+
+![](images/clipboard-2594856238.png)
+
+::: notes
+Here is the 14 point case and you can see that the centroids have nothing to do with the data points really.
+:::
+
+## Example
+
+![](images/clipboard-3344786038.png)
+
+::: notes
+And here is the example with the two centroids. And here you can see in this case, there is kind of two major groupings, and this one is kind of capturing both of them. But there really isn’t enough centroids to see how they cluster, but this is probably about as good as you can do.
+:::
+
+## An Example
+
+-   The ill-chosen 14 centers will achieve a better Distortion than the well-chosen 2 centers 
+
+::: notes
+In fact, those ill-chosen 14 centers are going to achieve a better distortion than the well-chosen two centers because even though the 14 centers had nothing really to do with the actual points, they are closer and they fill the space better.
+:::
+
+## Solution
+
+-   Penalize models with more clusters, according to how much extra fit would be expected from the additional clusters
+
+\
+
+-   You can use the Bayesian Information Criterion (BIC) or Akaike Information Criterion (AIC) to do this
+
+    -   Not just the same as cross-validation for this problem!
+
+::: notes
+So the solution is, rather than using cross-validation, penalize models with more clusters according to how much extra fit you’d extract from the additional clusters.
+:::
+
+##  Using an Information Criterion
+
+-   Assess how much fit would be spuriously expected from a random N centroids (without allowing the centroids to move)
+
+-   Assess how much fit you actually had
+
+\
+
+-   Find the difference
+
+::: notes
+So the question is, how much more fit did you get than you’d expect just from having n random centroids, just randomly distriuted? And
+:::
+
+## So how many clusters?
+
+## Try several values of k
+
+\
+
+-   Find “best-fitting” set of clusters for each value of k
+
+\
+
+-   Choose k with best value of BIC (or AIC)
+
+\
+\
+\
+Try several values of k
+
+\
+
+-   Find “best-fitting” set of clusters for each value of k
+
+\
+
+-   Choose k with best value of BIC (or AIC)
+
+## Silhouette Analysis 
+
+An increasingly popular method for determining how many clusters to use
+
+@rousseeuw1987silhouettes , @kaufman2009finding
+
+## Silhouette Analysis
+
+-   Silhouette plot shows how close each point in a cluster is to points in adjacent clusters
+
+\
+
+-   Silhouette values scaled from -1 to 1
+
+    -   Close to +1: Data point is far from adjacent clusters
+
+    -   Close to 0: Data point is at boundary between clusters
+
+    -   Close to -1: Data point is closer to other cluster than its own cluster 
+
+## Silhouette Formula
+
+For each data point i in Cluster C
+
+Find C\* = cluster which has the lowest average distance of i from all the data points in cluster c\*
+
+A(i) = average distance of i from all other data points in same cluster C
+
+B(i) = average dissimilarity of i from all other data points in cluster C\*
+
+$S(i) = \frac{B(i)-A(i))}{max({A(i),B(i))}}$
+
+::: notes
+So for data point i, we take the average distance from all the other data points in the same cluster C. We then find C\* which is the cluster at the lowest average dstiance of I from all other data points in C\*. So in other words, aside from point owned cluster, what cluster is closest to it? That’s C\*. And then we take the average distance of I from all the data points and we’re basically going to say how much is a data point closest to its own cluster, compared to another cluster, And again if a data point is closer to another cluster than its own cluster, you’ve got a problem.
+:::
+
+## Example from 
+
+\
+http://scikit-learn.org/ stable/auto_examples/cluster/ plot_kmeans_silhouette_analysis.html
+
+::: notes
+The example I’m about to show you comes from this webpage.
+:::
+
+## Good clusters
+
+![](images/clipboard-2310985642.png)
+
+::: notes
+So here are a couple of good clusters. You can see on the graph on the left, each data point, the x-axis represents how good the value for that data point is. All the green ones, that the first cluster, what their goodness is, and the black cluster, that’s what their goodness is. 
+
+\
+
+And you can see over here on the right that in fact, the green and black clusters are pretty good. Green’s way over on the top right, and black is kind of down the bottom left.  And we have points that in general have a good silhouette value. The vertical line is actually the average silhouette value. 
+:::
+
+## Good clusters
+
+![](images/clipboard-4183183316.png)
+
+::: notes
+So what if we have four clusters, the yellow, green, blue and black. You can imagine, you can see blue is the best on the left. That’s because blue is pretty far from everything else. Black, yellow, and green are sort of worse, right on the fringes. But you get a good average silhouette value, which is the red vertical line.
+:::
+
+## Bad clusters
+
+![](images/clipboard-2620794458.png)
+
+::: notes
+Here’s an example of bad clusters. We now have yellow-green, blue, and black. Well blue is pretty good, but the black kind of has two sub-clusteres that end up being very close to yellow-green. 
+:::
+
+## Bad clusters
+
+![](images/clipboard-680328035.png)
+
+::: notes
+Here’s another example of bad clustering. In this case, we’ve actually split the bottom cluster into two, and you can see on the left, orange and I guess that’s teal, do quite poorly. They have a lot of points that are very close to the other cluster, and as a result, we get a bad average value.
+:::
+
+## Bad clusters
+
+![](images/clipboard-381110455.png)
+
+::: notes
+And finally, if we split it even further, we do worse still.
+:::
+
+## So in this example
+
+-   2 and 4 clusters are reasonable choices
+
+-   3, 5, and 6 clusters are not good choices
+
+::: notes
+So in this example, 
+:::
+
+## Eigengap
+
+-   In spectral clustering (which we haven’t talked about yet) 
+
+\
+
+-   There is also the option of choosing the number of clusters that maximizes the eigengap (difference between consecutive eigenvalues)
+
+::: notes
+Eigenvalues is how you represent your clusters.
+:::
+
+## Alternate approach
+
+-   One question you should ask when choosing the number of clusters is – why am I conducting cluster analysis?
+
+\
+
+-   If your goal is to just discover qualitatively interesting patterns in the data, you may want to do something simpler than using an information criterion or silhouette analysis
+
+    -   Add clusters until you don’t get interesting new clusters anymore
+
+::: notes
+Finally, one last alternative approach. 
+:::
+
+## Next lecture
+
+## Reference

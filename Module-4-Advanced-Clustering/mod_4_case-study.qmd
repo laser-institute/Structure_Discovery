@@ -1,0 +1,321 @@
+---
+title: "Module 4 case review activity: Advanced Clustering"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+bibliography: lit/references.bib
+---
+
+In this case review activity, we will apply the same methods applied by the case review paper [@scrucca2023introduction]. We will use the data set and code provided in the paper, which consists of data collected from primary school students in northern Spain. Data were gathered on students' school engagement, self-regulation, and academic performance through the use of various validated measures. The school engagement measure (SEM) was employed to assess students' engagement, while their self-regulation was evaluated with the self-regulation strategy inventory—self-report. The measure for academic achievement was based on the students’ self-reported grades in Spanish and mathematics, which were rated on a scale of 1 to 5.
+
+We will use these data to identify "soft" clusters of students based on their engagement and self-regulation using an advanced clustering technique called Gaussian mixture modeling (GMM). Unlike k-means clustering, which groups observations based on distance, GMM is a model-based clustering approach that assumes data come from a mixture of probability distributions. Each cluster corresponds to a different probability distribution (often a multi-dimensional Gaussian, e.g., circle, sphere, etc., but could be others).
+
+When a data point is assigned to a cluster, the assumptions is that it fits well within that cluster's probability distribution. As we have discussed, compared to other clustering methods, a key advantage of GMM is its ability to apply model selection criteria and inferential procedures to evaluate and interpret the results (as opposed to silhouette or elbow methods).
+
+To start, we should ensure that we have the appropriate packages installed.
+
+```{r}
+if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
+library(ggplot2)
+if (!require("ggridges")) install.packages("ggridges", dependencies = TRUE)
+library(ggridges)
+if (!require("mclust")) install.packages("mclust", dependencies = TRUE)
+library(mclust)
+if (!require("rio")) install.packages("rio", dependencies = TRUE)
+library(rio)
+if (!require("tidyverse")) install.packages("tidyverse", dependencies = TRUE)
+library(tidyverse)
+```
+
+Then, we read and view the data set from an online comma-separated-value (CSV) file.
+
+```{r}
+# read the data
+data <- import("https://raw.githubusercontent.com/sonsoleslp/labook-data/main/3_engSRLach/Manuscript_School%20Engagment.csv", sep = ";")
+head(data)
+```
+
+We will select the variables we are interested in clustering. In this case, we will select behavioral, cognitive, and emotional engagement as the authors have done.
+
+```{r}
+# select the variables to be analyzed
+vars <- c("PRE_ENG_COND", "PRE_ENG_COGN", "PRE_ENG_EMOC")
+x <- select(data, all_of(vars)) |>
+as_tibble() |>
+rename("BehvEngmnt" = "PRE_ENG_COND", # Behavioral engagement
+"CognEngmnt" = "PRE_ENG_COGN", # Cognitive engagement
+"EmotEngmnt" = "PRE_ENG_EMOC") # Emotional engagement
+```
+
+Print the data set to ensure the correct variables are included.
+
+```{r}
+x
+```
+
+Check for any missing data points before we go further.
+
+```{r}
+sum(is.na(x))
+```
+
+Since there are no missing data points, we will generate a summary of the variables using descriptive statistics.
+
+```{r}
+x |> pivot_longer(cols = colnames(x)) |>
+group_by(name) |>
+summarize(N = n(),
+Mean = mean(value),
+SD = sd(value),
+Min = min(value),
+Median = median(value),
+Max = max(value))
+```
+
+To begin our analysis, similar to k-means, we must identify the optimal number of clusters. In this case, we can use an approach that evaluates the optimal number of clusters using Bayesian Information Criterion (BIC), opposed to other methods we have used such as silhouette and elbow methods. In the code chunk below, we are going to calculate multiple GMMs to our dataset with clusters that range from 1:9 (this is the default setting for mclustBIC function). In this way, it tries a different number of clusters and covariance structures and calculates the BIC value for each model. This model selection criterion jointly takes into account both the covariance decompositions and the number of mixture components in the model, such that the model balances fit (likelihood) and complexity (number of parameters). A lower BIC indicates a better fit model compared to higher BIC values.
+
+Given the characteristics of the data, which consists of a small number of unique values (i.e., 1-5) relative to the number of observations (i.e., n=717), a 'prior' is used for regularization to the GMM estimation process. This help in stabilizing the clustering results, especially when working with small datasets. Regularization helps with preventing over fitting by adding a prior belief about cluster parameters. In this specific case, the priorControl adds a prior distribution to the GMM estimation.
+
+```{r}
+BIC <- mclustBIC(x, prior = priorControl())
+summary(BIC)
+plot(BIC)
+```
+
+The VVI and VVV values correspond to the covariance structure used in the GMMs. Specifically, the 'VVI' indicates the diagonal covariance matrix, while the 'VVV' values correspond to the full covariance matrix. The BIC score is lowest for VVI,3, meaning this model provides the best balance of model fit and complexity. The selected model is a three-component GMM with diagonal covariance matrices of varying volume and shape, with axis-aligned orientation. Thus, the variables are independent within each cluster.
+
+VVI,4 (4 clusters) had slightly worse BIC (-6), meaning it was not as optimal as VVI,3, but close.
+
+VVV,3 (3 clusters with fully unconstrained covariance structure) had a much worse BIC (-12), making it less favorable.
+
+The fit of the optimal model is obtained using the code below, where we indicate the number of clusters using 'G'.
+
+```{r}
+mod <- Mclust(x, modelNames = "VVI", G = 3, prior = priorControl())
+summary(mod, parameters = TRUE)
+```
+
+The output reports some basic information about the fit, such as the maximized log-likelihood (log-likelihood; a measure of how well the model fits the data (higher is better)), the number of observations/data points (n), the number of estimated parameters (df), the BIC criterion (BIC), and the clustering table. It appears that cluster 3 has the highest number of observations, followed by clusters 1 and 2.
+
+We also see the Mixing Probabilities, which let us know the probability of each data point belonging to each cluster. We can see that Cluster 3 is the most common, while Cluster 2 has the smallest probability. The sum of these probabilities should equal 1.
+
+Finally, the cluster information is presented last, following the order of Means and Variances. When referring to the Means table, we can see that the table displays the mean values (centroids) for each engagement variable per cluster.
+
+::: callout-important
+### Question: What can you gather from the GMM output regarding the three clusters and the engagement variables?
+:::
+
+Now let's generate a visualization of the fitted GMM model.
+
+```{r}
+plot(mod, what = "classification")
+```
+
+The estimated model identifies three clusters of varying size. The third group (green triangles) accounts for more than 50% of the observations, while the first (blue points) and the second (red open squares) account for approximately 29% and 16%, respectively.
+
+::: callout-important
+### Question: Consider what you have learned about k-means up to this point. How is GMM different than kmeans based on this graph?
+:::
+
+```{r}
+# collect estimated means
+means <- data.frame(Profile = factor(1:mod$G),
+t(mod$parameters$mean)) |>
+pivot_longer(cols = -1,
+names_to = "Variable",
+values_to = "Mean")
+
+# convert variable names to factor
+means$Variable <- factor(means$Variable,
+levels = colnames(mod$data))
+
+# add mixing probabilities corresponding to clusters
+means <- means |>
+add_column(MixPro = mod$parameters$pro[means$Profile])
+means
+```
+
+The different engagement behavior of the three identified clusters can be illustrated using a latent profiles plot of the estimated means with point sizes proportional to the estimated mixing probabilities.
+
+```{r}
+ggplot(means, aes(x = Variable, y = Mean,
+group = Profile,
+shape = Profile,
+color = Profile)) +
+geom_point(aes(size = MixPro)) +
+geom_line(linewidth = 0.5) +
+labs(x = NULL, y = "Cluster means") +
+scale_color_manual(values = mclust.options("classPlotColors")) +
+scale_size(range = c(1, 3), guide = "none") +
+theme_bw() +
+theme(legend.position = "right")
+```
+
+From the visualization, we can see that cluster 2 has the highest engagement scores for all three variables, despite it being the smallest cluster compared to clusters 1 and 3. In contrast, all engagement scores are lower for the largest cluster (cluster 3), which are all lower for cluster 1.
+
+All three clusters exhibit the lowest mean scores for the cognitive engagement variable compared to behavioral and emotional engagement variables. For cluster 2, behavioral engagement and emotional engagement scores are comparable, whereas for the other two clusters, the mean scores for these variables are lower than those for the behavioral engagement variable. Taken together, we could characterize clusters 1, 3, and 2 as “low”, “medium”, and “high” engagement profiles, respectively.
+
+::: callout-important
+### Question: If we used a different clustering method (e.g., K-means instead of GMM), do you think we would see similar engagement profiles? Why or why not?
+:::
+
+To provide a evaluate the stability of the model parameters of the results presented in the previous graph, it is beneficial to incorporate a measure of uncertainty for the estimated means of the GMM. This can be achieved by bootstrap resampling using the function MclustBootstrap(). Bootstrap resampling is a statistical technique used to estimate the variability (uncertainty) of a sample statistic by generating multiple resampled datasets from the original data. This command performs bootstrap resampling on our fitted GMM to assess the stability of cluster parameters (such as means, variances, and mixing probabilities). Bootstrapping resamples the data with replacement data and refits the GMM model multiple times. This helps estimate how stable the mixing weights are across different samples, usually within a 95% confidence interval. If the mixing weights change significantly across bootstrap samples, it suggests that the clustering model may not be stable.
+
+In this case, we will generate 999 bootstrap resamples from our data.
+
+```{r}
+boot <- MclustBootstrap(mod, type = "bs", nboot = 999)
+```
+
+The bootstrap distribution of the mixing weights (the probability that each data point belongs to a specific cluster) can be visualized using histograms with the code below:
+
+```{r}
+par(mfcol = c(1, 3), mar = c(4, 4, 1, 1), mgp = c(2, 0.5, 0))
+plot(boot, what = "pro", xlim = c(0, 1))
+```
+
+We can also bootstrap the distribution of the components means with the code below:
+
+```{r}
+par(mfcol = c(3, 3), mar = c(4, 4, 1, 1), mgp = c(2, 0.5, 0))
+plot(boot, what = "mean", conf.level = 0.95)
+```
+
+In all the graphs above, the GMM estimates are shown as dashed vertical lines, while the horizontal segments represent the percentile intervals at the 95% confidence level. If a histogram is narrow (less spread out), the mixing weights are stable. If the histogram is wide (high variance), the cluster proportions fluctuate across different samples, suggesting instability in the clustering.
+
+We can also obtain the numerical output of the resampling-based bootstrap distributions using:
+
+```{r}
+sboot <- summary(boot, what = "ci")
+sboot
+```
+
+The information above can then be used to plot against the cluster means, with the 95% confidence intervals shown as vertical errors bars:
+
+```{r}
+means <- means |>
+add_column(lower = as.vector(sboot$mean[1,,]),
+upper = as.vector(sboot$mean[2,,]))
+means
+```
+
+```{r}
+ggplot(means, aes(x = Variable, y = Mean, group = Profile,
+shape = Profile, color = Profile)) +
+geom_point(aes(size = MixPro)) +
+geom_line(linewidth = 0.5) +
+geom_errorbar(aes(ymin = lower, ymax = upper),
+linewidth = 0.5, width = 0.1) +
+labs(x = NULL, y = "Cluster means") +
+scale_color_manual(values = mclust.options("classPlotColors")) +
+scale_size(range = c(1, 3), guide = "none") +
+theme_bw() +
+theme(legend.position = "top")
+```
+
+The error bars for cognitive and emotional engagement are visibly wider for the “low” engagement cluster (cluster 1) compared to clusters 2 (high) and 3 (moderate), suggesting higher uncertainty where the cluster assignments are less stable across resampling.
+
+Finally, in the case review paper, we read that the authors utilized an entropy measure of the cluster classification to estimate uncertainty.
+
+Low entropy (0) indicates that the model is less certain in classifying data points into clusters, whereas high entropy (1) indicates the model is more certain in assigning cases to clusters, meaning that points had similar probabilities of belonging to multiple clusters. Thus, high entropy values typically indicate a better model that is able to distinguish between the cluster components and that the components are relatively distinct.
+
+An entropy value close to 1 is ideal, while values above .6 are considered acceptable, although there is no agreed upon optimal cutoff for entropy. We can calculate entropy classification below:
+
+```{r}
+probs <- mod$z # posterior conditional probs
+probs_map <- apply(probs, 1, max) # maximum a posteriori probs
+class <- mod$classification # cluster classes for each obs
+n <- mod$n # number of obs
+K <- mod$G # number of clusters
+# Entropy
+E <- 1 + sum(probs * log(probs))/(n * log(K))
+E
+## [1] 0.6890602
+# Case-specific entropy contributions
+Ei <- 1 + rowSums(probs * log(probs))/log(K)
+sum(Ei)/n
+## [1] 0.6890602
+df_entropy <- data.frame(class = as.factor(class), entropy = Ei)
+df_entropy |>
+group_by(class) |>
+summarise(count = n(),
+mean = mean(entropy),
+sd = sd(entropy),
+min = min(entropy),
+max = max(entropy))
+```
+
+We can see that the entropy of the clusters is moderately high, on a scale from 0 to 1, which some clusters demonstrating maximum (or near maximum) values. In particular, it appears that cluster 1, the "low" engagement cluster, again reflects that the model was uncertain in it's cluster assignment across the bootstrap resampling.
+
+```{r}
+ggplot(df_entropy, aes(y = class, x = entropy, fill = class)) +
+geom_density_ridges(stat = "binline", bins = 21,
+scale = 0.9, alpha = 0.5) +
+scale_x_continuous(breaks = seq(0, 1 ,by=0.1),
+limits = c(0, 1.05)) +
+scale_fill_manual(values = mclust.options("classPlotColors")) +
+geom_vline(xintercept = E, lty = 2) +
+labs(x = "Case-specific entropy contribution",
+y = "Cluster") +
+theme_ridges(center_axis_labels = TRUE) +
+theme(legend.position = "none",
+panel.spacing = unit(1, "lines"),
+strip.text.x = element_text(size = 8))
+```
+
+Again, when using GMM clustering, each observation cannot be assigned to a cluster with 100% certainty. Instead, each observation has a probability of belonging to each cluster. Finally, we apply a Average posterior membership probabilities (AvePP), a measure that represents how strongly an observation belongs to its assigned cluster. We calculate the average of the posterior probabilities for all observations in a given cluster. This also tells us how confident the model is in its clustering assignments. For example, if a cluster has 10 students and their average probability of belonging to that cluster is .92, it means that the model's cluster assignments are highly confident.
+
+```{r}
+# Average posterior probabilities by cluster:
+df_AvePP <- data.frame(class = as.factor(class), pp = probs_map)
+df_AvePP |>
+group_by(class) |>
+summarise(count = n(),
+mean = mean(pp),
+sd = sd(pp),
+min = min(pp),
+max = max(pp))
+## # A tibble: 3 x 6
+## class count mean sd min max
+## <fct> <int> <dbl> <dbl> <dbl> <dbl>
+## 1 1 184 0.864 0.160 0.513 1.00
+## 2 2 119 0.858 0.146 0.468 0.999
+## 3 3 414 0.850 0.135 0.502 0.996
+```
+
+We plot the average membership probabilities for each cluster.
+
+```{r}
+ggplot(df_AvePP, aes(y = class, x = pp, fill = class)) +
+geom_density_ridges(stat = "binline", bins = 21, scale = 0.9, alpha = 0.5) +
+scale_x_continuous(breaks = seq(0, 1, by=0.1),
+limits = c(0, 1.05)) +
+scale_fill_manual(values = mclust.options("classPlotColors")) +
+labs(x = "MAP probabilities", y = "Cluster") +
+theme_ridges(center_axis_labels = TRUE) +
+theme(legend.position = "none",
+panel.spacing = unit(1, "lines"),
+strip.text.x = element_text(size = 8))
+```
+
+::: callout-important
+### Question: What can we infer about the model's confidence for each cluster given the MAP probabilities?
+:::
+
+::: callout-important
+### Question: How does GMM improve our ability to identify different types of learners compared to traditional clustering (e.g., K-means)?
+:::
+
+::: callout-important
+### Question: What are the potential limitations of using GMM in education? How might missing data, sample size, or model assumptions impact results?
+:::
+
+# References

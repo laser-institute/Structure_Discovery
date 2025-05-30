@@ -1,0 +1,307 @@
+---
+title: "Module 4: Advanced Cluster Analysis"
+subtitle: ""
+format:
+  revealjs: 
+    slide-number: c/t
+    progress: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/LASERLogoB.png
+    theme: [default, css/laser.scss]
+    width: 1920
+    height: 1080
+    margin: 0.05
+    footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
+resources:
+  - demo.pdf
+bibliography: lit/references.bib
+editor: visual
+csl: apa/apa-6th-edition.csl
+title-slide-attributes: 
+  data-notes: 
+---
+
+## Today…
+
+-   Multiple advanced algorithms for clustering
+
+::: notes
+A lot of algorithms behind k-means
+:::
+
+##  Gaussian Mixture Models
+
+-   Often called EM-based clustering
+
+\
+
+-   Kind of a misnomer in my opinion
+
+    -   What distinguishes this algorithm is the kind of clusters it finds
+
+    -   Other patterns can be fit using the Expectation Maximization algorithm 
+
+\
+
+-   I’ll use the terminology Andrew Moore uses, but note that it’s frequently called EM these days
+
+## Gaussian Mixture Models  
+
+A centroid **and** a radius\
+
+-   Fit with the same approach as k-means\
+    (some subtleties on process for selecting radius)
+
+::: notes
+So the cluster is not only determined by its center, but by how big it is – i.e., radius. 
+:::
+
+## Gaussian Mixture Models
+
+-   Can do fun things like
+
+    -   Overlapping clusters
+
+    -   Explicitly treating points as outliers
+
+::: notes
+A flaw in k-means is that it does not handle outliers well.
+:::
+
+## Example
+
+![](images/clipboard-1955655578.png)
+
+## Nifty Subtlety
+
+-   GMM still assigns every point to a cluster, but has a threshold on what’s really considered “in the cluster”
+
+\
+
+-   Used during model calculation
+
+##  Example
+
+![](images/clipboard-2360860354.png)
+
+::: notes
+For example, this point right here at the top is mathematically closer to the red cluster, but it is outside of that radius threshold, so it is treating it as an outlier.
+:::
+
+## Assessment
+
+-   Can assess with same approaches as before
+
+    -   Distortion
+
+    -   BIC
+
+\
+
+-   Plus likelihood
+
+::: notes
+EM models can be evaluated using typical methods such as distortion, BIC, AIC, and also log-likelihood.
+:::
+
+## Likelihood
+
+-   (more commonly, log likelihood)
+
+\
+
+-   The probability of the data occurring, given the model
+
+\
+
+-   Assesses each point’s probability, given the set of clusters, adds it all together
+
+::: notes
+Given the model, or given the centroids and the radi. 
+
+\
+
+And it assesses each point’s probability, given the set of clusters, and adds it all together.
+:::
+
+## For Instance....
+
+![](images/clipboard-419327094.png)
+
+::: notes
+These are very slikely points because they are very close to a centroid, while the ones farther from the centroid are more unlikely points since it does not fit this clustering scheme. 
+
+\
+
+So the basic idea behind this likelihood-based clustering approach is to say how probable are the points if the data were truly charactized by these centroids and these radi.
+:::
+
+## Disadvantages of GMMs
+
+-   Much slower to create than k-means
+
+-   Can be overkill for many problems
+
+::: notes
+So gaussian mixed models have some neat advantages. They can assign points to be apart of multiple clusters, so they can have overlapping clusters and they can handle outliers. 
+
+However, they do have some differences from k-means clustering. 
+
+Sometimes they are a complete overkill, for example, if you just want to create clusters that you can interpret, think about, and learn from you might not care if things are truly excluded as outliers. But still a good method good for a lot of things.
+:::
+
+## Spectral Clustering
+
+::: notes
+Another advanced method is spectral clustering.
+:::
+
+## Spectral Clustering
+
+![](images/clipboard-2119975957.png)
+
+::: notes
+And here we see an example of spectral clustering.
+:::
+
+## Spectral Clustering
+
+-   Conducts dimensionality reduction and clustering simultaneously
+
+    -   Like support vector machines
+
+    -   Mathematically equivalent to K-means clustering on a non-linear dimension-reduced space
+
+::: notes
+This is very similar to what support vector machines do. 
+
+\
+
+Basically what spectral analysis does, is let’s say you have 4 dimensions. It will collapse those dimensions in 1 and then creates clusters within the that dimension.
+
+\
+
+So why would you want to do spectral clustering? It is because it allows you to find an oddly shaped regions of your space that are true clusters but across dimensions don’t really look like circles or clusters, or n-dimensional spheres.
+:::
+
+## Hierarchical Clustering
+
+-   Clusters can contain sub-clusters
+
+## Example  ![](https://lh7-rt.googleusercontent.com/slidesz/AGV_vUcIYFSxu_fiDj3chpKxrb4u50Hr3zJzM-CPI9-f0gKCOMWR4v8oYEhUPZS66Obxr5m8a1c_FrwTBXlriMLCpuuD2tuBYCeMuoboznAPmUWs1Hqp0XxVUfo_o626zwjmYvD3U0XnHE-4T70qfVc8-NE=s2048?key=kEH-rc39vkHwJZiev6tvTx1p)  
+
+::: notes
+So let’s take this previous example. We have these two overall clusters, but then there are more clusters within each the bigger clusters. So this will allow you to see the structure within your cluster.
+:::
+
+##  Dendrogram  ![](images/clipboard-212659515.png)
+
+::: notes
+Another way you can look at your clusters is by using a dendrogram. Where you can see that each cluster is broken into subclusters.
+:::
+
+## Hierarchical Agglommerative Clustering (HAC)
+
+-   Each data point starts as its own cluster
+
+-   Two clusters are combined if the resulting fit is better
+
+-   Continue until no more clusters can be combined
+
+::: notes
+This is the most common type of hierarchical clustering.
+
+\
+
+You repeatedly try to find the best way to combine multiple clusters, whether they have one point or seventy points. And you do that over and over again, combining the best two clusters until finally no more clusters will combine since you only have one group.
+:::
+
+## DP-Means clustering
+
+-   Starts with single point and cluster
+
+\
+
+-   Repeatedly adds new point
+
+    -   If point does not fit well with existing clusters, creates a new cluster
+
+::: notes
+It just repeates that iteratively until all points are a cluster, or outliers. 
+:::
+
+## Sequence clustering
+
+-   Clusters sequences rather than individual data points
+
+\
+
+-   A variety of algorithms exist to do this
+
+::: notes
+You may want to account for all the data points within individuals, instead of averaging or utilizing a single data points from an individual. This may be necessary because students could be doing things are different rates over time, maybe they are less engaged with videos at the beginning of the course, but as new and more difficult material is introduced in a course, they may interact with more videos as the semester progresses. So what a lot of folks use is sequence clustering to get at those metrics.
+:::
+
+## Dynamic Time Warping
+
+-   A method for calculating difference between sequences when length is not the same
+
+    -   i.e. what if two students have same overall pattern of behavior but don’t take the same time to demonstrate each behavior?
+
+\
+
+-   Tries to match each event in one sequence to an event in the other sequence and check if order is consistent
+
+::: notes
+One method for doing this is dynamic time warping. 
+:::
+
+## Latent Class Analysis\*
+
+-   \* Not technically clustering
+
+## Latent Class Analysis
+
+-   Type of structural equation modeling that groups data points into a latent variable (conceptually similar to a cluster)
+
+\
+
+-   Attempts to find data points that are statistically independent of each other, when controlling for group – such that the relationship between the data points is wholly explained by the grouping 
+
+## Latent Class Analysis
+
+-   Can conduct statistical analysis of latent classes
+
+-   Can be used to model changes in membership over time
+
+\
+
+-   Requires tons and tons of data
+
+-   Very slow
+
+-   Tends to find smaller number of latent classes than cluster analysis
+
+::: notes
+So you can see how well certain points fit within latent classes, or clusters. 
+
+\
+
+That’s because it has a higher criterion for data points that are farther away.
+:::
+
+## Many types of clustering
+
+-   Which one you choose depends on what the data look like
+
+-   And what kind of patterns you want to find
+
+::: notes
+If you want to find patterns in a very straight forward and dimensional space, k-means might may sense. If you need to fit multiple dimensions, then you may want to use spectral analysis. 
+
+If you want to fit multiple circles and outliers, then you might want to use gaussian mixed models. And if want to see how the clusters are related to each other, then you might want to use hierarchical clustering. So there are lots of options here.
+:::
+
+## Next lecture

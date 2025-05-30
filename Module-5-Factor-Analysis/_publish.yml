@@ -1,0 +1,8 @@
+- source: ul-5-badge.qmd
+  quarto-pub:
+    - id: 70f6e0fc-857e-4f75-b375-47043f4007eb
+      url: https://laserkt.quarto.pub/module-5-badge-activity
+- source: ul-5-case-study.qmd
+  quarto-pub:
+    - id: a1151893-8502-47d5-b36b-01636927ee9b
+      url: https://laserkt.quarto.pub/module-5-case-review-activity-factor-analysis

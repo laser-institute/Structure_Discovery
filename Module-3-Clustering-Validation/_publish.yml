@@ -1,0 +1,12 @@
+- source: ul-3-badge.qmd
+  quarto-pub:
+    - id: bf325118-ea73-4454-8cb7-a2cc086a1d1e
+      url: https://laserkt.quarto.pub/module-3-badge-activity
+- source: ul-3-cluster-validation.qmd
+  quarto-pub:
+    - id: 670fa4fa-4280-45df-b201-49828c5a3e84
+      url: https://laserkt.quarto.pub/module-3-clustering-validation
+- source: ul-3-case-study.qmd
+  quarto-pub:
+    - id: 88c78924-55e4-4551-9f42-aa9b742133a1
+      url: https://laserkt.quarto.pub/module-3-case-review-activity-clustering-validation

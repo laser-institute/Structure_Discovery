@@ -1,0 +1,366 @@
+---
+title: "Module 6: Q-Matrix"
+subtitle: ""
+format:
+  revealjs: 
+    slide-number: c/t
+    progress: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/LASERLogoB.png
+    theme: [default, css/laser.scss]
+    width: 1920
+    height: 1080
+    margin: 0.05
+    footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
+resources:
+  - demo.pdf
+bibliography: lit/references.bib
+editor: visual
+csl: apa/apa-6th-edition.csl
+title-slide-attributes: 
+  data-notes: 
+---
+
+## What is the Q-Matrix?
+
+-   A table
+
+-   Where rows are items
+
+-   And columns are skills
+
+    @tatsuoka1983rule @barnes2005practice
+
+-   Also called a KC \[knowledge component\] Model
+
+-   Or a skill-item mapping
+
+## What is the Q-Matrix? @tatsuoka1983rule @barnes2005practice
+
+![](images/clipboard-2298555189.png)
+
+## Example
+
+![](images/clipboard-3492925289.png)
+
+## How do we get a skill-item mapping?
+
+-   Automatic model discovery
+
+-   Hand-development and refinement
+
+-   Hybrid approaches
+
+## How do we get a skill-item mapping?
+
+-   [Automatic model discovery]{style="color:red;"}
+
+-   Hand-development and refinement
+
+-   Hybrid approaches
+
+## Automated Model Discovery
+
+-   Learn the mapping between items and skills solely from data
+
+## Initial algorithm
+
+-   Hill-climbing based method @barnes2005experimental
+
+## More common approach lately
+
+-   Non-negative matrix factorization\
+    @desmarais2012mapping
+
+-   Can be combined!\
+    @picones2022combining
+
+::: notes
+The initial way that people did this was a hill climbing based method that came from Barnes et al. But more common methods that have been used lately involve a method called “non-negative matrix factorization” which is mathematically intense and we will not go into those details. 
+
+\
+
+It’s worth noting, by the way, that you can actually combine these two methods. And Picones et al. provide a nice example of combining non-negative matrix factorization with hill climbing.
+
+\
+:::
+
+## First question
+
+-   How many skills should we use?
+
+\
+
+-   This is determined empirically
+
+    1.  Try 1 skill
+
+    2.  Try 1 more skill than previous model (e.g. 2,3,4,5…)
+
+    3.  Does the new model do better than the previous model?\
+        If so, go to step 2.\
+        If not, quit and use the previous model.
+
+::: notes
+So, the first question you ask yourself when doing this is, how many skills should we use? And this is determined empirically. First, we try one skill. Then we try one more skill than the previous model, then two, three, four and so on.
+
+\
+
+And we look, every time we add a new skill, at whether the new model fit the data better than the previous model. And if so, we go to the next step. However, if the model is not a better fit, then we quit and we use our best that we have so far.
+:::
+
+## How do we know if one Q-matrix is better than another
+
+-   Several definitions
+
+::: notes
+But you may also ask: How do we know whether one Q-matrix is better than another one? There are several ways to look at this.
+:::
+
+## Barnes et al.’s definition
+
+-   Better models have the property that if a student knows skill X
+
+-   And item 1 and item 2 both have skill X
+
+-   Then a student who gets item 1 right will be more likely to get item 2 right 
+
+    -   And item 1 wrong → item 2 wrong
+
+    -   And item 2 right → item 1 right
+
+    -   And item 2 wrong → item 1 wrong
+
+::: notes
+In other words, when two items that involve the same skill, should be connected. 
+:::
+
+## Barnes et al.’s definition
+
+-   Given a skill-item mapping, you can predict, for each combination of skills whether a student should get each item correct or not
+
+\
+
+-   A model’s degree of error is based on how many item-student pairs the prediction gets wrong
+
+::: notes
+To put it another way, given a skill item mapping, you can predict for each combination of skills whether a student should get each item correct or not. And a model’s degree of error is based on how many item-student pairs the prediction gets wrong. 
+:::
+
+## And forward from there
+
+-   You can compare models with different numbers of skills using BIC or AIC or cross-validation @effenberger2020exploration
+
+::: notes
+However, you’re typically going to get better fit for having more possible skills. So what you can do going forward from there, as Effenberger et al. point out, is you can compare model with different number of skills using BIC or AIC or cross-validation.
+:::
+
+## Subtlety
+
+-   Is skill conjunctive? (as in Barnes)
+
+    -   You need all relevant skills to get an item right
+
+-   Or is it compensatory? @beck2008composition
+
+    -   Any relevant skill leads to getting an item right
+
+::: notes
+Is the skill conjunctive? Which means, as in Barnes, if an item has multiple skills, you need every relevant skill to get an item right. If an item involves skills 1, 2, and 3, you need to have 1, 2, and 3 or you’re going to get it wrong.
+
+\
+
+Or is skill compensatory, as Pardo et al proposes, where having any relevant skill leads to getting an item right? In other words, if you have skill 1 or 2 or 3, any one of them, you’re going to get the item right.
+:::
+
+## Assumption
+
+-   Barnes’s approach and NNMF (and most approaches to q-matrix discovery) assume no learning
+
+::: notes
+So one thing that’s worth mentioning is that Barnes’ approach and non-negative matrix factorization, and let’s be frank, most approaches to Q-matrix discovery, assume no learning.
+:::
+
+## Alternate Test of Model Goodness
+
+-   Look at student improvement over time
+
+-   Fit a model like PFA or BKT from Week 4, and see how well it fits data, given the skill-item mapping
+
+    -   No point to doing this with DKT-family, since they either skip or fit their own q-matrix!\
+
+-   @liu2017going, @effenberger2020exploration, @picones2022combining Give examples\
+    \
+
+::: notes
+An alternate way to do this is to look at students’ improvement over time.
+
+\
+
+But if you’re familiar with knowledge tracing methods, you may know that DKT is typically better than BKT or PFA. The reason is because DKT family algorithms either are going to skip the step of having a skill item mapping entirely, or they’re going to fit their own Q-matrix or alternative to a Q-matrix.
+
+\
+
+So literally, you put a different Q-matrix in the DKT family, you get the exact same thing back out.
+
+\
+
+This process of looking at student improvement over time in the process of validating Q-matrices, you can see in various papers, such as the one’s listed here.
+:::
+
+## How do we get a Q-Matrix?
+
+-   Automatic model discovery
+
+-   [Hand-development and refinement]{style="color:red;"}
+
+-   Hybrid approaches
+
+## Hand Development and Refinement
+
+-   The original way that Q-Matrices were created
+
+\
+
+-   A domain expert creates the Q-Matrix using knowledge engineering
+
+## Hand Development and Refinement
+
+-   What kind of data can we use to guide refinement?
+
+-   Some slides adapted from a talk in my class\
+    by John Stamper
+
+![](images/clipboard-764182918.png)
+
+## Strategies for Q-Matrix Refinement
+
+-   Try to smooth learning curves
+
+\
+
+-   Look for skills with no apparent learning
+
+\
+
+-   Look for problems with unexpected error rates
+
+\
+\
+
+::: notes
+The learning curve strategy actually comes from Corbett and Anderson in 1995.
+:::
+
+## Tool for doing this
+
+-   Pittsburgh Science of Learning Center DataShop
+
+\
+
+-   <https://pslcdatashop.web.cmu.edu/>
+
+::: notes
+But you can also do it in excel, you can do it in a visualization program, but the Data Shop’s got tools to help you do it.
+:::
+
+## Learning Curve In Brief
+
+-   Shows relationship between amount of practice and performance
+
+![](images/clipboard-446517771.png)\
+\
+
+::: notes
+This classic graph comes from corbett and Anderson (1995). And you can see that the error rate goes down as the student practice smore, and you kind of hopes that that would be what happens
+:::
+
+## Spikes in learning curves…
+
+-   Often imply two (or more) skills are being treated as a single skill
+
+![](images/clipboard-2981701677.png)\
+\
+
+::: notes
+Spikes in learning curves often imply that two or more skills are being treated as a single skill. So if we look at this graph, we can see that the student seems to be getting better, then they shoot up, then they come down and then they coming up again.
+:::
+
+## Spikes in learning curves…
+
+-   Often imply two (or more) skills are being treated as a single skill
+
+![](images/clipboard-412059348.png)\
+
+::: notes
+Actually this graph is demonstrating two different learning curves occurring. If you look at it like it has two learning curves, it looks really smooth and nice, but
+:::
+
+## Spikes in learning curves…
+
+-   Often imply two (or more) skills are being treated as a single skill
+
+![](images/clipboard-428252429.png)\
+
+::: notes
+If you look at it as one, it is a total mess.
+:::
+
+## Example
+
+Possible to look at learning curves for different skill models\
+(we will discuss this more in a future lecture)
+
+![](images/clipboard-358943964.png)
+
+::: notes
+The PSLC data shop makes it possible to look at learning curves for different skill models.
+
+\
+
+So for example, if we treat geometry as a single skill, the entirety of geometry area, you don’t get a smooth learning curve. But if you split it into 12 component skill, then you get a smooth learning curve shown at the bottom right.
+:::
+
+## You can inspect curves for individual skills
+
+![](images/clipboard-929961695.png)
+
+::: notes
+You can inspect the curves for individual skills. Again this picture is from DataShop. 
+
+\
+
+If a skill is not improving, then you’re either teaching it really badly, or the model’s messed up. Or perhaps both!
+:::
+
+## Also look for problems with unexpected error rates
+
+![](images/clipboard-1175939492.png)
+
+::: notes
+The second thing you can do is look for problems with unexpectedly high error rates. There’s a tool in the data shop called the performance profilers, shown here, where it shows you each item’s actual error rate and the predicted error rate based on the model.
+
+\
+
+If you’ve got an item that has an error rate that’s much higher than what you’d predict from the model, you know there’s something wrong there, and its something worth looking into. Maybe that problem doesn’t fit the skill you think it does.
+:::
+
+## DataShop can apply model for you!
+
+-   Applies a mathematical model called LFA (similar to PFA) to data
+
+-   Can give AIC and BIC goodness measures for different skill-item mappings
+
+![](images/clipboard-4156909720.png)
+
+::: notes
+So once you’ve built a skill out of mapping, the Data Shop can actually test how good it is for you. It applies a mathematical model call LFA, which is similar to PFA, to the data, and then gives you AIC and BIC goodness of fit measures for the different skill out of mappings you might have created.
+:::
+
+## Next Up
+
+Case Activity
+
+## References

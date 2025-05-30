@@ -1,0 +1,344 @@
+---
+title: "Module 3 case review activity: Clustering validation"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+bibliography: lit/references.bib
+---
+
+An important task in using clustering methods is validation. Most existing methods present it as a model selection problem, in which the clustering algorithm is run with different values of *K*, where the best value of K maximizes or minimizes a selected criterion. Validation can also be used to select between different types of clustering, e.g., spectral vs. gmm vs. k-means.
+
+In this case review activity, we will apply k-means clustering methods, similar to the approach used in [@khosravi2017using]. Since their dataset and code were not made available, we will create from scratch. The authors described their sample as being collected from a large, flipped introductory programming course. We will need to generate our own data using similar variables, conduct k-means clustering and validation, and then interpret the results.
+
+The authors study the specific variables:
+
+1.  Performance: summative (S) and formative (F)
+    -   S features: S1-S3, use a total of 7 scores from summative assessments:
+        -   S1: (labs) the average lab grade of students for the first 5 labs;
+        -   S2: (midterm 1) the first midterm grade; and,
+        -   S3: (midterm 2) the second midterm grade.
+    -   F features: F1 and F2, use a total of 30 scores from formal assessments:
+        -   F1: (clickers) the average clicker grade over 15 lectures; and,
+        -   F2: (worksheets) the average grade of students for the in-class exercises over 15 lectures.
+2.  Engagement: behavioral (B)
+    -   B features: B1-B4, use a total of 41 scores to represent the number of view of screen casts for the 15 online lectures
+        -   B1: (screen cast views) the total number of views of screen casts for the 15 lectures;
+        -   B2: (worksheet solution view) the total number of solution (out of 15);
+        -   B3: (pre-lab exercise views) the total number of view of the 5 pre-lab exercises; and
+        -   B4: (examination/solution views) the total number of files out of the four practice questions with solutions for midterms; and two exam solutions for the midterm student access.
+
+We have a lot of features to work with, where each falls across three dimensions: S, F, B, and on the top: performance and engagement categories. These data represents multiple, hierarchical dimensions.
+
+Before we start, let's ensure we have installed the right packages.
+
+```{r}
+chooseCRANmirror(graphics = FALSE, ind = 1)
+if (!require("tidyverse")) install.packages("tidyverse", dependencies = TRUE)
+library(tidyverse)
+if (!require("cluster")) install.packages("cluster", dependencies = TRUE)
+library(cluster)
+if (!require("factoextra")) install.packages("factoextra", dependencies = TRUE)
+library(factoextra)
+if (!require("NbClust")) install.packages("NbClust", dependencies = TRUE)
+library(NbClust)
+if (!require("readr")) install.packages("readr", dependencies = TRUE)
+library(readr)
+if (!require("dplyr")) install.packages("dplyr", dependencies = TRUE)
+library(dplyr)
+if (!require("knitr")) install.packages("knitr", dependencies = TRUE)
+library(knitr)
+if (!require("kableExtra")) install.packages("kableExtra", dependencies = TRUE)
+library(kableExtra)
+```
+
+Let's generate random data based on their description of the data structure and variables.
+
+We will normalize the scores, putting them on a similar scale before conducting the clustering analysis. The authors scaled the dimensions by transforming them into normalized values with a mean of 0 and standard deviation of 1.
+
+By transforming each variable to have a mean of 0 and standard deviation of 1, every dimension contributes equally to the distance calculation. Without proper scaling, the variable(s) with larger numerical ranges could dominate the clustering, potentially obscuring patterns in other dimensions.
+
+```{r}
+# Set seed for reproducibility
+set.seed(123)
+
+# Define number of students
+n_students <- 78
+
+# Generate random normalized data for each feature
+generate_scaled_data <- function(n) {
+  scale(rnorm(n, mean = 0, sd = 1))
+}
+
+# Generate Final Exam scores in range 0-100
+generate_final_exam_score <- function(n) {
+  runif(n, min = 0, max = 100)  # Uniform distribution between 0 and 100
+} # the authors did not provide average or SD information to estimate the distribution
+
+# Create a data frame
+student_data <- data.frame(
+  Student_ID = 1:n_students,
+  S1 = generate_scaled_data(n_students),  # Average lab grade (first 5 labs)
+  S2 = generate_scaled_data(n_students),  # Midterm 1 grade
+  S3 = generate_scaled_data(n_students),  # Midterm 2 grade
+  F1 = generate_scaled_data(n_students),  # Clicker grade (15 lectures)
+  F2 = generate_scaled_data(n_students),  # Worksheet grade (15 lectures)
+  B1 = generate_scaled_data(n_students),  # Screencast views (15 lectures)
+  B2 = generate_scaled_data(n_students),  # Worksheet solution views (out of 15)
+  B3 = generate_scaled_data(n_students),  # Pre-lab exercise views (5 pre-labs)
+  B4 = generate_scaled_data(n_students),   # Examination solution views (out of 6)
+  Final_Exam = generate_final_exam_score(n_students)
+)
+
+head(student_data)
+```
+
+# Determining the Optimal Number of Clusters
+
+The paper by [@khosravi2017using] applied two cluster validation methods. First, a gap statistic was used to measure clusters based on properties of internal cohesion and external separation [@tibshirani2001estimating]. The gap statistic helps identify an initial range for K by comparing the clustering structure in the data to that of randomly distributed points. They explored a minimum of 2, and a maximum of 14 clusters, a guideline provided by a prior study [@thorndike1953belongs], but we will assess if that is optimal for our randomly generated data. The second method used was the 'elbow' method to evaluate the sum of square errors (SSE) for a range of values of K.
+
+To account for random initialization of centroids in k-means, for each value in the range, the authors ran 100 executions of the k-means algorithm and the solution with the highest likelihood is selected. While the authors did not discuss the gap statistic output, we will run it for teaching purposes.
+
+## Gap statistic method [@tibshirani2001estimating]
+
+```{r}
+k_min <- 2
+k_max <- 14
+k_range <- k_min:k_max
+
+gap_stat <- clusGap(student_data %>% select(-Student_ID,-Final_Exam), 
+                    FUN = kmeans, 
+                    K.max = k_max, nstart=100)
+fviz_gap_stat(gap_stat)
+```
+
+Based on the gap statistic, it appears that 1 one cluster is optimal, suggesting that there may not be distinct groups within our dataset (possibly due to generating a normal distribution or small sample size of 78). Next, the authors used the **elbow method** to determine the optimal number of clusters (K) by running k-means for K values. We will apply this with a range **\[2, 14\]** for teaching purposes, even though this grouping may be artificial based on our randomly generated dataset.
+
+## Elbow method
+
+We will run a loop to calculate k-means using 2-14 clusters.
+
+```{r}
+k_range <- 2:14
+sse_values <- sapply(k_range, function(k) {
+  kmeans_result <- kmeans(student_data %>% select(-Student_ID,-Final_Exam), centers = k, nstart = 100)
+  return(kmeans_result$tot.withinss)
+})
+```
+
+Next, we evaluate the k range using an elbow plot.
+
+```{r}
+# Create elbow plot data
+elbow_plot <- data.frame(K = k_range, SSE = sse_values)
+ggplot(elbow_plot, aes(x = K, y = SSE)) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Elbow Method for Optimal K") +
+  xlab("Number of Clusters (K)") +
+  ylab("Sum of Squared Errors (SSE)")
+```
+
+::: callout-important
+### 📌 Question: How many clusters should we indicate for k-means based on the elbow plot?
+:::
+
+```{r}
+# Suppose we pick k=4 from the elbow or gap; could also be 5
+k <- 4 
+kmeans_result <- kmeans(student_data %>% select(-Student_ID, -Final_Exam), centers = k, nstart = 100)
+student_data$Cluster <- factor(kmeans_result$cluster)
+kmeans_result
+```
+
+::: callout-important
+### 📌 Question: What can we gather from the variance explained?
+:::
+
+## Silhouette method
+
+Another common validation method is Silhouette analysis, a method that the authors did not utilize in the paper. Silhouette analysis is a way to evaluate how well-separated the clusters are in a clustering solution. For each data point, it measures:
+
+-   How close the point is to others in the same cluster
+-   How far the point is from points in the nearest different cluster
+
+The silhouette width for any data point generally falls in the range −1 to −1:
+
+-   +1: indicates a perfectly separated point, i.e., it's much closer to its own cluster than any other cluster.
+
+-   0: indicates a boundary point equally close to its own cluster as to a neighboring cluster.
+
+-   −1: suggests the point is assigned to the wrong cluster, as it’s closer to a different cluster than its own.
+
+```{r, warning=FALSE}
+dist_matrix <- dist(student_data %>% select(-Student_ID, -Final_Exam, -Cluster), method = "euclidean")
+
+sil <- silhouette(kmeans_result$cluster, dist_matrix)
+
+mean_sil_width <- summary(sil)$avg.width
+cat("Mean Silhouette Width for k =", k, "is", mean_sil_width, "\n")
+
+plot(sil, main = paste("Silhouette plot (k =", k, ")"))
+```
+
+::: callout-important
+### 📌 Question: What can we gather from the silhouette visualization? How close are the clusters to each other?
+:::
+
+The average silhouette width is quite low (.11). This indicates that our clusters are not well separated. Since it is near 0, it indicates that most points are only *slightly* closer to their own cluster's center than to centers of other clusters.
+
+Next, [@khosravi2017using] created a visualization of the cluster groupings with final exam score variables (which we excluded from our k-means analysis).
+
+```{r}
+ggplot(student_data, aes(x = Cluster, y = Final_Exam, fill = Cluster)) +
+  geom_boxplot() +
+  ggtitle("Boxplot of Final Exam Grades by Cluster") +
+  xlab("Cluster") +
+  ylab("Final Exam Score") +
+  theme_minimal()
+```
+
+Groups 1 and 3 appear to outperform groups 2 and 4 regarding final exam scores.
+
+## Cluster Interpretation
+
+The authors provided the median (but I added the average and SD).
+
+```{r}
+# Compute summary statistics for Final Exam scores by Cluster
+summary_table <- student_data %>%
+  group_by(Cluster) %>%
+  summarise(
+    Mean = mean(Final_Exam),
+    Std_Dev = sd(Final_Exam),
+    Median = median(Final_Exam)
+  )
+
+summary_table %>%
+  kable("html", caption = "Final Exam Scores by Cluster") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r}
+# Compute summary statistics for all normalized variables by Cluster
+summary_table <- student_data %>%
+  group_by(Cluster) %>%
+  summarise(
+    Mean_S1 = mean(S1), Std_S1 = sd(S1), Median_S1 = median(S1),
+    Mean_S2 = mean(S2), Std_S2 = sd(S2), Median_S2 = median(S2),
+    Mean_S3 = mean(S3), Std_S3 = sd(S3), Median_S3 = median(S3),
+    Mean_F1 = mean(F1), Std_F1 = sd(F1), Median_F1 = median(F1),
+    Mean_F2 = mean(F2), Std_F2 = sd(F2), Median_F2 = median(F2),
+    Mean_B1 = mean(B1), Std_B1 = sd(B1), Median_B1 = median(B1),
+    Mean_B2 = mean(B2), Std_B2 = sd(B2), Median_B2 = median(B2),
+    Mean_B3 = mean(B3), Std_B3 = sd(B3), Median_B3 = median(B3),
+    Mean_B4 = mean(B4), Std_B4 = sd(B4), Median_B4 = median(B4),
+  )
+
+summary_table %>%
+  kable("html", caption = "Normalized Values of Student Features (S1-3, F1-2, B1-4) by Cluster") %>%
+  kable_styling(full_width = FALSE)
+```
+
+::: callout-important
+### 📌 Question: What conclusions can we draw about student groups based on k-means analysis?
+:::
+
+## Research Question 2: Overly engaged student subpopulations
+
+In the paper, [@khosravi2017using] looked further at extreme subpopulations of students' behavior "engagement" variables: B1-B4.
+
+-   Overly engaged participants: those with the highest number of interactions with online materials. Students with the highest 20% of the average, behavioral values were selected as the subpopulation of study. We do so in the code chunk below:
+
+```{r}
+# Compute the average of E1, E2, and E3 for each student
+student_data <- student_data %>%
+  mutate(Average_B = (B1 + B2 + B3 + B4) / 4)
+
+# Determine the top 20% of students
+top_n <- ceiling(0.20 * nrow(student_data))
+
+# Filter students who have the highest Average_B values
+top_students <- student_data %>%
+  arrange(desc(Average_B)) %>%
+  slice_head(n = top_n)  # Select top 20% students
+
+top_students
+```
+
+Again, the authors used the elbow method to select their number of centroids. But first we will apply the gap statistic to identify our K range.
+
+```{r}
+k_min <- 2
+k_max <- 14
+k_range <- k_min:k_max
+
+gap_stat <- clusGap(top_students %>% select(-Student_ID,-Final_Exam, -Cluster, -Average_B), 
+                    FUN = kmeans, 
+                    K.max = k_max, nstart=100)
+fviz_gap_stat(gap_stat)
+```
+
+Not surprising, but again, we are seeing that the data set lacks student groupings. Let's try now with the elbow method with the 2:14 k range.
+
+```{r}
+# Compute k-means clustering for K values from 2 to 14
+k_range <- 2:14
+sse_values <- sapply(k_range, function(k) {
+  kmeans_result <- kmeans(top_students %>% select(--Student_ID,-Final_Exam, -Cluster, -Average_B), centers = k, nstart = 100)
+  return(kmeans_result$tot.withinss)
+})
+```
+
+Next, we evaluate the k range using an elbow plot.
+
+```{r}
+# Create elbow plot data
+elbow_plot <- data.frame(K = k_range, SSE = sse_values)
+```
+
+```{r}
+# Plot Elbow Method
+ggplot(elbow_plot, aes(x = K, y = SSE)) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Elbow Method for Optimal K") +
+  xlab("Number of Clusters (K) for overly engaged participants") +
+  ylab("Sum of Squared Errors (SSE)")
+```
+
+::: callout-important
+### 📌 Question: How many clusters should we select based on the elbow plot?
+:::
+
+```{r}
+optimal_k <- 5 # could also be 4
+
+# Perform k-means clustering
+kmeans_result <- kmeans(top_students %>% select(-Student_ID,-Final_Exam,-Cluster, -Average_B), centers = optimal_k, nstart = 100)
+top_students$Cluster <- factor(kmeans_result$cluster)
+```
+
+We will now display the Final Exam Scores by each cluster.
+
+```{r}
+ggplot(top_students, aes(x = Cluster, y = Final_Exam, fill = Cluster)) +
+  geom_boxplot() +
+  ggtitle("Boxplot of Final Exam Grades by Overly Engaged Participant Clusters") +
+  xlab("Cluster") +
+  ylab("Final Exam Score") +
+  theme_minimal()
+```
+
+::: callout-important
+### 📌 Question: What can we infer about overly engaged participants and their final grades?
+:::
+
+To identify subgroups within clusters, there are more advanced clustering techniques we can use. We will learn more about this in the next module.

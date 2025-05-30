@@ -1,0 +1,327 @@
+---
+title: "Module 6 case review activity: Q-Matrix"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+bibliography: lit/references.bib
+---
+
+The goal of q-matrix construction is to extract underlying, or latent variables, which account for students' differential performance on questions. The Q-matrix method is a concept-to-question mapping that represents the relationships between test questions and underlying skills or concepts required to answer them. This algorithm aims to help educators and researchers to extract interpretable Q-matrices, which can be used to diagnose student knowledge states and guide targeted remediation.
+
+In this case review activity, we apply the same methods as [@barnes2005q]. Specifically, we apply the q-matrix method using data from Ryan Baker's Big Data in Education MOOT course. [@barnes2005q] compared the q-matrix method with expert q-matrices, and evaluated the extent to which the q-matrix method was effective in providing remediation for students' learning. Today we will test how well our own q-matrices do on students' response data.
+
+::: callout-important
+### Take a moment to think about how might the Q-matrix method be useful for you and your own work?
+:::
+
+In [@barnes2005q], the Q-matrix method was applied to a large group of students (we can find the exact sample sizes for each section in Table 13) enrolled in a Binary Relations tutorial in the Fall 2002 Discrete Mathematics course (CSC 226) at NC State University. The authors applied the Q-matrix method to test the following hypotheses:
+
+## Procedure
+
+Add from Ryan
+
+## Q-Matrix Algorithm
+
+The Q-matrix algorithm is a simple hill-climbing algorithm that creates a matrix representing relationships between concepts and questions directly from student response data. The algorithm varies **num_concept**, the number of concepts, and the values in the Q-matrix, minimizing the total error for all students for a given set of **n** questions.
+
+To avoid local minima, each search is seeded with different random Q-matrices, and the best search result is kept.
+
+When you run the Q-matrix method multiple times with different random initializations, each run is known as a “restart point.” After each complete run (which includes the hill-climbing), the algorithm outputs a final Q-matrix and its associated error (the total difference between the students’ actual responses and the Q-matrix’s predicted responses).
+
+A restart point’s search is considered “best” if it yields the lowest error across all runs. The “best” Q-matrix is the one with the minimum error among all the restarts.
+
+Before we start, let's make sure we have the set up right...
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(cluster)  # Load clustering package for concept state extraction
+library(stats)
+```
+
+### **Pull in Students' Response data**
+
+```{r, warning=FALSE}
+# 8 items, n = 1920 students
+data <- read.csv('8items.csv')
+head(data)
+str(data)
+```
+
+You can see that the data represent binary numbers, 1=correct, 0=incorrect. These data represent each students' responses to each of the items regarding topics covered.
+
+### **Algorithm Steps**
+
+Before we calculate the Q-matrix, the key parameters are listed below. It is important to note that again, we used an arbitrary clustering approach to determine the number of clusters. Furthermore, the case review paper by [@barnes2005q] did not provide the number of starts or iterations used, nor the delta value to indicate how to evaluate the optimization. Thus, we will use arbitrary numbers to teaching purposes.
+
+#### **Key Parameters**
+
+| Parameter       | Description                                                           |
+|-----------------|-----------------------------------------------------------------------|
+| `num_questions` | Number of questions in the dataset                                    |
+| `num_concepts`  | Number of concepts (skills) to identify                               |
+| `responses`     | Matrix of student responses (binary: correct/incorrect)               |
+| `num_starts`    | Number of times the algorithm is run with different random Q-matrices |
+| `num_iter`      | Number of optimization iterations for each Q-matrix                   |
+| `delta`         | Small change applied to Q-matrix values for optimization              |
+
+Take note of the algorithm below.
+
+The number of starts is 50 with 5 iterations and a delta of .1 (a very small threshold to evaluate small changes in error). It is important to also note that we determine a minimum and a maximum for the concept number, making it range from 1 to 8, since there were 8 topics covered on the assessment.
+
+### Q-Matrix Algorithm Steps
+
+1.  **Initialize** `num_concepts`, the number of concepts, is set to 1, and a random Q-matrix linking concepts and questions is generated, with values ranging from 0 to 1.
+    -   A Q-matrix is initialized randomly with binary values.
+
+```{r, warning=FALSE}
+initialize_q_matrix <- function(num_questions, num_concepts) {
+  Q <- matrix(sample(c(0, 1), num_questions * num_concepts, replace = TRUE), 
+              nrow = num_questions, ncol = num_concepts)  
+
+  print(paste("Initialized Q-Matrix Shape:", dim(Q)[1], "x", dim(Q)[2]))
+
+  return(Q)
+}
+
+# Start with 1 concept
+num_concepts <- 1 
+num_questions <- 8
+Q <- initialize_q_matrix(num_questions, num_concepts)  
+```
+
+2.  **Calculate the concept states**, next, students' response data are clustered into "concept" states. Each cluster represents the students who understand the concept (1) and those who do not (0). The function below creates concept states using the hierarchical clustering technique with a Hamming distance metric. We use a Hammond distance metric in this case, since we are working with binary values. Euclidean would not be appropriate in this instance.
+
+::: callout-important
+### Take note that hierarchical clustering was used in our case review to identify concept states. In [@barnes2005q], what cluster method was used to identify the concept states? Does it differ from our approach?
+:::
+
+```{r, warning=FALSE}
+data <- as.matrix(data[, -1]) # remove student id variable
+distance_matrix1 <- dist(data, method = "binary")
+hc1 <- hclust(distance_matrix1, method = 'complete')
+clusters1 <- cutree(hc1, h = max(hc1$height) * 0.5)
+table(clusters1)
+plot(hc1, main = "Hierarchical Clustering of Students")
+```
+
+So we have 57 clusters or "concept states" identified...
+
+3.  **Compute the Ideal Response Vector (IDR)**: Each concept state has an associated ideal response vector (IDR), such that the IDR represent the required concepts/skills needed to answer the questions (1=required, 0=not required). Student responses are compared to all IDRs, assigning responses to the closest IDR while measuring error.
+
+A q-matrix is evaluated based on its fit to a set of student responses, and is measured as error per student. The total error associated with each concept state assignment is calculated, over all students. [@barnes2005q] created an array with indices of answer vectors ranging from 0 to 2\^q-1, where 1 is the number of questions in the task.
+
+The method involved first tallying the number of student responses with each answer vector. Then, for each response with at least one student, compared the response with all IDRs and choose the one closest in Hammond Distance. The total error over all students is used to determine the overall errors of the q-matrix.
+
+```{r, warning=FALSE}
+compute_q_matrix_error_section1 <- function(Q, responses, clusters) {
+  if (is.null(clusters)) return(Inf)
+
+  unique_clusters <- sort(unique(clusters))
+  num_clusters <- length(unique_clusters)
+  num_questions <- 8
+  num_concepts <- ncol(Q)
+
+  cat("Section 1 - Q Shape:", dim(Q)[1], "x", dim(Q)[2], "\n")
+  cat("Responses Shape:", dim(responses)[1], "x", dim(responses)[2], "\n")
+  cat("Num Clusters:", num_clusters, "\n")
+
+  concept_states <- matrix(0, nrow = num_clusters, ncol = num_concepts)
+
+  for (i in seq_along(unique_clusters)) {
+    student_indices <- which(clusters == unique_clusters[i])
+
+    if (length(student_indices) > 0) {
+      mean_responses <- colMeans(responses[student_indices, , drop = FALSE])
+      mean_responses <- matrix(mean_responses, nrow = 1, ncol = num_questions)
+
+      if (ncol(mean_responses) != nrow(Q)) {
+        stop(paste("Mismatch: `mean_responses` has", ncol(mean_responses),
+                   "columns but `Q` has", nrow(Q), "rows. These must match!"))
+      }
+
+      concept_states[i, ] <- ifelse(mean_responses %*% Q > 0.5, 1, 0)
+    }
+  }
+
+  neg_c <- 1 - concept_states
+  neg_cQ <- neg_c %*% t(Q) 
+  IDR <- 1 - (neg_cQ > 0)
+
+  cluster_mapping <- match(clusters, unique_clusters)
+  matched_idr <- IDR[cluster_mapping, , drop = FALSE]
+
+  if (!all(dim(responses) == dim(matched_idr))) {
+    stop("Dimension Mismatch: `responses` and `matched_idr` must have the same dimensions!")
+  }
+
+  total_error <- sum(rowSums(abs(responses - matched_idr)))
+
+  return(ifelse(is.na(total_error), Inf, total_error))
+}
+```
+
+4.  **Perform hill-climbing**: Modify a single Q-matrix value by a small fixed `delta`, recompute its error, and keep the change if the error improves.
+    -   Iteratively **modifies individual Q-matrix values** to minimize error.
+    -   If increasing or decreasing a matrix value reduces the error, the change is accepted.
+
+In practice, delta = 0.1 represents the small step size the algorithm uses when “tweaking” or modifying entries in the Q-matrix during its hill-climbing search. When the algorithm attempts to improve the Q-matrix, it changes a cell in the matrix by +0.1 or −0.1 and checks if the error goes down. If the error decreases, it keeps that small change; otherwise, it reverts.
+
+A larger delta (say 0.5) would make bigger leaps, potentially skipping good local improvements or overshooting an optimal point.
+
+A smaller delta (like 0.1) makes finer adjustments, letting the algorithm carefully inch toward a lower-error Q-matrix but possibly taking more time to converge.
+
+```{r, warning=FALSE}
+optimize_q_matrix_section1 <- function(Q, responses, clusters, num_iter = 10) {
+  curr_error <- compute_q_matrix_error_section1(Q, responses, clusters)
+  cat("Initial Error (Section 1):", curr_error, "\n")
+
+  for (iter in 1:num_iter) {
+    changed <- FALSE
+
+    for (c in 1:ncol(Q)) {
+      for (q in 1:nrow(Q)) {
+        Q[q, c] <- 1 - Q[q, c]  
+        new_error <- compute_q_matrix_error_section1(Q, responses, clusters)
+
+        if (new_error < curr_error) {
+          curr_error <- new_error
+          changed <- TRUE
+        } else {
+          Q[q, c] <- 1 - Q[q, c]
+        }
+      }
+    }
+
+    cat("Iteration", iter, "- Error:", curr_error, "\n")
+
+    if (!changed) {
+      cat("Stopping optimization: No further improvements found.\n")
+      break
+    }
+  }
+
+  return(Q)
+}
+```
+
+5.  **Repeat for all values in the Q-matrix multiple times** until error no longer significantly decreases.
+    -   The algorithm is run **multiple times with different initial Q-matrices**.
+    -   This prevents getting stuck in a **local minimum** and helps find the best possible Q-matrix.
+    -   Specifically, we will have 50 initializations with 10 iterations each.
+
+```{r,warning=FALSE}
+run_q_matrix_multiple_times1 <- function(num_questions, responses, max_concepts = 5, num_starts = 50, num_iter = 10) {
+  best_q <- NULL
+  min_error <- Inf
+  best_num_concepts <- 1  
+
+  for (start in 1:num_starts) {
+    cat("Starting run", start, "...\n")
+
+    for (num_concepts in 1:max_concepts) {
+      Q <- matrix(sample(c(0, 1), num_questions * num_concepts, replace = TRUE), 
+                  nrow = num_questions, ncol = num_concepts)
+
+      if (is.null(clusters1)) next  
+
+      Q <- optimize_q_matrix_section1(Q, responses, clusters1, num_iter)
+      curr_error <- compute_q_matrix_error_section1(Q, responses, clusters1)
+
+      if (!is.na(curr_error) && curr_error < min_error) {
+        best_q <- Q
+        min_error <- curr_error
+        best_num_concepts <- num_concepts
+      }
+    }
+  }
+
+  cat("\nBest Q-matrix found with", best_num_concepts, "concepts and error:", min_error, "\n")
+  
+  return(list(Q_matrix = best_q, min_error = min_error, best_num_concepts = best_num_concepts))
+}
+```
+
+6.  **Determine the best number of concepts** by increasing `num_concepts` until a stopping criterion is met, such as:
+    -   Q-matrix error falling below a pre-set threshold (e.g., less than 1 per student).
+    -   Marginal error reduction with additional concepts diminishing.
+
+Let's extract the results from the best q-matrix to see how many concepts it identified. Take note of how the error changes as we add more or less concepts.
+
+```{r, include=FALSE}
+results_section <- run_q_matrix_multiple_times1(num_questions, data, max_concepts = 8)
+```
+
+```{r}
+print(results_section)
+```
+
+```{r, include=FALSE}
+results_section <- run_q_matrix_multiple_times1(num_questions, data, max_concepts = 7)
+```
+
+```{r}
+print(results_section)
+```
+
+```{r, include=FALSE}
+results_section <- run_q_matrix_multiple_times1(num_questions, data, max_concepts = 6)
+```
+
+```{r}
+print(results_section)
+```
+
+```{r, include=FALSE}
+results_section <- run_q_matrix_multiple_times1(num_questions, data, max_concepts = 5)
+```
+
+```{r}
+print(results_section)
+```
+
+```{r, include=FALSE}
+results_section <- run_q_matrix_multiple_times1(num_questions, data, max_concepts = 4)
+```
+
+```{r}
+print(results_section)
+```
+
+```{r, include=FALSE}
+results_section <- run_q_matrix_multiple_times1(num_questions, data, max_concepts = 3)
+```
+
+```{r}
+print(results_section)
+```
+
+```{r, include=FALSE}
+results_section <- run_q_matrix_multiple_times1(num_questions, data, max_concepts = 2)
+```
+
+```{r}
+print(results_section)
+```
+
+```{r, include=FALSE}
+results_section <- run_q_matrix_multiple_times1(num_questions, data, max_concepts = 1)
+```
+
+```{r}
+print(results_section)
+```
+
+We can see that the error does not improve by taking away more concepts.
+
+::: callout-important
+### Which Q-matrix should we select, and how might we interpret it?
+:::

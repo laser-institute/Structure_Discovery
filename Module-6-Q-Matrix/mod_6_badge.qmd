@@ -1,0 +1,64 @@
+---
+title: "Module 6 Badge Activity"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+jupyter: python3
+bibliography: lit/references.bib
+---
+
+In this activity, you will reflect on the use of the Q-matrix method to analyze educational data. Please provide a thoughtful response to the following questions.
+
+\
+\
+
+1.  What is the Q-matrix method, and how does it help in understanding student performance?
+
+\
+\
+\
+\
+\
+
+2.  What are the key steps involved in constructing a Q-matrix?
+
+\
+\
+\
+\
+\
+\
+
+3.  How can the Q-matrix method be used to improve teaching and learning?
+
+\
+\
+\
+\
+\
+
+4.  Can you think of a specific example (from your own experience or hypothetical) where the Q-matrix method could be applied?
+
+\
+\
+\
+\
+\
+
+5.  What challenges might arise when using the Q-matrix method in real-world scenarios?
+
+\
+\
+\
+\
+\
+
+6.  Are there any limitations to the Q-matrix method? How might these be addressed?

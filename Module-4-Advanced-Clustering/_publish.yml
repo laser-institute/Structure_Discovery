@@ -1,0 +1,12 @@
+- source: ul-4-badge.qmd
+  quarto-pub:
+    - id: 922b9517-bf1a-4b4f-9bac-bdacae14b069
+      url: https://laserkt.quarto.pub/module-4-badge-activity
+- source: ul-4-case-study.qmd
+  quarto-pub:
+    - id: ca1e58a7-dfee-4e23-ba6d-fb6c0538f177
+      url: https://laserkt.quarto.pub/module-4-case-review-activity-advanced-clustering
+- source: ul-4-advanced-cluster.qmd
+  quarto-pub:
+    - id: b227116d-92bf-4f46-b659-adf1812e608e
+      url: https://laserkt.quarto.pub/module-4-advanced-cluster-analysis

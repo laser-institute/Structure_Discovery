@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="ul-6-q-matrix_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ul-6-q-matrix_files/libs/quarto-html/tabby.min.js"></script>
+<script src="ul-6-q-matrix_files/libs/quarto-html/popper.min.js"></script>
+<script src="ul-6-q-matrix_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="ul-6-q-matrix_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ul-6-q-matrix_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="ul-6-q-matrix_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
+
+  <title>Module 6: Q-Matrix</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="ul-6-q-matrix_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="ul-6-q-matrix_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="ul-6-q-matrix_files/libs/revealjs/dist/theme/quarto-735d019a274be6a2104eee4dbb974812.css">
+  <link href="ul-6-q-matrix_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="ul-6-q-matrix_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="ul-6-q-matrix_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="ul-6-q-matrix_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="ul-6-q-matrix_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="ul-6-q-matrix_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-notes="" class="quarto-title-block center">
+  <h1 class="title">Module 6: Q-Matrix</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="what-is-the-q-matrix" class="slide level2">
+<h2>What is the Q-Matrix?</h2>
+<ul>
+<li><p>A table</p></li>
+<li><p>Where rows are items</p></li>
+<li><p>And columns are skills</p>
+<p><span class="citation" data-cites="tatsuoka1983rule">Tatsuoka (<a href="#/references" role="doc-biblioref" onclick="">1983</a>)</span> <span class="citation" data-cites="barnes2005practice">B. Barnes (<a href="#/references" role="doc-biblioref" onclick="">2005</a>)</span></p></li>
+<li><p>Also called a KC [knowledge component] Model</p></li>
+<li><p>Or a skill-item mapping</p></li>
+</ul>
+</section>
+<section id="what-is-the-q-matrix-tatsuoka1983rule-barnes2005practice" class="slide level2">
+<h2>What is the Q-Matrix? <span class="citation" data-cites="tatsuoka1983rule">Tatsuoka (<a href="#/references" role="doc-biblioref" onclick="">1983</a>)</span> <span class="citation" data-cites="barnes2005practice">B. Barnes (<a href="#/references" role="doc-biblioref" onclick="">2005</a>)</span></h2>
+
+<img data-src="images/clipboard-2298555189.png" class="r-stretch"></section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+
+<img data-src="images/clipboard-3492925289.png" class="r-stretch"></section>
+<section id="how-do-we-get-a-skill-item-mapping" class="slide level2">
+<h2>How do we get a skill-item mapping?</h2>
+<ul>
+<li><p>Automatic model discovery</p></li>
+<li><p>Hand-development and refinement</p></li>
+<li><p>Hybrid approaches</p></li>
+</ul>
+</section>
+<section id="how-do-we-get-a-skill-item-mapping-1" class="slide level2">
+<h2>How do we get a skill-item mapping?</h2>
+<ul>
+<li><p><span style="color:red;">Automatic model discovery</span></p></li>
+<li><p>Hand-development and refinement</p></li>
+<li><p>Hybrid approaches</p></li>
+</ul>
+</section>
+<section id="automated-model-discovery" class="slide level2">
+<h2>Automated Model Discovery</h2>
+<ul>
+<li>Learn the mapping between items and skills solely from data</li>
+</ul>
+</section>
+<section id="initial-algorithm" class="slide level2">
+<h2>Initial algorithm</h2>
+<ul>
+<li>Hill-climbing based method <span class="citation" data-cites="barnes2005experimental">T. Barnes, Bitzer, &amp; Vouk (<a href="#/references" role="doc-biblioref" onclick="">2005</a>)</span></li>
+</ul>
+</section>
+<section id="more-common-approach-lately" class="slide level2">
+<h2>More common approach lately</h2>
+<ul>
+<li><p>Non-negative matrix factorization<br>
+<span class="citation" data-cites="desmarais2012mapping">Desmarais (<a href="#/references" role="doc-biblioref" onclick="">2012</a>)</span></p></li>
+<li><p>Can be combined!<br>
+<span class="citation" data-cites="picones2022combining">Picones, PaaBen, Koprinska, &amp; Yacef (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span></p></li>
+</ul>
+<aside class="notes">
+<p>The initial way that people did this was a hill climbing based method that came from Barnes et al.&nbsp;But more common methods that have been used lately involve a method called “non-negative matrix factorization” which is mathematically intense and we will not go into those details.&nbsp;</p>
+<p><br>
+</p>
+<p>It’s worth noting, by the way, that you can actually combine these two methods. And Picones et al.&nbsp;provide a nice example of combining non-negative matrix factorization with hill climbing.</p>
+<p><br>
+</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="first-question" class="slide level2">
+<h2>First question</h2>
+<ul>
+<li>How many skills should we use?</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><p>This is determined empirically</p>
+<ol type="1">
+<li><p>Try 1 skill</p></li>
+<li><p>Try 1 more skill than previous model (e.g.&nbsp;2,3,4,5…)</p></li>
+<li><p>Does the new model do better than the previous model?<br>
+If so, go to step 2.<br>
+If not, quit and use the previous model.</p></li>
+</ol></li>
+</ul>
+<aside class="notes">
+<p>So, the first question you ask yourself when doing this is, how many skills should we use? And this is determined empirically. First, we try one skill. Then we try one more skill than the previous model, then two, three, four and so on.</p>
+<p><br>
+</p>
+<p>And we look, every time we add a new skill, at whether the new model fit the data better than the previous model. And if so, we go to the next step. However, if the model is not a better fit, then we quit and we use our best that we have so far.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="how-do-we-know-if-one-q-matrix-is-better-than-another" class="slide level2">
+<h2>How do we know if one Q-matrix is better than another</h2>
+<ul>
+<li>Several definitions</li>
+</ul>
+<aside class="notes">
+<p>But you may also ask: How do we know whether one Q-matrix is better than another one? There are several ways to look at this.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="barnes-et-al.s-definition" class="slide level2">
+<h2>Barnes et al.’s definition</h2>
+<ul>
+<li><p>Better models have the property that if a student knows skill X</p></li>
+<li><p>And item 1 and item 2 both have skill X</p></li>
+<li><p>Then a student who gets item 1 right will be more likely to get item 2 right&nbsp;</p>
+<ul>
+<li><p>And item 1 wrong → item 2 wrong</p></li>
+<li><p>And item 2 right → item 1 right</p></li>
+<li><p>And item 2 wrong → item 1 wrong</p></li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>In other words, when two items that involve the same skill, should be connected.&nbsp;</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="barnes-et-al.s-definition-1" class="slide level2">
+<h2>Barnes et al.’s definition</h2>
+<ul>
+<li>Given a skill-item mapping, you can predict, for each combination of skills whether a student should get each item correct or not</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>A model’s degree of error is based on how many item-student pairs the prediction gets wrong</li>
+</ul>
+<aside class="notes">
+<p>To put it another way, given a skill item mapping, you can predict for each combination of skills whether a student should get each item correct or not. And a model’s degree of error is based on how many item-student pairs the prediction gets wrong.&nbsp;</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="and-forward-from-there" class="slide level2">
+<h2>And forward from there</h2>
+<ul>
+<li>You can compare models with different numbers of skills using BIC or AIC or cross-validation <span class="citation" data-cites="effenberger2020exploration">Effenberger, Pelánek, &amp; Čechák (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span></li>
+</ul>
+<aside class="notes">
+<p>However, you’re typically going to get better fit for having more possible skills. So what you can do going forward from there, as Effenberger et al.&nbsp;point out, is you can compare model with different number of skills using BIC or AIC or cross-validation.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="subtlety" class="slide level2">
+<h2>Subtlety</h2>
+<ul>
+<li><p>Is skill conjunctive? (as in Barnes)</p>
+<ul>
+<li>You need all relevant skills to get an item right</li>
+</ul></li>
+<li><p>Or is it compensatory? <span class="citation" data-cites="beck2008composition">Beck &amp; Heffernan (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span></p>
+<ul>
+<li>Any relevant skill leads to getting an item right</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>Is the skill conjunctive? Which means, as in Barnes, if an item has multiple skills, you need every relevant skill to get an item right. If an item involves skills 1, 2, and 3, you need to have 1, 2, and 3 or you’re going to get it wrong.</p>
+<p><br>
+</p>
+<p>Or is skill compensatory, as Pardo et al proposes, where having any relevant skill leads to getting an item right? In other words, if you have skill 1 or 2 or 3, any one of them, you’re going to get the item right.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="assumption" class="slide level2">
+<h2>Assumption</h2>
+<ul>
+<li>Barnes’s approach and NNMF (and most approaches to q-matrix discovery) assume no learning</li>
+</ul>
+<aside class="notes">
+<p>So one thing that’s worth mentioning is that Barnes’ approach and non-negative matrix factorization, and let’s be frank, most approaches to Q-matrix discovery, assume no learning.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="alternate-test-of-model-goodness" class="slide level2">
+<h2>Alternate Test of Model Goodness</h2>
+<ul>
+<li><p>Look at student improvement over time</p></li>
+<li><p>Fit a model like PFA or BKT from Week 4, and see how well it fits data, given the skill-item mapping</p>
+<ul>
+<li>No point to doing this with DKT-family, since they either skip or fit their own q-matrix!<br>
+</li>
+</ul></li>
+<li><p><span class="citation" data-cites="liu2017going">Liu &amp; Koedinger (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span>, <span class="citation" data-cites="effenberger2020exploration">Effenberger et al. (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span>, <span class="citation" data-cites="picones2022combining">Picones et al. (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span> Give examples<br>
+<br>
+</p></li>
+</ul>
+<aside class="notes">
+<p>An alternate way to do this is to look at students’ improvement over time.</p>
+<p><br>
+</p>
+<p>But if you’re familiar with knowledge tracing methods, you may know that DKT is typically better than BKT or PFA. The reason is because DKT family algorithms either are going to skip the step of having a skill item mapping entirely, or they’re going to fit their own Q-matrix or alternative to a Q-matrix.</p>
+<p><br>
+</p>
+<p>So literally, you put a different Q-matrix in the DKT family, you get the exact same thing back out.</p>
+<p><br>
+</p>
+<p>This process of looking at student improvement over time in the process of validating Q-matrices, you can see in various papers, such as the one’s listed here.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="how-do-we-get-a-q-matrix" class="slide level2">
+<h2>How do we get a Q-Matrix?</h2>
+<ul>
+<li><p>Automatic model discovery</p></li>
+<li><p><span style="color:red;">Hand-development and refinement</span></p></li>
+<li><p>Hybrid approaches</p></li>
+</ul>
+</section>
+<section id="hand-development-and-refinement" class="slide level2">
+<h2>Hand Development and Refinement</h2>
+<ul>
+<li>The original way that Q-Matrices were created</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>A domain expert creates the Q-Matrix using knowledge engineering</li>
+</ul>
+</section>
+<section id="hand-development-and-refinement-1" class="slide level2">
+<h2>Hand Development and Refinement</h2>
+<ul>
+<li><p>What kind of data can we use to guide refinement?</p></li>
+<li><p>Some slides adapted from a talk in my class<br>
+by John Stamper</p></li>
+</ul>
+
+<img data-src="images/clipboard-764182918.png" class="r-stretch"></section>
+<section id="strategies-for-q-matrix-refinement" class="slide level2">
+<h2>Strategies for Q-Matrix Refinement</h2>
+<ul>
+<li>Try to smooth learning curves</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>Look for skills with no apparent learning</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>Look for problems with unexpected error rates</li>
+</ul>
+<p><br>
+<br>
+</p>
+<aside class="notes">
+<p>The learning curve strategy actually comes from Corbett and Anderson in 1995.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="tool-for-doing-this" class="slide level2">
+<h2>Tool for doing this</h2>
+<ul>
+<li>Pittsburgh Science of Learning Center DataShop</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><a href="https://pslcdatashop.web.cmu.edu/" class="uri">https://pslcdatashop.web.cmu.edu/</a></li>
+</ul>
+<aside class="notes">
+<p>But you can also do it in excel, you can do it in a visualization program, but the Data Shop’s got tools to help you do it.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="learning-curve-in-brief" class="slide level2">
+<h2>Learning Curve In Brief</h2>
+<ul>
+<li>Shows relationship between amount of practice and performance</li>
+</ul>
+<p><img data-src="images/clipboard-446517771.png"><br>
+<br>
+</p>
+<aside class="notes">
+<p>This classic graph comes from corbett and Anderson (1995). And you can see that the error rate goes down as the student practice smore, and you kind of hopes that that would be what happens</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="spikes-in-learning-curves" class="slide level2">
+<h2>Spikes in learning curves…</h2>
+<ul>
+<li>Often imply two (or more) skills are being treated as a single skill</li>
+</ul>
+<p><img data-src="images/clipboard-2981701677.png"><br>
+<br>
+</p>
+<aside class="notes">
+<p>Spikes in learning curves often imply that two or more skills are being treated as a single skill. So if we look at this graph, we can see that the student seems to be getting better, then they shoot up, then they come down and then they coming up again.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="spikes-in-learning-curves-1" class="slide level2">
+<h2>Spikes in learning curves…</h2>
+<ul>
+<li>Often imply two (or more) skills are being treated as a single skill</li>
+</ul>
+<p><img data-src="images/clipboard-412059348.png"><br>
+</p>
+<aside class="notes">
+<p>Actually this graph is demonstrating two different learning curves occurring. If you look at it like it has two learning curves, it looks really smooth and nice, but</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="spikes-in-learning-curves-2" class="slide level2">
+<h2>Spikes in learning curves…</h2>
+<ul>
+<li>Often imply two (or more) skills are being treated as a single skill</li>
+</ul>
+<p><img data-src="images/clipboard-428252429.png"><br>
+</p>
+<aside class="notes">
+<p>If you look at it as one, it is a total mess.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example</h2>
+<p>Possible to look at learning curves for different skill models<br>
+(we will discuss this more in a future lecture)</p>
+
+<img data-src="images/clipboard-358943964.png" class="r-stretch"><aside class="notes">
+<p>The PSLC data shop makes it possible to look at learning curves for different skill models.</p>
+<p><br>
+</p>
+<p>So for example, if we treat geometry as a single skill, the entirety of geometry area, you don’t get a smooth learning curve. But if you split it into 12 component skill, then you get a smooth learning curve shown at the bottom right.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="you-can-inspect-curves-for-individual-skills" class="slide level2">
+<h2>You can inspect curves for individual skills</h2>
+
+<img data-src="images/clipboard-929961695.png" class="r-stretch"><aside class="notes">
+<p>You can inspect the curves for individual skills. Again this picture is from DataShop.&nbsp;</p>
+<p><br>
+</p>
+<p>If a skill is not improving, then you’re either teaching it really badly, or the model’s messed up. Or perhaps both!</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="also-look-for-problems-with-unexpected-error-rates" class="slide level2">
+<h2>Also look for problems with unexpected error rates</h2>
+
+<img data-src="images/clipboard-1175939492.png" class="r-stretch"><aside class="notes">
+<p>The second thing you can do is look for problems with unexpectedly high error rates. There’s a tool in the data shop called the performance profilers, shown here, where it shows you each item’s actual error rate and the predicted error rate based on the model.</p>
+<p><br>
+</p>
+<p>If you’ve got an item that has an error rate that’s much higher than what you’d predict from the model, you know there’s something wrong there, and its something worth looking into. Maybe that problem doesn’t fit the skill you think it does.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="datashop-can-apply-model-for-you" class="slide level2">
+<h2>DataShop can apply model for you!</h2>
+<ul>
+<li><p>Applies a mathematical model called LFA (similar to PFA) to data</p></li>
+<li><p>Can give AIC and BIC goodness measures for different skill-item mappings</p></li>
+</ul>
+
+<img data-src="images/clipboard-4156909720.png" class="r-stretch"><aside class="notes">
+<p>So once you’ve built a skill out of mapping, the Data Shop can actually test how good it is for you. It applies a mathematical model call LFA, which is similar to PFA, to the data, and then gives you AIC and BIC goodness of fit measures for the different skill out of mappings you might have created.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="next-up" class="slide level2">
+<h2>Next Up</h2>
+<p>Case Activity</p>
+</section>
+<section id="references" class="slide level2 smaller scrollable">
+<h2>References</h2>
+<a href="https://www.go.ncsu.edu/laser-institute">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-barnes2005practice" class="csl-entry" role="listitem">
+Barnes, B. (2005). Practice as collective action. In <em>The practice turn in contemporary theory</em> (pp. 25–36). Routledge.
+</div>
+<div id="ref-barnes2005experimental" class="csl-entry" role="listitem">
+Barnes, T., Bitzer, D., &amp; Vouk, M. (2005). Experimental analysis of the q-matrix method in knowledge discovery. <em>International Symposium on Methodologies for Intelligent Systems</em>, 603–611. Springer.
+</div>
+<div id="ref-beck2008composition" class="csl-entry" role="listitem">
+Beck, Z. A. P. E., &amp; Heffernan, C. R. T. (2008). The composition effect: Conjunctive or compensatory? An analysis of multi-skill math questions in ITS. <em>Educational Data Mining 2008</em>, 147.
+</div>
+<div id="ref-desmarais2012mapping" class="csl-entry" role="listitem">
+Desmarais, M. C. (2012). Mapping question items to skills with non-negative matrix factorization. <em>ACM Sigkdd Explorations Newsletter</em>, <em>13</em>(2), 30–36.
+</div>
+<div id="ref-effenberger2020exploration" class="csl-entry" role="listitem">
+Effenberger, T., Pelánek, R., &amp; Čechák, J. (2020). Exploration of the robustness and generalizability of the additive factors model. <em>Proceedings of the Tenth International Conference on Learning Analytics &amp; Knowledge</em>, 472–479.
+</div>
+<div id="ref-liu2017going" class="csl-entry" role="listitem">
+Liu, R., &amp; Koedinger, K. R. (2017). Going beyond better data prediction to create explanatory models of educational data. <em>The Handbook of Learning Analytics</em>, <em>1</em>, 69–76.
+</div>
+<div id="ref-picones2022combining" class="csl-entry" role="listitem">
+Picones, G., PaaBen, B., Koprinska, I., &amp; Yacef, K. (2022). Combining domain modelling and student modelling techniques in a single automated pipeline. <em>International Educational Data Mining Society</em>.
+</div>
+<div id="ref-tatsuoka1983rule" class="csl-entry" role="listitem">
+Tatsuoka, K. K. (1983). Rule space: An approach for dealing with misconceptions based on item response theory. <em>Journal of Educational Measurement</em>, 345–354.
+</div>
+</div>
+</a></section><a href="https://www.go.ncsu.edu/laser-institute">
+    </a></div><a href="https://www.go.ncsu.edu/laser-institute">
+  </a><div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="images/LASERLogoB.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p><a href="https://www.go.ncsu.edu/laser-institute">go.ncsu.edu/laser-institute</a></p><a href="https://www.go.ncsu.edu/laser-institute">
+</a></div><a href="https://www.go.ncsu.edu/laser-institute">
+</a></div></div><a href="https://www.go.ncsu.edu/laser-institute">
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="ul-6-q-matrix_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="ul-6-q-matrix_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="ul-6-q-matrix_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="ul-6-q-matrix_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="ul-6-q-matrix_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="ul-6-q-matrix_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="ul-6-q-matrix_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="ul-6-q-matrix_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="ul-6-q-matrix_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="ul-6-q-matrix_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="ul-6-q-matrix_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":false},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+
+        height: 1080,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 5.0e-2,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</a></body></html>

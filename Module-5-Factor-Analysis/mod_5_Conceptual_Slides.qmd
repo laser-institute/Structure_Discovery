@@ -1,0 +1,599 @@
+---
+title: "Module 5: Factor Analysis"
+subtitle: ""
+format:
+  revealjs: 
+    slide-number: c/t
+    progress: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/LASERLogoB.png
+    theme: [default, css/laser.scss]
+    width: 1920
+    height: 1080
+    margin: 0.05
+    footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
+resources:
+  - demo.pdf
+bibliography: lit/references.bib
+editor: visual
+csl: apa/apa-6th-edition.csl
+title-slide-attributes: 
+  data-notes: 
+---
+
+## Factor Analysis
+
+-   You have a whole lot of variables
+
+-   Can you group them into “factors”?
+
+::: notes
+In factor analysis, you have a lot of variables, and you want to group them into factors which kind of are variables that express the center of several variables
+:::
+
+## Factor Analysis and Clustering
+
+-   Not the same 
+
+    -   Clustering finds how data points group together
+
+    -   Factor analysis finds how data features/variables/items group together
+
+\
+
+-   In many cases, one problem can be transformed into the other
+
+-   But conceptually still not the same thing
+
+\
+
+::: notes
+It is important to note that factor analysis is not the same as cluster analysis. 
+:::
+
+## Goal 1 of Factor Analysis
+
+::: notes
+-   You have a lot of quantitative\* variables
+
+    -   And since you have a lot of variables you have high dimensionality
+
+\
+
+-   You want to reduce the dimensionality into a smaller number of factors
+
+\
+\
+\
+:::
+
+## Goal 1 of Factor Analysis
+
+\* -- there is also a variant for categorical and binary data, Latent Class Factor Analysis (LCFA --\
+@magidson2001latent; @magidson2004latent), as well as a variant for mixed data types, Exponential Family Principal Component Analysis (EPCA – @collins2001generalization)
+
+::: notes
+And there are other variants as well!
+:::
+
+## Goal 2 of Factor Analysis
+
+-   You have a lot of quantitative\* variables
+
+    -   And since you have a lot of variables you have high dimensionality
+
+\
+
+-   You want to understand the structure that unifies these variables
+
+## Classic Example
+
+-   You have a questionnaire with 100 items
+
+\
+
+-   Do the 100 items group into a smaller number of factors?
+
+    -   E.g. Do the 100 items actually tap only 6 deeper constructs?
+
+    -   Can the 100 items be divided into 6 scales?
+
+    -   Which items fit poorly in their scales?
+
+\
+
+-   Common in attempting to design questionnaire with scales and sub-scales
+
+## Another Example
+
+-   You have a set of 600 features of student behavior
+
+\
+
+-   You want to reduce the data space before running a classification algorithm
+
+\
+
+-   Do the 600 features group into a smaller number of factors?
+
+    -   E.g. Do the 600 features actually tap only 15 deeper constructs?
+
+## Another Example
+
+-   You have a taxonomy of 120 design features that an e-learning lesson could possess
+
+\
+
+-   You want to reduce the data space before studying the relationship between these features and student learning
+
+\
+
+-   Do the 120 design features group into 8 factors?
+
+    -   E.g. Do the 120 features actually group into a set of 8 dimensions of tutor design?
+
+## Two types of Factor Analysis
+
+-   Experimental
+
+    -   Determine variable groupings in bottom-up fashion
+
+    -   More common in EDM
+
+\
+
+-   Confirmatory
+
+    -   Take existing structure, verify its goodness
+
+    -   More common in Psychometrics
+
+::: notes
+There are two types of factor analysis
+:::
+
+## Mathematical Assumption in most Factor Analysis
+
+-   Each variable loads onto every factor, but with different strengths
+
+    -   Some strengths are infinitesimally small\
+
+::: notes
+So it’s not actually, for example, that these seven variables are in this factor as much as that every variable is but only seven actually loads strongly to it. In other words, only seven participate substantially in its calculation.
+:::
+
+## Example
+
+![](images/clipboard-3105742570.png)
+
+::: notes
+Let’s take an example. Say you ran factor analysis with these 12 variables and here’s how much each one loads on each factor.
+:::
+
+## Computing a Factor Score: Can you write an equation for F1?
+
+![](images/clipboard-602728829.png)
+
+::: notes
+ So first question, can you write an equation for factor one? It turns out to be pretty easy.
+:::
+
+## Can you write an equation for F1?
+
+(It’s just a straight-up linear equation, like in linear regression! Cazart!)
+
+![](images/clipboard-4003602932.png)
+
+::: notes
+You just take a straight-up linear equation like in linear regression. 
+
+\
+:::
+
+## Example
+
+0.01V1-0.62V2+0.003V3+0.04V4+0.05V5-0.66V6\
++0.04V7+0.02V8+0.32V9+0.01V10-0.03V11+0.55V12
+
+![](images/clipboard-415022354.png)
+
+::: notes
+So, for example, what you’ll get for factor one is, look at the top left cell, .01 times V1, minus go one down, .62 times V2, and so on and so forth all the way to V12. Notice the top and you’ll see that every single thing in F1, whether it is negative or positive, is going to end up being in this equation.
+:::
+
+## Popup quiz
+
+Can you write an equation for F2?
+
+![](images/clipboard-3916097341.png)
+
+::: notes
+Now try yourself to write the equation for F2.
+
+\
+
+If so, the answer is
+
+\
+
+-0.7V1+0.1V2-0.14V3+0.03V4 +0.73V5+0.02V6-0.03V7-0.01V8\
+-0.34V9-0.02V10-0.02V11-0.32V12
+:::
+
+## Which variables load strongly on F1?
+
+![](images/clipboard-3604735306.png)
+
+::: notes
+Well, what’s a strong loading? What’s actually a good number here?
+:::
+
+## Wait… what’s a “strong” loading?
+
+-   One common guideline: \> 0.4 or \< -0.4
+
+\
+
+-   Comrey & Lee (1992)
+
+    -   0.70 excellent (or -0.70)
+
+    -   0.63 very good
+
+    -   0.55 good
+
+    -   0.45 fair
+
+    -   0.32 poor
+
+\
+
+-   One of those arbitrary things that people seem to take exceedingly seriously
+
+    -   Another approach is to look for a gap in the loadings in your actual data
+
+::: notes
+One common guideline is that the strong loading is above .4 or below -.4
+
+\
+
+However, setting a “strong” vs. “not so strong” factor loading is rather arbitrary. Does .55 differ so much that .54 would be considered fair than good?
+
+\
+
+Another approach folks use is to look at the gap in the loadings of their actual data. Such that instead of saying, well .4 is something I really care about. I’ve got a whole bunch here that are above. 55, but then from .55 to .37 there’s really nothing.
+
+\
+
+Or maybe from .65, there’s a bunch of stuff above .65 but then nothing down to .42. Maybe we don’t want to include that .41 even though it’s above .4 if everything else that’s strongly loaded is above .65.
+:::
+
+## Which variables load strongly on F1?
+
+![](images/clipboard-2246840180.png)
+
+::: notes
+Well you know regardless of whether you’re going to treat .4 as the magic number or look for a big gap, it’s going to be the same answer here.
+
+\
+
+V2 is -.62, V6 is -.66, and V12 is .55. and there’s nothing else all the way down to .32.
+:::
+
+## Which variables load strongly on F2?
+
+![](images/clipboard-1200402038.png)
+
+## Which variables load strongly on F2?
+
+![](images/clipboard-3575269147.png)
+
+::: notes
+Well, in this case, it’s V1 and V5. There’s a big gap between those and V9, -.34
+:::
+
+## Quiz: Which variables load strongly on F3?
+
+![](images/clipboard-3877623191.png)
+
+::: notes
+The answer is A.
+:::
+
+## Which variables don’t fit this scheme?
+
+e.g. don’t load strongly on any factor
+
+![](images/clipboard-1584410816.png)
+
+::: notes
+So which variables do not fit this scheme? Or in other words, which variables don’t load strongly on any factor?
+:::
+
+## Which variables don’t fit this scheme?
+
+e.g. don’t load strongly on any factor
+
+::: notes
+You can see that we have V4, which has .04, .03, and .-.02.  So not good on any factor. 
+
+\
+
+And V10 is .01, -.02, and -.07. 
+
+\
+
+But what about V9? That’s kind of weird one, right? It actually has two reasonable strong loadings. It’s much weaker than any of the other ones in those two factors. And it’s below that major negative .4 or .4. But it is hard to say that this completely doesn’t fit. It kind of seems to fit two of them.
+
+\
+
+If the magic number was lower, V9 would be find. In fact, V9 seems to load on two factors in a moderate degree. This probably means it’s actually an item that isn’t really quite right for this factor scheme.
+:::
+
+## Assigning items to factors to create scales
+
+-   After loading is created, you can create one-factor-per-variable models (“scales”) by iteratively 
+
+    -   assigning each item to one factor
+
+    -   dropping the one item that loads most poorly in its factor, if it has no strong loading
+
+    -   re-fitting factors
+
+::: notes
+Okay so we’ve got our factors. How do we create scales, for say, a questionnaire? Or for saying, okay I do not actually do not want to calculate across my 10,000 variables every single time. I just want to know which variables to calculate across. In that case, we can actually create scales by assigning items to specific factors.
+:::
+
+## Item Selection
+
+-   Some researchers recommend conducting item selection based on face validity – e.g. if it doesn’t look like it should fit, don’t include it
+
+-   Depends on how theory-driven you want to be
+
+    -   And how much of a theory you actually have!
+
+::: notes
+Some folks recommend that item selections should be based on the face validity, rather than only based on the fit to a factor. In other words, if it doesn’t look like it should fit, don’t include it. 
+:::
+
+## How does it work mathematically?
+
+Two algorithms (Ferguson, 1971)
+
+-   Principal axis factoring (PAF)
+
+    -   Fits to shared variance between variables
+
+-   Principal components analysis (PCA)
+
+    -   Fits to all variance between variables, including variance unique to specific variables
+
+\
+
+-   PCA is more common these days
+
+\
+
+-   Similar, especially as number of variables increases\
+    \
+
+::: notes
+But it really doesn’t matter so much, especially as the number of variables increases. PCA is also a little bit easier to compute.
+:::
+
+## How does it work mathematically?
+
+-   First factor tries to find a combination of variable-weightings that gets the best fit to the data
+
+-   Second factor tries to find a combination of variable-weightings that best fits the remaining unexplained variance
+
+-   Third factor tries to find a combination of variable-weightings that best fits the remaining unexplained variance…
+
+::: notes
+First, so we’re going to try to say, how can we most predict the variance in the data by finding a combination of variable weightings on the various variables? And then we take what is not fit, the residuals. We take the remaining unexplained variance and the second factor tries to find a combination of variable weightings, another linear regression equation, that best fits that.
+
+\
+
+So imagine you’re doing a linear regression. The first of a factor analysis is just do a linear regression. And then take all the variance from that linear regression, all that unexplained variance, all the residuals, and fit a linear regression equation from that. 
+
+\
+
+And then, after you’ve done the second factor, take all the remaining variance, everything you haven’t fit so far, all the residuals, and try to fit that with another linear regression equation.
+:::
+
+## How does it work mathematically?
+
+-   Factors are then made orthogonal (e.g. uncorrelated to each other)
+
+    -   Uses statistical process called factor rotation, which takes a set of factors and re-fits to maintain equal fit while minimizing factor correlation
+
+    -   Essentially, there is a large equivalence class of possible solutions; factor rotation tries to find the solution that minimizes between-factor correlation
+
+::: notes
+You keep doing that until you cannot fit anything anymore. You then make the factors orthogonal, or in other words, uncorrelated to one another. Now how do we do that?\
+\
+Well, we use a statistical process that I’m we will not go too in-depth in, called factor rotation. Which takes a set of factors and refits to maintain equal fit while minimizing the factor correlation.
+
+\
+
+Essentially there is going to be a large equivalence class of potential solutions, sets of for example, three linear regression equations that each do an equally good job of fitting the variance. And factor rotation ties to find the solution that minimizes the correlation between the factors. So it’s going to try to find factors that equally fit all the data while fitting each other, correlating to each other as little as possible.
+
+\
+
+So trying to get orthogonal, one that goes this way, one that goes this way, and one that goes this way.
+:::
+
+## Looking at this another way…
+
+-   This approach tries to find lines, planes, and hyperplanes in the K-dimensional space (K variables)
+
+\
+
+-   Which best fit the data
+
+\
+
+-   This may remind you of spectral clustering…
+
+::: notes
+This may remind you of spectral clustering. Or you may have seen that there are a lot of things in educational data mining where the same math used in slightly different ways ends up being very different things.
+:::
+
+## Goodness
+
+-   What proportion of the variance in the original variables is explained by the factoring?\
+    (e.g. r2 – called in Factor Analysis land the estimate of the communality)
+
+\
+
+-   Better to use cross-validated r2
+
+    -   Still not standard
+
+::: notes
+So how do you compute the goodness of a factor analysis? Well, you look at what proportion of the variables in the original variables is explained by the factoring. This is typically computed as R squared, or the correlation squared, which in factor analysis land is often called the estimate of the communality.
+
+\
+
+Once again, same thing, different terms.
+
+\
+
+The only thing I’d add to this is it’s usually better to use cross-validated r squared than just the original r squared on all the training data being your test data.
+
+\
+
+Typically, people will still use the test data as the training data in factor analysis. But if you cross-validate, you’ll get a better estimate of how good your factors really are.
+:::
+
+## How many factors?
+
+-   Best approach: decide using cross-validated r2
+
+\
+
+-   Alternate approach: drop any factor with fewer than 3 strong loadings
+
+\
+
+-   Alternate approach: add factors until you get an incomprehensible factor
+
+    -   But one person’s incomprehensible factor is another person’s research finding!
+
+::: notes
+So how many factors should you use? Well, the best approach is to decide on using cross-validated r squared. But there is an alternative approach that some people use which is where they drop any factor that has fewer than three strong loadings. 
+
+\
+
+Now this makes sense if you’re doing questionnaires. But who wants a subscale with only two items on it? It doesn’t really make sense and it doesn’t give you enough data. But for other uses of factor analysis, this may make more sense. You may want factors that are outlier factors in various ways. 
+
+\
+
+Another alternative approach is adding factors until you get an incomprehensible factor. This is actually fairly common and fairly popular in the statistics community. You just keep going with more factors, until you get a factor that you say, I have no idea what that means.
+
+Now the only concern I have about this: At what point is one person’s incomprehensible finding another person’s research finding?
+
+\
+
+So if you’re going to throw things out just because you don’t understand them, really make sure that it’s really just junk and not something that you just do not understand.
+:::
+
+## Desired Amount of Data
+
+-   At least 5 data points per variable @Gorsuch1983FactorAnalysis
+
+-   At least 3-6 data points per variable @cattell1978scientific
+
+-   At least 100 total data points @Gorsuch1983FactorAnalysis=
+
+-   @comrey1992first guidelines for total sample size
+
+    -   100= poor 
+
+    -   200 = fair
+
+    -   300 = good
+
+    -   500 = very good 
+
+    -   1,000 or more = excellent
+
+\
+
+-   My opinion: use cross-validation and see empirically
+
+::: notes
+So how much data should you have to do a factor analysis? Well, Gorsuch says at least five data points per variable. Cattell says at least three to six data points per variable, and so on and so forth. 
+
+\
+
+You know whenever you see wonderfully round numbers as guidelines, you should be just a little suspicious. It’s probably a magic number. And as far as I can tell, these were based on Gorsuch and Cattell and others’ personal experiences, which is good. You know you are taking this course, you’re getting suggestions and guidelines on things, it’s good to get peoples’ opinions on things, but it’s also important not to take it too too seriously. 
+
+\
+
+If you get good things out of a factor analysis with 99 data points or only four data points per variable, you know, if you get something useful, you’ve got something useful. If you get something that helps you think about your data, that’s good. If your factor analysis, leads to a better prediction model, then who cares?
+
+\
+
+ Use cross-validation and see empirically – see if it’s useful.
+:::
+
+## OK you’ve done a factor analysis, and you’ve got scales
+
+-   One more thing to do before you publish
+
+\
+
+-   Check internal reliability of scales
+
+\
+
+-   Cronbach’s α
+
+## Cronbach’s α
+
+$\alpha = \frac{N·\overline{c}}{\overline{v}+(N-1)·\overline{c}}$
+
+-   N = number of items
+
+-   C = average inter-item covariance (averaged at subject level)
+
+-   V = average variance (averaged at subject level)
+
+## Cronbach’s α: magic numbers @mallery2005spss
+
+-   \> 0.9 Excellent
+
+-   0.8-0.9 Good
+
+-   0.7-0.8 Acceptable
+
+-   0.6-0.7 Questionable
+
+-   0.5-0.6 Poor
+
+-   \< 0.5 Unacceptable
+
+::: notes
+So here are some magic numbers for interpreting Cronbach’s alpha.
+:::
+
+## Factor Analysis
+
+-   A powerful tool for discovering unknown structure in data
+
+\
+
+-   Conceptually similar to clustering
+
+\
+
+-   Finds an orthogonal type of structure
+
+## Next module
+
+Q-Matrix
+
+## Reference

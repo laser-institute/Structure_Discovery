@@ -1,0 +1,253 @@
+---
+title: "Module 5 case review activity: Factor Analysis"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+bibliography: lit/references.bib
+---
+
+In this code-along, you'll learn how to perform Confirmatory Factor Analysis (CFA) and Exploratory Factor Analysis (EFA) on the Academic Motivation Scale (AMS). We will replicate what [@guay2015application] did in their paper, by specifically following Study 1, where they compared the fit between CFA and exploratory structural equation modeling. For purposes of this code along, we will focus on running CFA and EFA as methods that help us either identify or confirm whether the underlying factor structure of motivation aligns with theoretical models like Deci and Ryan's Self-Determination Theory (SDT).
+
+Motivation is defined as a multidimensional concept that varies in terms of quality. SDT proposes different types of motivation that reflect different levels of self-determination (i.e., the extent to which behavior originates from the self) [@deci2012self]. SDT outlines several different types of motivation: intrinsic, extrinsix, and amotivation.
+
+1.  Intrinsic motivation is the most self-determined form of motivation, and occurs when a person engages in an activity for its own sake, for the pleasure and satisfaction derived, which can be broken down into further categories:
+    -   To know: pleasure and satisfaction in learning, exploring, and trying to understand something new,
+    -   To experimence simulation: sensations, excitement, or aesthetic enjoyment associated with the activity, and
+    -   To accomplish: satisfaction and pleasure derived from trying to surpass oneself or to accomplish or create something.
+2.  Extrinsic motivation involves engaging in an activity as a mean to an end rather than for its intrinsic qualities, which can be broken down into further categories:
+    -   Identified: occurs when behaviors are performed by choice, because the individual considers them important,
+    -   Introjected: when behaviors are partly internalized, but not fully coherent with other aspects of the self, and
+    -   External: refers to behaviors that are not self-determined, and are instead regulated by external means such as rewards and constraints.
+3.  Amotivation: characterized by a lack of intentionality, or a relative lack of motivation (intrinsic or extrinsic).
+
+Motivation types are expected to show a simplex like patterns of correlations, with stronger positive correlations between adjacent than distant motivations [@ryan1989perceived]. These patterns of correlations are frequently used to test the convergent and divergent validity of scores of motivational instruments developed in light of SDT.
+
+CFA and EFA are distinct from each other in that, CFA is built to confirm the factors that we indicate are present, whereas EFA will estimate freely, such that items can load onto multiple factors. In this way, with CFA, we are testing a hypothesized factor structure, whereas with EFA, we are discovering underlying factor structures.
+
+Before we get started, let's make sure we have the right packages installed and loaded.
+
+```{r setup}
+# Load required libraries
+#install.packages("lavaan") ensure this package is downloaded.
+library(lavaan)
+library(psych)
+if (!require("polycor")) {
+  install.packages("polycor", repos = "https://cloud.r-project.org") # download packaged from this source.
+}
+library(polycor)
+library(tidyverse)
+library(MASS)  # for mvrnorm
+library(corrplot)
+```
+
+Next, we need to generate data with a similar structure as the AMS scale, representing 28 items with 1,416 responses.
+
+```{r simulate-ams-data}
+set.seed(123)
+
+n <- 1416  # number of participants from Study 1
+
+n_factors <- 7
+items_per_factor <- 4
+
+# Create a correlation matrix: only F1 and F2 correlated
+latent_cor <- diag(n_factors)
+latent_cor[1, 2] <- 0.4
+latent_cor[2, 1] <- 0.4
+
+# Simulate latent variables
+latent_factors <- MASS::mvrnorm(n, mu = rep(0, n_factors), Sigma = latent_cor)
+
+# Simulate 28 items (4 per factor)
+items <- list()
+for (f in 1:n_factors) {
+  for (i in 1:items_per_factor) {
+    # Generate item response from latent factor + noise
+    signal <- latent_factors[, f] + rnorm(n, 0, 0.6)
+    
+    # Convert to Likert-scale (1–7)
+    item <- cut(signal,
+                breaks = quantile(signal, probs = seq(0, 1, length.out = 8), na.rm = TRUE),
+                include.lowest = TRUE,
+                labels = FALSE)
+    
+    items[[length(items) + 1]] <- item
+  }
+}
+
+# Assemble into a dataframe
+ams_data <- as.data.frame(items)
+colnames(ams_data) <- paste0("Q", 1:(n_factors * items_per_factor))
+
+# Convert to ordered for CFA/EFA
+ams_ord <- ams_data %>%
+  mutate(across(everything(), ordered))
+```
+
+```{r display-data}
+head(ams_data)
+head(ams_ord)
+```
+
+Now we will build our 7-factor CFA model, the one that does not account for cross-factor loadings. Below, we indicate which questionnaire items should load onto each factor. You can see that each factor had four items each. For CFA, we tell the model which factors we have and we use it to confirm the factor structure.
+
+```{r}
+
+ams_model <- '
+Intrinsic_Motivation_to_Know =~ Q1 + Q2 + Q3 + Q4
+Intrinsic_Motivation_to_Accomplish =~ Q5 + Q6 + Q7 + Q8
+Intrinsic_Stimulation =~ Q9 + Q10 + Q11 + Q12
+Identified_Regulation =~ Q13 + Q14 + Q15 + Q16
+Introjected_Regulation =~ Q17 + Q18 + Q19 + Q20
+External_Regulation =~ Q21 + Q22 + Q23 + Q24
+Amotivation =~ Q25 + Q26 + Q27 + Q28
+'
+```
+
+When running CFA on ordinal (Likert-type) data, especially when using WLSMV estimation, the estimator for categorical variables. The data we have imply order, but the distances between them aren't equal (e.g., the psychological distance between 2 and 3 may not be the same as between 6 and 7 universally). So, treating our data as interval/continuous (like standard Pearson correlations assume) can distort the relationships among items. Instead, we use polychoric correlations, which estimate the correlation between underlying continuous latent variables assumed to drive the ordinal responses.
+
+Now we will estimate the polychoric correlation matrix.
+
+```{r polychoric-correlation}
+# Get polychoric correlation matrix
+poly_cor <- psych::polychoric(ams_ord)$rho
+# Visualize using corrplot
+corrplot::corrplot(
+  poly_cor,
+  method = "color",
+  type = "upper",
+  order = "hclust",
+  tl.col = "black",
+  tl.cex = 0.6,
+  addCoef.col = "black",
+  number.cex = 0.5
+)
+```
+
+Notice the dark blue patterns on the edge of the scatterplot. You will noticed that each of the four items, that are separated across factors, are highly correlated with other items in the same factor. This may suggest that there are no cross-loadings in these instances, however, there appears to be a correlation between items in one factor (items 5-8) with items in another factor (items 9-12). We also see relatively weak negative correlations between some of the items with other items in different factors.
+
+To get a better sense, let's also check correlations between the average of each factor, when we average the underlying items together, and assess whether there may be correlations between the factors at the scale level.
+
+```{r}
+# Convert ordered factors to numeric for averaging
+ams_numeric <- ams_ord %>% mutate(across(everything(), ~ as.numeric(as.character(.))))
+
+# Define subscale (factor) names and item mappings
+factor_map <- list(
+  Intrinsic_Know = paste0("Q", 1:4),
+  Intrinsic_Accomplish = paste0("Q", 5:8),
+  Intrinsic_Stimulation = paste0("Q", 9:12),
+  Identified_Regulation = paste0("Q", 13:16),
+  Introjected_Regulation = paste0("Q", 17:20),
+  External_Regulation = paste0("Q", 21:24),
+  Amotivation = paste0("Q", 25:28)
+)
+
+# Create new dataframe with average scores per factor
+ams_subscales <- lapply(factor_map, function(items) {
+  rowMeans(ams_numeric[, items])
+}) %>% as.data.frame()
+
+```
+
+```{r}
+# Run Pearson correlation
+subscale_corr <- cor(ams_subscales[,-1])
+
+corrplot(subscale_corr,
+         method = "color",
+         type = "upper",
+         order = "hclust",
+         addCoef.col = "black",
+         tl.cex = 0.8)
+```
+
+Take note that the averaged items within factors demonstrate some weak correlations when aggregated by item averages. But the correlations do not appear to be too strong. Let's proceed with CFA followed by EFA.
+
+## CFA
+
+Now we will fit our initial CFA model to assess the goodness-of-fit, without accounting for the cross-loadings.
+
+```{r cfa model}
+
+cfa_fit <- lavaan::cfa(
+  model = ams_model,
+  data = ams_ord,
+  estimator = "WLSMV",
+  ordered = colnames(ams_ord),
+  std.lv = TRUE
+)
+
+summary(cfa_fit, fit.measures = TRUE, standardized = TRUE)
+```
+
+The output for CFA is quite extensive, but provide lots of detailed information such that we can determine the fit of the model. We can first reference the Latent Varialbes output, where we can gather information on the factor loadings. Generally, it is good practice to set a threshold for loadings as such:
+
+-   
+
+    > = .7 is a strong loading,
+
+-   .69 - .4 is a moderate loading, and
+
+-   \< .4 is a weak loading.
+
+We can see that across all of the items for each factor demonstrate factor loadings \> .84, suggesting that each of the items assigned to the factor demonstrate strong loadings.
+
+To evaluate the goodness-of-fit, researchers often standard metrics that we have already talked about thus far (AIC, RMSEA, BIC). In the case of CFA, we also have additional metrics that are useful (which are not influenced by the sample size; see below):
+
+-   comparative fit index (CFI),
+-   Tucker-Lewis Index (TLI), and
+-   Root mean square error of approximation (RMSEA).
+
+Values greater than .9 for CFI and TLI are considered to be indicative of good model fit. Values smaller than .08 or .06 for the RMSEA support respectively acceptable, good model fit. Let's see how our model does by running the code chunk below.
+
+```{r cfa fit}
+fitMeasures(cfa_fit, c("cfi", "tli", "rmsea", "srmr", "aic", "bic")) # AIC and BIC are less informative under WLSMW estimation.
+```
+
+We see that the model demonstrate good fit with CFI/TFI scores above or equal to 1. Furthermore, we see that RMSEA is 0 and SRMR is nearing 0, and lower than the threshold of .06 for an acceptable fit.
+
+It is important to note that this is a very clean factor structure, likely due to the fact that we simulated random data, instead of utilizing real data.
+
+## EFA
+
+Now we will run the same data using EFA, but in this analysis, we will directly input the polychoric correlations matrix into the equation to account for cross-factor loadings. Specifically, we are using principal axis factoring (fm = "pa") and oblimin rotation methods.
+
+```{r}
+# Compute polychoric correlation matrix
+poly_efa <- psych::polychoric(ams_ord)
+
+# Run EFA with 7 factors using oblimin rotation (as in Study 1)
+efa_result <- psych::fa(r = poly_efa$rho, nfactors = 7, fm = "pa", rotate = "oblimin")
+print(efa_result)
+```
+
+We can see that the output is identifying 7 factors, similar to our initial structure informed by SDT and confirmed by CFA.
+
+First, we want to interpret the standardized loading form the output. For the PA values, factor loadings close to 1 mean there is a strong loading on that factor. We can see which items load well onto certain factors (e.g., PA6 has strong loadings for item 9-12, but low loadings for the remaining items).
+
+The 'h2', 'u2', and 'com' variables indicate other metrics.
+
+-   h2: communality, which is the proportion of variance in that item explained by all factors.
+-   u2: uniqueness, such that 1-h2 is the left over item variance left unexplained.
+-   com: complexity, where the \# of factors an item meaningfully loads on.
+
+From the 'com' variable alone, we can see that each item loads onto 1 factor. Across all items, they explained a high degree of variance, ranging from .7-.77 of variability by all factors, with as low as .23 variance left unexplained by all factors for each
+
+::: callout-important
+### Question: To what extent do the EFA results differ from the CFA results?
+:::
+
+But again, it is important to note that these data have a very clean factor structure, likely due to the fact that we simulated random data, instead of utilizing real data.
+
+::: callout-important
+### Question: Reflect on an example case where you will use CFA over EFA? Now EFA over CFA? What are the benefits and limitations of each approach?
+:::

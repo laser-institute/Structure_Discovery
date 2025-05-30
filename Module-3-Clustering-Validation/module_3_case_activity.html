@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Elizabeth Cloude">
+<meta name="dcterms.date" content="2025-04-30">
+
+<title>Module 3 case review activity: Clustering validation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="module_3_case_activity_files/libs/clipboard/clipboard.min.js"></script>
+<script src="module_3_case_activity_files/libs/quarto-html/quarto.js"></script>
+<script src="module_3_case_activity_files/libs/quarto-html/popper.min.js"></script>
+<script src="module_3_case_activity_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="module_3_case_activity_files/libs/quarto-html/anchor.min.js"></script>
+<link href="module_3_case_activity_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="module_3_case_activity_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="module_3_case_activity_files/libs/quarto-html/quarto-syntax-highlighting-dark-b53751a350365c71b6c909e95f209ed1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="module_3_case_activity_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="module_3_case_activity_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="module_3_case_activity_files/libs/bootstrap/bootstrap-ace83b8419f3c34b77ed47bdf10475a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="module_3_case_activity_files/libs/bootstrap/bootstrap-dark-e2c873b82842e939c894474a46ad78e6.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="module_3_case_activity_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="module_3_case_activity_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#determining-the-optimal-number-of-clusters" id="toc-determining-the-optimal-number-of-clusters" class="nav-link active" data-scroll-target="#determining-the-optimal-number-of-clusters">Determining the Optimal Number of Clusters</a>
+  <ul>
+  <li><a href="#gap-statistic-method-tibshirani2001estimating" id="toc-gap-statistic-method-tibshirani2001estimating" class="nav-link" data-scroll-target="#gap-statistic-method-tibshirani2001estimating">Gap statistic method <span class="citation" data-cites="tibshirani2001estimating">(Tibshirani, Walther, and Hastie 2001)</span></a></li>
+  <li><a href="#elbow-method" id="toc-elbow-method" class="nav-link" data-scroll-target="#elbow-method">Elbow method</a></li>
+  <li><a href="#silhouette-method" id="toc-silhouette-method" class="nav-link" data-scroll-target="#silhouette-method">Silhouette method</a></li>
+  <li><a href="#cluster-interpretation" id="toc-cluster-interpretation" class="nav-link" data-scroll-target="#cluster-interpretation">Cluster Interpretation</a></li>
+  <li><a href="#research-question-2-overly-engaged-student-subpopulations" id="toc-research-question-2-overly-engaged-student-subpopulations" class="nav-link" data-scroll-target="#research-question-2-overly-engaged-student-subpopulations">Research Question 2: Overly engaged student subpopulations</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Module 3 case review activity: Clustering validation</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Elizabeth Cloude </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 30, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>An important task in using clustering methods is validation. Most existing methods present it as a model selection problem, in which the clustering algorithm is run with different values of <em>K</em>, where the best value of K maximizes or minimizes a selected criterion. Validation can also be used to select between different types of clustering, e.g., spectral vs.&nbsp;gmm vs.&nbsp;k-means.</p>
+<p>In this case review activity, we will apply k-means clustering methods, similar to the approach used in <span class="citation" data-cites="khosravi2017using">(<a href="#ref-khosravi2017using" role="doc-biblioref">Khosravi and Cooper 2017</a>)</span>. Since their dataset and code were not made available, we will create from scratch. The authors described their sample as being collected from a large, flipped introductory programming course. We will need to generate our own data using similar variables, conduct k-means clustering and validation, and then interpret the results.</p>
+<p>The authors study the specific variables:</p>
+<ol type="1">
+<li>Performance: summative (S) and formative (F)
+<ul>
+<li>S features: S1-S3, use a total of 7 scores from summative assessments:
+<ul>
+<li>S1: (labs) the average lab grade of students for the first 5 labs;</li>
+<li>S2: (midterm 1) the first midterm grade; and,</li>
+<li>S3: (midterm 2) the second midterm grade.</li>
+</ul></li>
+<li>F features: F1 and F2, use a total of 30 scores from formal assessments:
+<ul>
+<li>F1: (clickers) the average clicker grade over 15 lectures; and,</li>
+<li>F2: (worksheets) the average grade of students for the in-class exercises over 15 lectures.</li>
+</ul></li>
+</ul></li>
+<li>Engagement: behavioral (B)
+<ul>
+<li>B features: B1-B4, use a total of 41 scores to represent the number of view of screen casts for the 15 online lectures
+<ul>
+<li>B1: (screen cast views) the total number of views of screen casts for the 15 lectures;</li>
+<li>B2: (worksheet solution view) the total number of solution (out of 15);</li>
+<li>B3: (pre-lab exercise views) the total number of view of the 5 pre-lab exercises; and</li>
+<li>B4: (examination/solution views) the total number of files out of the four practice questions with solutions for midterms; and two exam solutions for the midterm student access.</li>
+</ul></li>
+</ul></li>
+</ol>
+<p>We have a lot of features to work with, where each falls across three dimensions: S, F, B, and on the top: performance and engagement categories. These data represents multiple, hierarchical dimensions.</p>
+<p>Before we start, let’s ensure we have installed the right packages.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chooseCRANmirror</span>(<span class="at">graphics =</span> <span class="cn">FALSE</span>, <span class="at">ind =</span> <span class="dv">1</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"tidyverse"</span>)) <span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: tidyverse</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.4     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"cluster"</span>)) <span class="fu">install.packages</span>(<span class="st">"cluster"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: cluster</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"factoextra"</span>)) <span class="fu">install.packages</span>(<span class="st">"factoextra"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: factoextra
+Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"NbClust"</span>)) <span class="fu">install.packages</span>(<span class="st">"NbClust"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: NbClust</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(NbClust)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"readr"</span>)) <span class="fu">install.packages</span>(<span class="st">"readr"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"dplyr"</span>)) <span class="fu">install.packages</span>(<span class="st">"dplyr"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"knitr"</span>)) <span class="fu">install.packages</span>(<span class="st">"knitr"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: knitr</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"kableExtra"</span>)) <span class="fu">install.packages</span>(<span class="st">"kableExtra"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: kableExtra
+
+Attaching package: 'kableExtra'
+
+The following object is masked from 'package:dplyr':
+
+    group_rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s generate random data based on their description of the data structure and variables.</p>
+<p>We will normalize the scores, putting them on a similar scale before conducting the clustering analysis. The authors scaled the dimensions by transforming them into normalized values with a mean of 0 and standard deviation of 1.</p>
+<p>By transforming each variable to have a mean of 0 and standard deviation of 1, every dimension contributes equally to the distance calculation. Without proper scaling, the variable(s) with larger numerical ranges could dominate the clustering, potentially obscuring patterns in other dimensions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed for reproducibility</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define number of students</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>n_students <span class="ot">&lt;-</span> <span class="dv">78</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate random normalized data for each feature</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>generate_scaled_data <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale</span>(<span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate Final Exam scores in range 0-100</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>generate_final_exam_score <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">runif</span>(n, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">100</span>)  <span class="co"># Uniform distribution between 0 and 100</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>} <span class="co"># the authors did not provide average or SD information to estimate the distribution</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>student_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">Student_ID =</span> <span class="dv">1</span><span class="sc">:</span>n_students,</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">S1 =</span> <span class="fu">generate_scaled_data</span>(n_students),  <span class="co"># Average lab grade (first 5 labs)</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">S2 =</span> <span class="fu">generate_scaled_data</span>(n_students),  <span class="co"># Midterm 1 grade</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">S3 =</span> <span class="fu">generate_scaled_data</span>(n_students),  <span class="co"># Midterm 2 grade</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">F1 =</span> <span class="fu">generate_scaled_data</span>(n_students),  <span class="co"># Clicker grade (15 lectures)</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">F2 =</span> <span class="fu">generate_scaled_data</span>(n_students),  <span class="co"># Worksheet grade (15 lectures)</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">B1 =</span> <span class="fu">generate_scaled_data</span>(n_students),  <span class="co"># Screencast views (15 lectures)</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">B2 =</span> <span class="fu">generate_scaled_data</span>(n_students),  <span class="co"># Worksheet solution views (out of 15)</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">B3 =</span> <span class="fu">generate_scaled_data</span>(n_students),  <span class="co"># Pre-lab exercise views (5 pre-labs)</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">B4 =</span> <span class="fu">generate_scaled_data</span>(n_students),   <span class="co"># Examination solution views (out of 6)</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">Final_Exam =</span> <span class="fu">generate_final_exam_score</span>(n_students)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(student_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Student_ID         S1          S2         S3         F1         F2         B1
+1          1 -0.6197726  0.25429474  0.5355729 -0.7067900 -1.6978453 -0.6043625
+2          2 -0.2666170 -0.08331887 -0.4433603 -1.4610635 -0.5896007 -2.0428259
+3          3  1.6460641  0.06920601  0.9688103 -0.3091876 -0.3439047  0.8538083
+4          4  0.0548771  0.46936811 -0.4456021  0.3021595  0.6957375 -0.7780826
+5          5  0.1177241 -0.32769588  1.0480708  0.2059967 -0.1012473 -0.5343864
+6          6  1.8132411  0.74255922 -1.1515723 -0.9171863 -1.2368267  1.4438673
+          B2         B3         B4 Final_Exam
+1 -0.0473209 -1.0392236 -0.7071205  24.412509
+2  1.2001355  0.7399667  1.0653019  75.818554
+3  2.2010870  2.4732960  0.3133897  54.730268
+4 -0.4553162 -0.4183782 -0.8908032  94.806690
+5 -1.6811393  0.9387940 -1.2074927   8.617219
+6 -0.4057280 -0.6361522  2.1831050  94.788258</code></pre>
+</div>
+</div>
+<section id="determining-the-optimal-number-of-clusters" class="level1">
+<h1>Determining the Optimal Number of Clusters</h1>
+<p>The paper by <span class="citation" data-cites="khosravi2017using">(<a href="#ref-khosravi2017using" role="doc-biblioref">Khosravi and Cooper 2017</a>)</span> applied two cluster validation methods. First, a gap statistic was used to measure clusters based on properties of internal cohesion and external separation <span class="citation" data-cites="tibshirani2001estimating">(<a href="#ref-tibshirani2001estimating" role="doc-biblioref">Tibshirani, Walther, and Hastie 2001</a>)</span>. The gap statistic helps identify an initial range for K by comparing the clustering structure in the data to that of randomly distributed points. They explored a minimum of 2, and a maximum of 14 clusters, a guideline provided by a prior study <span class="citation" data-cites="thorndike1953belongs">(<a href="#ref-thorndike1953belongs" role="doc-biblioref">Thorndike 1953</a>)</span>, but we will assess if that is optimal for our randomly generated data. The second method used was the ‘elbow’ method to evaluate the sum of square errors (SSE) for a range of values of K.</p>
+<p>To account for random initialization of centroids in k-means, for each value in the range, the authors ran 100 executions of the k-means algorithm and the solution with the highest likelihood is selected. While the authors did not discuss the gap statistic output, we will run it for teaching purposes.</p>
+<section id="gap-statistic-method-tibshirani2001estimating" class="level2">
+<h2 class="anchored" data-anchor-id="gap-statistic-method-tibshirani2001estimating">Gap statistic method <span class="citation" data-cites="tibshirani2001estimating">(<a href="#ref-tibshirani2001estimating" role="doc-biblioref">Tibshirani, Walther, and Hastie 2001</a>)</span></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>k_min <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>k_max <span class="ot">&lt;-</span> <span class="dv">14</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>k_range <span class="ot">&lt;-</span> k_min<span class="sc">:</span>k_max</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>gap_stat <span class="ot">&lt;-</span> <span class="fu">clusGap</span>(student_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Student_ID,<span class="sc">-</span>Final_Exam), </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">FUN =</span> kmeans, </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">K.max =</span> k_max, <span class="at">nstart=</span><span class="dv">100</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_gap_stat</span>(gap_stat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="module_3_case_activity_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Based on the gap statistic, it appears that 1 one cluster is optimal, suggesting that there may not be distinct groups within our dataset (possibly due to generating a normal distribution or small sample size of 78). Next, the authors used the <strong>elbow method</strong> to determine the optimal number of clusters (K) by running k-means for K values. We will apply this with a range <strong>[2, 14]</strong> for teaching purposes, even though this grouping may be artificial based on our randomly generated dataset.</p>
+</section>
+<section id="elbow-method" class="level2">
+<h2 class="anchored" data-anchor-id="elbow-method">Elbow method</h2>
+<p>We will run a loop to calculate k-means using 2-14 clusters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>k_range <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">14</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>sse_values <span class="ot">&lt;-</span> <span class="fu">sapply</span>(k_range, <span class="cf">function</span>(k) {</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  kmeans_result <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(student_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Student_ID,<span class="sc">-</span>Final_Exam), <span class="at">centers =</span> k, <span class="at">nstart =</span> <span class="dv">100</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(kmeans_result<span class="sc">$</span>tot.withinss)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we evaluate the k range using an elbow plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create elbow plot data</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>elbow_plot <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">K =</span> k_range, <span class="at">SSE =</span> sse_values)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(elbow_plot, <span class="fu">aes</span>(<span class="at">x =</span> K, <span class="at">y =</span> SSE)) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Elbow Method for Optimal K"</span>) <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Number of Clusters (K)"</span>) <span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Sum of Squared Errors (SSE)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="module_3_case_activity_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📌 Question: How many clusters should we indicate for k-means based on the elbow plot?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppose we pick k=4 from the elbow or gap; could also be 5</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">4</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>kmeans_result <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(student_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Student_ID, <span class="sc">-</span>Final_Exam), <span class="at">centers =</span> k, <span class="at">nstart =</span> <span class="dv">100</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>student_data<span class="sc">$</span>Cluster <span class="ot">&lt;-</span> <span class="fu">factor</span>(kmeans_result<span class="sc">$</span>cluster)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>kmeans_result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>K-means clustering with 4 clusters of sizes 23, 19, 20, 16
+
+Cluster means:
+          S1         S2         S3          F1         F2         B1         B2
+1 -0.3603077  0.3117187 -0.7996153 -0.08791758 -0.5085279  0.7041883 -0.3118723
+2  0.1783690  0.2629476  0.6788241 -0.72624417 -0.1658799 -0.6840823  0.1026723
+3  0.6212869 -0.3781287 -0.2872137  0.42200322  0.3519330 -0.6785556 -0.3967000
+4 -0.4704795 -0.2876852  0.7023604  0.46129246  0.4880752  0.6482716  0.8222680
+          B3         B4
+1 -0.2607151  0.5184058
+2 -0.7216142  0.3951152
+3  0.3064278 -0.9058394
+4  0.8486600 -0.0821083
+
+Clustering vector:
+ [1] 2 2 4 3 3 1 3 4 4 2 3 3 2 2 1 3 2 4 2 1 4 4 4 1 1 2 3 1 1 3 4 4 2 1 2 2 1 1
+[39] 1 2 3 1 1 3 2 2 1 4 3 1 3 3 4 3 3 3 4 1 3 2 1 1 1 1 1 3 4 2 4 2 1 1 2 3 2 3
+[77] 4 4
+
+Within cluster sum of squares by cluster:
+[1] 148.4310 125.2280 117.2691 113.4019
+ (between_SS / total_SS =  27.2 %)
+
+Available components:
+
+[1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+[6] "betweenss"    "size"         "iter"         "ifault"      </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📌 Question: What can we gather from the variance explained?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+</section>
+<section id="silhouette-method" class="level2">
+<h2 class="anchored" data-anchor-id="silhouette-method">Silhouette method</h2>
+<p>Another common validation method is Silhouette analysis, a method that the authors did not utilize in the paper. Silhouette analysis is a way to evaluate how well-separated the clusters are in a clustering solution. For each data point, it measures:</p>
+<ul>
+<li>How close the point is to others in the same cluster</li>
+<li>How far the point is from points in the nearest different cluster</li>
+</ul>
+<p>The silhouette width for any data point generally falls in the range −1 to −1:</p>
+<ul>
+<li><p>+1: indicates a perfectly separated point, i.e., it’s much closer to its own cluster than any other cluster.</p></li>
+<li><p>0: indicates a boundary point equally close to its own cluster as to a neighboring cluster.</p></li>
+<li><p>−1: suggests the point is assigned to the wrong cluster, as it’s closer to a different cluster than its own.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dist_matrix <span class="ot">&lt;-</span> <span class="fu">dist</span>(student_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Student_ID, <span class="sc">-</span>Final_Exam, <span class="sc">-</span>Cluster), <span class="at">method =</span> <span class="st">"euclidean"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>sil <span class="ot">&lt;-</span> <span class="fu">silhouette</span>(kmeans_result<span class="sc">$</span>cluster, dist_matrix)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>mean_sil_width <span class="ot">&lt;-</span> <span class="fu">summary</span>(sil)<span class="sc">$</span>avg.width</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean Silhouette Width for k ="</span>, k, <span class="st">"is"</span>, mean_sil_width, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean Silhouette Width for k = 4 is 0.1128031 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sil, <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Silhouette plot (k ="</span>, k, <span class="st">")"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="module_3_case_activity_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📌 Question: What can we gather from the silhouette visualization? How close are the clusters to each other?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+<p>The average silhouette width is quite low (.11). This indicates that our clusters are not well separated. Since it is near 0, it indicates that most points are only <em>slightly</em> closer to their own cluster’s center than to centers of other clusters.</p>
+<p>Next, <span class="citation" data-cites="khosravi2017using">(<a href="#ref-khosravi2017using" role="doc-biblioref">Khosravi and Cooper 2017</a>)</span> created a visualization of the cluster groupings with final exam score variables (which we excluded from our k-means analysis).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(student_data, <span class="fu">aes</span>(<span class="at">x =</span> Cluster, <span class="at">y =</span> Final_Exam, <span class="at">fill =</span> Cluster)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Boxplot of Final Exam Grades by Cluster"</span>) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Cluster"</span>) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Final Exam Score"</span>) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="module_3_case_activity_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Groups 1 and 3 appear to outperform groups 2 and 4 regarding final exam scores.</p>
+</section>
+<section id="cluster-interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="cluster-interpretation">Cluster Interpretation</h2>
+<p>The authors provided the median (but I added the average and SD).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute summary statistics for Final Exam scores by Cluster</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> student_data <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Cluster) <span class="sc">%&gt;%</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean =</span> <span class="fu">mean</span>(Final_Exam),</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Std_Dev =</span> <span class="fu">sd</span>(Final_Exam),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median =</span> <span class="fu">median</span>(Final_Exam)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>summary_table <span class="sc">%&gt;%</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="st">"html"</span>, <span class="at">caption =</span> <span class="st">"Final Exam Scores by Cluster"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Final Exam Scores by Cluster</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Cluster</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Std_Dev</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">57.46593</td>
+<td style="text-align: right;">34.01090</td>
+<td style="text-align: right;">72.52994</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">46.45892</td>
+<td style="text-align: right;">22.59861</td>
+<td style="text-align: right;">47.00026</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">63.64206</td>
+<td style="text-align: right;">27.36462</td>
+<td style="text-align: right;">72.75197</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">54.33292</td>
+<td style="text-align: right;">25.96303</td>
+<td style="text-align: right;">56.39156</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute summary statistics for all normalized variables by Cluster</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> student_data <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Cluster) <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_S1 =</span> <span class="fu">mean</span>(S1), <span class="at">Std_S1 =</span> <span class="fu">sd</span>(S1), <span class="at">Median_S1 =</span> <span class="fu">median</span>(S1),</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_S2 =</span> <span class="fu">mean</span>(S2), <span class="at">Std_S2 =</span> <span class="fu">sd</span>(S2), <span class="at">Median_S2 =</span> <span class="fu">median</span>(S2),</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_S3 =</span> <span class="fu">mean</span>(S3), <span class="at">Std_S3 =</span> <span class="fu">sd</span>(S3), <span class="at">Median_S3 =</span> <span class="fu">median</span>(S3),</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_F1 =</span> <span class="fu">mean</span>(F1), <span class="at">Std_F1 =</span> <span class="fu">sd</span>(F1), <span class="at">Median_F1 =</span> <span class="fu">median</span>(F1),</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_F2 =</span> <span class="fu">mean</span>(F2), <span class="at">Std_F2 =</span> <span class="fu">sd</span>(F2), <span class="at">Median_F2 =</span> <span class="fu">median</span>(F2),</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_B1 =</span> <span class="fu">mean</span>(B1), <span class="at">Std_B1 =</span> <span class="fu">sd</span>(B1), <span class="at">Median_B1 =</span> <span class="fu">median</span>(B1),</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_B2 =</span> <span class="fu">mean</span>(B2), <span class="at">Std_B2 =</span> <span class="fu">sd</span>(B2), <span class="at">Median_B2 =</span> <span class="fu">median</span>(B2),</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_B3 =</span> <span class="fu">mean</span>(B3), <span class="at">Std_B3 =</span> <span class="fu">sd</span>(B3), <span class="at">Median_B3 =</span> <span class="fu">median</span>(B3),</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_B4 =</span> <span class="fu">mean</span>(B4), <span class="at">Std_B4 =</span> <span class="fu">sd</span>(B4), <span class="at">Median_B4 =</span> <span class="fu">median</span>(B4),</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>summary_table <span class="sc">%&gt;%</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="st">"html"</span>, <span class="at">caption =</span> <span class="st">"Normalized Values of Student Features (S1-3, F1-2, B1-4) by Cluster"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Normalized Values of Student Features (S1-3, F1-2, B1-4) by Cluster</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Cluster</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean_S1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Std_S1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Median_S1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean_S2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Std_S2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Median_S2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean_S3</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Std_S3</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Median_S3</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean_F1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Std_F1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Median_F1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean_F2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Std_F2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Median_F2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean_B1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Std_B1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Median_B1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean_B2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Std_B2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Median_B2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean_B3</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Std_B3</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Median_B3</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean_B4</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Std_B4</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Median_B4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">-0.3603077</td>
+<td style="text-align: right;">0.8825635</td>
+<td style="text-align: right;">-0.4512761</td>
+<td style="text-align: right;">0.3117187</td>
+<td style="text-align: right;">1.0922239</td>
+<td style="text-align: right;">0.3148471</td>
+<td style="text-align: right;">-0.7996153</td>
+<td style="text-align: right;">0.4067517</td>
+<td style="text-align: right;">-0.7909660</td>
+<td style="text-align: right;">-0.0879176</td>
+<td style="text-align: right;">0.9851686</td>
+<td style="text-align: right;">-0.0754996</td>
+<td style="text-align: right;">-0.5085279</td>
+<td style="text-align: right;">0.9279212</td>
+<td style="text-align: right;">-0.4541564</td>
+<td style="text-align: right;">0.7041883</td>
+<td style="text-align: right;">0.6390962</td>
+<td style="text-align: right;">0.6904529</td>
+<td style="text-align: right;">-0.3118723</td>
+<td style="text-align: right;">0.9877097</td>
+<td style="text-align: right;">-0.3620482</td>
+<td style="text-align: right;">-0.2607151</td>
+<td style="text-align: right;">0.6858903</td>
+<td style="text-align: right;">-0.3176950</td>
+<td style="text-align: right;">0.5184058</td>
+<td style="text-align: right;">0.9609842</td>
+<td style="text-align: right;">0.6188367</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">0.1783690</td>
+<td style="text-align: right;">0.9502891</td>
+<td style="text-align: right;">0.2103746</td>
+<td style="text-align: right;">0.2629476</td>
+<td style="text-align: right;">0.9065340</td>
+<td style="text-align: right;">0.2542947</td>
+<td style="text-align: right;">0.6788241</td>
+<td style="text-align: right;">0.8883907</td>
+<td style="text-align: right;">0.5355729</td>
+<td style="text-align: right;">-0.7262442</td>
+<td style="text-align: right;">0.7952441</td>
+<td style="text-align: right;">-0.7067900</td>
+<td style="text-align: right;">-0.1658799</td>
+<td style="text-align: right;">1.0053031</td>
+<td style="text-align: right;">-0.0297082</td>
+<td style="text-align: right;">-0.6840823</td>
+<td style="text-align: right;">0.7539766</td>
+<td style="text-align: right;">-0.5012948</td>
+<td style="text-align: right;">0.1026723</td>
+<td style="text-align: right;">0.9511016</td>
+<td style="text-align: right;">0.2456422</td>
+<td style="text-align: right;">-0.7216142</td>
+<td style="text-align: right;">0.9005715</td>
+<td style="text-align: right;">-0.9317416</td>
+<td style="text-align: right;">0.3951152</td>
+<td style="text-align: right;">0.7182412</td>
+<td style="text-align: right;">0.4496494</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">0.6212869</td>
+<td style="text-align: right;">0.8450670</td>
+<td style="text-align: right;">0.4182526</td>
+<td style="text-align: right;">-0.3781287</td>
+<td style="text-align: right;">0.8154797</td>
+<td style="text-align: right;">-0.3550243</td>
+<td style="text-align: right;">-0.2872137</td>
+<td style="text-align: right;">0.6808003</td>
+<td style="text-align: right;">-0.3397292</td>
+<td style="text-align: right;">0.4220032</td>
+<td style="text-align: right;">0.7981226</td>
+<td style="text-align: right;">0.2373418</td>
+<td style="text-align: right;">0.3519330</td>
+<td style="text-align: right;">0.9240171</td>
+<td style="text-align: right;">0.3534924</td>
+<td style="text-align: right;">-0.6785556</td>
+<td style="text-align: right;">0.8915587</td>
+<td style="text-align: right;">-0.5684547</td>
+<td style="text-align: right;">-0.3967000</td>
+<td style="text-align: right;">0.7027482</td>
+<td style="text-align: right;">-0.3584397</td>
+<td style="text-align: right;">0.3064278</td>
+<td style="text-align: right;">0.9871054</td>
+<td style="text-align: right;">0.4596658</td>
+<td style="text-align: right;">-0.9058394</td>
+<td style="text-align: right;">0.7586214</td>
+<td style="text-align: right;">-1.0197314</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">-0.4704795</td>
+<td style="text-align: right;">1.0062580</td>
+<td style="text-align: right;">-0.4277308</td>
+<td style="text-align: right;">-0.2876852</td>
+<td style="text-align: right;">1.0196416</td>
+<td style="text-align: right;">-0.2851518</td>
+<td style="text-align: right;">0.7023604</td>
+<td style="text-align: right;">1.0752894</td>
+<td style="text-align: right;">0.4590409</td>
+<td style="text-align: right;">0.4612925</td>
+<td style="text-align: right;">0.9998655</td>
+<td style="text-align: right;">0.6349509</td>
+<td style="text-align: right;">0.4880752</td>
+<td style="text-align: right;">0.8518282</td>
+<td style="text-align: right;">0.2901938</td>
+<td style="text-align: right;">0.6482716</td>
+<td style="text-align: right;">0.6557132</td>
+<td style="text-align: right;">0.6787384</td>
+<td style="text-align: right;">0.8222680</td>
+<td style="text-align: right;">0.9475838</td>
+<td style="text-align: right;">0.8944140</td>
+<td style="text-align: right;">0.8486600</td>
+<td style="text-align: right;">0.7606923</td>
+<td style="text-align: right;">0.7307737</td>
+<td style="text-align: right;">-0.0821083</td>
+<td style="text-align: right;">0.8484031</td>
+<td style="text-align: right;">-0.0411617</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📌 Question: What conclusions can we draw about student groups based on k-means analysis?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+</section>
+<section id="research-question-2-overly-engaged-student-subpopulations" class="level2">
+<h2 class="anchored" data-anchor-id="research-question-2-overly-engaged-student-subpopulations">Research Question 2: Overly engaged student subpopulations</h2>
+<p>In the paper, <span class="citation" data-cites="khosravi2017using">(<a href="#ref-khosravi2017using" role="doc-biblioref">Khosravi and Cooper 2017</a>)</span> looked further at extreme subpopulations of students’ behavior “engagement” variables: B1-B4.</p>
+<ul>
+<li>Overly engaged participants: those with the highest number of interactions with online materials. Students with the highest 20% of the average, behavioral values were selected as the subpopulation of study. We do so in the code chunk below:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the average of E1, E2, and E3 for each student</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>student_data <span class="ot">&lt;-</span> student_data <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Average_B =</span> (B1 <span class="sc">+</span> B2 <span class="sc">+</span> B3 <span class="sc">+</span> B4) <span class="sc">/</span> <span class="dv">4</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Determine the top 20% of students</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>top_n <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(<span class="fl">0.20</span> <span class="sc">*</span> <span class="fu">nrow</span>(student_data))</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter students who have the highest Average_B values</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>top_students <span class="ot">&lt;-</span> student_data <span class="sc">%&gt;%</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Average_B)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> top_n)  <span class="co"># Select top 20% students</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>top_students</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Student_ID          S1          S2          S3         F1          F2
+1           3  1.64606414  0.06920601  0.96881030 -0.3091876 -0.34390475
+2          67  0.45871636 -1.62553232  1.10786479 -0.8498524 -0.01126205
+3          69  0.96558001 -1.47814760 -0.43417046 -1.0766507  0.03685918
+4          18 -2.12322258 -0.56978577  2.17384180 -0.6940814  0.01000956
+5          31  0.43546595 -0.33778279  1.10794030  2.2056463  1.64866877
+6           9 -0.75489542  1.21963588 -0.48984499  1.3961289  0.23667702
+7          25 -0.68880418 -0.19698379 -1.16637951 -0.2388155 -1.34062521
+8          21 -1.16223040 -0.18539433 -0.01405432  1.5001836 -0.70788625
+9           6  1.81324108  0.74255922 -1.15157234 -0.9171863 -1.23682667
+10         57 -1.67644098 -2.10181669  1.23619571  1.0633134  0.84682186
+11         15 -0.61481737  0.31484712 -0.27899761 -0.7985881 -0.05707471
+12         77 -0.32499065 -0.06282264  0.17091642  1.1981880 -0.42624229
+13         53 -0.06634785  1.58626343  1.67408772  0.1010921  0.80815077
+14         38 -0.08670680  0.38066451 -0.99060512  0.8542292 -0.17436205
+15         68  0.03616160 -0.49665986  0.68689670 -0.8878864 -1.76043716
+16         39 -0.34764669  0.17455329 -1.42536450  0.5716475  1.00245757
+            B1         B2          B3          B4 Final_Exam Cluster Average_B
+1   0.85380833  2.2010870  2.47329601  0.31338974  54.730268       4 1.4603953
+2   1.06904094  2.1662853  1.75446544  0.05771431  70.017861       4 1.2618765
+3   0.23138801  1.2475111  1.16146048  1.30967108  73.303999       4 0.9875077
+4   0.73206904  0.7927208  1.55743233  0.41143454  58.052849       4 0.8734142
+5   1.70630851  0.3045600  0.77264622  0.61591727  38.692570       4 0.8498580
+6  -1.18869610  1.8913982  1.71993495  0.66727609  61.384094       4 0.7724783
+7  -0.38213772  1.3991463  1.05142381  0.86980367  92.527287       1 0.7345590
+8   0.48050673  1.7908533  0.63687808 -0.23927680  46.269884       4 0.6672403
+9   1.44386734 -0.4057280 -0.63615217  2.18310497  94.788258       1 0.6462730
+10  0.42964740  1.1879485  0.08871287  0.51997841  95.895040       4 0.5565718
+11  0.65045159  1.4393187 -0.68613844  0.76764909  77.279440       1 0.5428202
+12  0.71730311  0.8957167  0.94027696 -0.56364578  76.164434       4 0.4974127
+13  0.64017368  1.0144787  1.26429071 -0.94583876  23.182380       4 0.4932761
+14  0.02238179 -0.2359978  0.60364739  1.49400832  61.276590       1 0.4710099
+15 -0.45004341  0.8186791  0.10548521  1.30536355   6.557490       2 0.4448711
+16  1.56734299 -1.1785507 -0.88467603  2.06555367   4.196682       1 0.3924175</code></pre>
+</div>
+</div>
+<p>Again, the authors used the elbow method to select their number of centroids. But first we will apply the gap statistic to identify our K range.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>k_min <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>k_max <span class="ot">&lt;-</span> <span class="dv">14</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>k_range <span class="ot">&lt;-</span> k_min<span class="sc">:</span>k_max</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>gap_stat <span class="ot">&lt;-</span> <span class="fu">clusGap</span>(top_students <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Student_ID,<span class="sc">-</span>Final_Exam, <span class="sc">-</span>Cluster, <span class="sc">-</span>Average_B), </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">FUN =</span> kmeans, </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">K.max =</span> k_max, <span class="at">nstart=</span><span class="dv">100</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_gap_stat</span>(gap_stat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="module_3_case_activity_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Not surprising, but again, we are seeing that the data set lacks student groupings. Let’s try now with the elbow method with the 2:14 k range.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute k-means clustering for K values from 2 to 14</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>k_range <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">14</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>sse_values <span class="ot">&lt;-</span> <span class="fu">sapply</span>(k_range, <span class="cf">function</span>(k) {</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  kmeans_result <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(top_students <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">--</span>Student_ID,<span class="sc">-</span>Final_Exam, <span class="sc">-</span>Cluster, <span class="sc">-</span>Average_B), <span class="at">centers =</span> k, <span class="at">nstart =</span> <span class="dv">100</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(kmeans_result<span class="sc">$</span>tot.withinss)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we evaluate the k range using an elbow plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create elbow plot data</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>elbow_plot <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">K =</span> k_range, <span class="at">SSE =</span> sse_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Elbow Method</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(elbow_plot, <span class="fu">aes</span>(<span class="at">x =</span> K, <span class="at">y =</span> SSE)) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Elbow Method for Optimal K"</span>) <span class="sc">+</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Number of Clusters (K) for overly engaged participants"</span>) <span class="sc">+</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Sum of Squared Errors (SSE)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="module_3_case_activity_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📌 Question: How many clusters should we select based on the elbow plot?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>optimal_k <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="co"># could also be 4</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform k-means clustering</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>kmeans_result <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(top_students <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Student_ID,<span class="sc">-</span>Final_Exam,<span class="sc">-</span>Cluster, <span class="sc">-</span>Average_B), <span class="at">centers =</span> optimal_k, <span class="at">nstart =</span> <span class="dv">100</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>top_students<span class="sc">$</span>Cluster <span class="ot">&lt;-</span> <span class="fu">factor</span>(kmeans_result<span class="sc">$</span>cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will now display the Final Exam Scores by each cluster.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top_students, <span class="fu">aes</span>(<span class="at">x =</span> Cluster, <span class="at">y =</span> Final_Exam, <span class="at">fill =</span> Cluster)) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Boxplot of Final Exam Grades by Overly Engaged Participant Clusters"</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Cluster"</span>) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Final Exam Score"</span>) <span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="module_3_case_activity_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📌 Question: What can we infer about overly engaged participants and their final grades?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+<p>To identify subgroups within clusters, there are more advanced clustering techniques we can use. We will learn more about this in the next module.</p>
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-khosravi2017using" class="csl-entry" role="listitem">
+Khosravi, Hassan, and Kendra ML Cooper. 2017. <span>“Using Learning Analytics to Investigate Patterns of Performance and Engagement in Large Classes.”</span> In <em>Proceedings of the 2017 Acm Sigcse Technical Symposium on Computer Science Education</em>, 309–14.
+</div>
+<div id="ref-thorndike1953belongs" class="csl-entry" role="listitem">
+Thorndike, Robert L. 1953. <span>“Who Belongs in the Family?”</span> <em>Psychometrika</em> 18 (4): 267–76.
+</div>
+<div id="ref-tibshirani2001estimating" class="csl-entry" role="listitem">
+Tibshirani, Robert, Guenther Walther, and Trevor Hastie. 2001. <span>“Estimating the Number of Clusters in a Data Set via the Gap Statistic.”</span> <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em> 63 (2): 411–23.
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

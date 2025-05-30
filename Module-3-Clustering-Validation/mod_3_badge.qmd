@@ -1,0 +1,36 @@
+---
+title: "Module 3 Badge Activity"
+author: Elizabeth Cloude
+date: today 
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-location: right
+theme:
+  light: simplex
+  dark: cyborg
+editor: visual
+jupyter: python3
+bibliography: lit/references.bib
+---
+
+Scenario: You are an educator for an introductory course with 50 students. During the course, you collect information on how often and how long students engage with the instructional materials posted on the learning management system.
+
+The data include: Frequency of engagement: How often students access videos, quizzes, and lecture notes. Time spent: Total time students spend interacting with each type of material.
+
+You decide to use k-means clustering to analyze these data to better understand how students engage with the course materials and to design targeted interventions for different student groups. Write a short essay (300–500 words) reflecting on the following prompts: What kinds of patterns or groupings might clustering reveal about student behavior or performance in this course?
+
+How could these clusters help you understand differences in how students engage with the course materials?
+
+Are there any specific challenges you anticipate in interpreting these clusters?
+
+Instructions. Please answer the questions below by reflecting on the topics we have covered on clustering validation.
+
+Why is validation necessary in clustering analysis? Reflect on how different validation methods (e.g., gap statistic, silhouette score, elbow method) can impact the interpretation of results.
+
+What are the consequences of using an inappropriate number of clusters in educational research? How might too many or too few clusters affect insights about student learning and performance?
+
+Which validation method (or combination of methods) do you think is the most useful? Why?
+
+Reflect on an example from your own educational and/or research experience where clustering could provide insights.
