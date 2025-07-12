@@ -40,9 +40,13 @@ By the end of this course, fellows will be able to:
 * [Badge Activity](https://laserkt.quarto.pub/module-3-badge-activity-2b85/): A reflection task to connect clustering validation to your own research or instructional practice.
 
 # Module 4: Advanced Clustering  
-[Advanced Clustering Conceptual Overview](https://laserkt.quarto.pub/module-4-advanced-cluster-analysis-1b4f/#/title-slide)  
-[Advanced Clustering Case Study](https://laserkt.quarto.pub/module-4-case-review-activity-advanced-clustering-f273/)  
-[Advanced Clustering Badge Activity](https://laserkt.quarto.pub/module-4-badge-activity-27bc/)  
+* [Conceptual Overview](https://laserkt.quarto.pub/module-4-advanced-cluster-analysis-1b4f/#/title-slide): Slides introducing advanced clustering methods (e.g., hierarchical clustering) and their applications in educational data.
+
+* [Case Study/Essential Reading](): A key reading showcasing the use of advanced clustering techniques in educational research. This reading helps contextualize when and why to use more sophisticated models.
+
+* [Code-Along](https://laserkt.quarto.pub/module-4-case-review-activity-advanced-clustering-f273/): A guided code-along activity exploring advanced clustering techniques, with space for discussion and reflection.
+
+* [Badge Activity](https://laserkt.quarto.pub/module-4-badge-activity-27bc/): A reflective task to connect advanced clustering approaches to your own research or teaching.
 
 # Module 5: Factor Analysis  
 [Factor Analysis Conceptual Overview](https://laserkt.quarto.pub/module-5-factor-analysis/#/title-slide)  
