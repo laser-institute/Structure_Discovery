@@ -56,19 +56,19 @@ By the end of this module, you should be able to:
 
 ## Why Unsupervised Learning?
 
--   Discover hidden structures or data groupings
+-  Discover hidden structures or data groupings
 
 <!-- -->
 
--   Ideal for exploratory data analysis
+-  Ideal for exploratory data analysis
 
 <!-- -->
 
--   Data preparation for supervised learning
+-  Data preparation for supervised learning
 
 <!-- -->
 
--   Reduce dimensionality (simplify data while retaining meaning)
+-  Reduce dimensionality (simplify data while retaining meaning)
 
 
 ## Clustering
@@ -85,7 +85,7 @@ By the end of this module, you should be able to:
 
 <!-- -->
 
-![Structure discovery methods](images/module_1_image_2.jpg){width=70% align=center}
+![Structure discovery methods](images/module_1_image_2.jpg){align=center}
 
 
 ## Q-Matrix
