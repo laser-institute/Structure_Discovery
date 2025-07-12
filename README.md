@@ -22,18 +22,22 @@ By the end of this course, fellows will be able to:
 * [Badge Activity](https://laserkt.quarto.pub/module-1-badge-discovering-patterns-without-labels-03e7/): A self-paced, reflection activity that promotes a deeper understanding of structure discovery methods.
 
 # Module 2: Clustering  
-* [Clustering Conceptual Overview](https://laserkt.quarto.pub/module-7-unsupervised-machine-learning-400b/#/title-slide): Introductory slides covering core clustering concepts, algorithms, and use cases in education.
+* [Conceptual Overview](https://laserkt.quarto.pub/module-7-unsupervised-machine-learning-400b/#/title-slide): Introductory slides covering core clustering concepts, algorithms, and use cases in education.
 
 * [Case Study/Essential Reading](https://github.com/laser-institute/Structure_Discovery/blob/master/Module-2-Clustering/lit/kmeans%20case%20study.pdf): A foundational article demonstrating how clustering techniques are applied in real-world educational research.
 
-* [Clustering Case Study](https://laserkt.quarto.pub/module-2-case-review-activity-clustering-9c4d/): A guided analysis of a real-world study applying clustering to educational data.
+* [Code Along](https://laserkt.quarto.pub/module-2-case-review-activity-clustering-9c4d/): A guided analysis of a real-world study applying clustering to educational data.
 
-* [Clustering Badge Activity](https://laserkt.quarto.pub/module-2-badge-activity-094f/): Reflection activity.
+* [Badge Activity](https://laserkt.quarto.pub/module-2-badge-activity-094f/): Reflection activity.
 
 # Module 3: Clustering Validation  
-[Clustering Validation Conceptual Overview](https://laserkt.quarto.pub/module-3-clustering-validation-03d9/#/title-slide)  
-[Clustering Validation Case Study](https://laserkt.quarto.pub/module-3-case-review-activity-clustering-validation-9bcb/)   
-[Clustering Validation Badge Activity](https://laserkt.quarto.pub/module-3-badge-activity-2b85/)  
+* [CConceptual Overview](https://laserkt.quarto.pub/module-3-clustering-validation-03d9/#/title-slide): Slides introducing key concepts in validating clustering results, including metrics like silhouette analysis.
+
+* [Case Study/Essential Reading](): A key reading demonstrating how clustering validation techniques are applied in practice. In this code-along, you will gain an understanding of how to assess and interpret the quality of clustering solutions.
+
+* [Code Along](https://laserkt.quarto.pub/module-3-case-review-activity-clustering-validation-9bcb/): A guided coding activity using real data to apply clustering validation metrics and interpret results.
+
+* [Badge Activity](https://laserkt.quarto.pub/module-3-badge-activity-2b85/): A reflection task to connect clustering validation to your own research or instructional practice.
 
 # Module 4: Advanced Clustering  
 [Advanced Clustering Conceptual Overview](https://laserkt.quarto.pub/module-4-advanced-cluster-analysis-1b4f/#/title-slide)  
