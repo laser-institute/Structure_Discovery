@@ -8,7 +8,7 @@ format:
     chalkboard: 
       buttons: false
     preview-links: auto
-    logo: images/LASERLogoB.png
+    logo: images/LASERLogoB.jpg
     theme: [default, css/laser.scss]
     width: 1920
     height: 1080
