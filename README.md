@@ -1,7 +1,7 @@
 # UNsupervised-machine-learning  
 Module-1 Structure Discovery Introduction  
 [Unsupervised Intro Conceptual Overview](http://localhost:6695/#/title-slide)  
-[Unsupervised Intro Case Study](https://laserkt.quarto.pub/unsupervised-learning-activity---student-performance-with-assistments/)  
+[Unsupervised Intro Case Study](https://github.com/laser-institute/UNsupervised-machine-learning/blob/master/Module-1-Intro/lit/Rahman%20et%20al.%20(2024)%20Case%20Review.pdf)  
 [Unsupervised Intro Code Along](https://laserkt.quarto.pub/unsupervised-learning-activity---student-performance-with-assistments-b0d3/)  
 [Unsupervised Intro Badge Activity](https://laserkt.quarto.pub/module-1-badge-discovering-patterns-without-labels-03e7/)  
 
