@@ -128,3 +128,7 @@ By the end of this module, you should be able to:
 ## First Up
 
 Clustering
+
+::: {.notes}
+Clustering will be our first module where we will dive deep into structure discovery. This will make up the majority of tomorrow's lesson.
+:::
