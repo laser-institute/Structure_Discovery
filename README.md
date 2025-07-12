@@ -58,6 +58,10 @@ By the end of this course, fellows will be able to:
 * [Badge Activity](https://laserkt.quarto.pub/module-5-badge-activity-e182/): A reflective task to connect factor analysis to your teaching or research.
 
 # Module 6: Q-Matrix  
-[Q-Matrix Conceptual Overview](https://laserkt.quarto.pub/module-6-q-matrix/#/title-slide)  
-[Q-Matrix Case Study](https://laserkt.quarto.pub/module-6-case-review-activity-q-matrix-ea57/)  
-[Q-Matrix Badge Activity](https://laserkt.quarto.pub/module-6-badge-activity/)  
+* [Conceptual Overview](https://laserkt.quarto.pub/module-6-q-matrix/#/title-slide): Slides introducing Q-matrix analysis, and how skills or attributes are mapped to items in assessments.
+
+* [Case Study/Essential Reading](https://github.com/laser-institute/Structure_Discovery/blob/master/Module-6-Q-Matrix/lit/WS05-02-006.pdf): A key reading outlining how Q-matrices are constructed and validated in educational research.
+
+* [Code-Along](https://laserkt.quarto.pub/module-6-case-review-activity-q-matrix-ea57/): A hands-on, guided activity that walks through Q-matrix creation and evaluation using example data.
+
+* [Badge Activity](https://laserkt.quarto.pub/module-6-badge-activity/): A reflection activity to connect Q-matrix modeling to your own research or teaching practices.
