@@ -22,9 +22,13 @@ By the end of this course, fellows will be able to:
 * [Badge Activity](https://laserkt.quarto.pub/module-1-badge-discovering-patterns-without-labels-03e7/): A self-paced, reflection activity that promotes a deeper understanding of structure discovery methods.
 
 # Module 2: Clustering  
-[Clustering Conceptual Overview](https://laserkt.quarto.pub/module-7-unsupervised-machine-learning-400b/#/title-slide)  
-[Clustering Case Study](https://laserkt.quarto.pub/module-2-case-review-activity-clustering-9c4d/)  
-[Clustering Badge Activity](https://laserkt.quarto.pub/module-2-badge-activity-094f/)  
+* [Clustering Conceptual Overview](https://laserkt.quarto.pub/module-7-unsupervised-machine-learning-400b/#/title-slide): Introductory slides covering core clustering concepts, algorithms, and use cases in education.
+
+* [Case Study/Essential Reading]()
+
+* [Clustering Case Study](https://laserkt.quarto.pub/module-2-case-review-activity-clustering-9c4d/): A guided analysis of a real-world study applying clustering to educational data.
+
+* [Clustering Badge Activity](https://laserkt.quarto.pub/module-2-badge-activity-094f/)  
 
 # Module 3: Clustering Validation  
 [Clustering Validation Conceptual Overview](https://laserkt.quarto.pub/module-3-clustering-validation-03d9/#/title-slide)  
