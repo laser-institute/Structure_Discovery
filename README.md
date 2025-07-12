@@ -28,7 +28,7 @@ By the end of this course, fellows will be able to:
 
 * [Code Along](https://laserkt.quarto.pub/module-2-case-review-activity-clustering-9c4d/): A guided analysis of a real-world study applying clustering to educational data.
 
-* [Badge Activity](https://laserkt.quarto.pub/module-2-badge-activity-094f/): Reflection activity.
+* [Badge Activity](https://laserkt.quarto.pub/module-2-badge-activity-094f/): A reflection activity to connect clusering to your own research or teaching practices.
 
 # Module 3: Clustering Validation  
 * [CConceptual Overview](https://laserkt.quarto.pub/module-3-clustering-validation-03d9/#/title-slide): Slides introducing key concepts in validating clustering results, including metrics like silhouette analysis.
@@ -37,7 +37,7 @@ By the end of this course, fellows will be able to:
 
 * [Code Along](https://laserkt.quarto.pub/module-3-case-review-activity-clustering-validation-9bcb/): A guided coding activity using real data to apply clustering validation metrics and interpret results.
 
-* [Badge Activity](https://laserkt.quarto.pub/module-3-badge-activity-2b85/): A reflection task to connect clustering validation to your own research or instructional practice.
+* [Badge Activity](https://laserkt.quarto.pub/module-3-badge-activity-2b85/): A reflection activity to connect clustering validation to your own research or instructional practice.
 
 # Module 4: Advanced Clustering  
 * [Conceptual Overview](https://laserkt.quarto.pub/module-4-advanced-cluster-analysis-1b4f/#/title-slide): Slides introducing advanced clustering methods (e.g., hierarchical clustering) and their applications in educational data.
@@ -46,12 +46,16 @@ By the end of this course, fellows will be able to:
 
 * [Code-Along](https://laserkt.quarto.pub/module-4-case-review-activity-advanced-clustering-f273/): A guided code-along activity exploring advanced clustering techniques, with space for discussion and reflection.
 
-* [Badge Activity](https://laserkt.quarto.pub/module-4-badge-activity-27bc/): A reflective task to connect advanced clustering approaches to your own research or teaching.
+* [Badge Activity](https://laserkt.quarto.pub/module-4-badge-activity-27bc/): A reflective activity to connect advanced clustering approaches to your own research or teaching.
 
 # Module 5: Factor Analysis  
-[Factor Analysis Conceptual Overview](https://laserkt.quarto.pub/module-5-factor-analysis/#/title-slide)  
-[Factor Analysis Case Study](https://laserkt.quarto.pub/module-5-case-review-activity-factor-analysis-23e4/)   
-[Factor Analysis Badge Activity](https://laserkt.quarto.pub/module-5-badge-activity-e182/)  
+* [Conceptual Overview](https://laserkt.quarto.pub/module-5-factor-analysis/#/title-slide): Slides introducing factor analysis, including exploratory and confirmatory approaches, latent constructs, and their role in measuring psychological and educational variables.
+
+* [Case Study/Essential Reading](https://github.com/laser-institute/Structure_Discovery/blob/master/Module-5-Factor-Analysis/lit/Application%20of%20Exploratory%20Structural%20Equation%20Modeling%20to%20Evaluate%20the%20Academic%20Motivation%20Scale%20(1)%20(2).pdf): A foundational reading applying exploratory structural equation modeling (ESEM) to assess academic motivation. Illustrates how factor models are evaluated and interpreted in practice.
+
+* [Code-along](https://laserkt.quarto.pub/module-5-case-review-activity-factor-analysis-23e4/): A hands-on, guided activity to practice running and interpreting factor analysis using real data.
+
+* [Badge Activity](https://laserkt.quarto.pub/module-5-badge-activity-e182/): A reflective task to connect factor analysis to your teaching or research.
 
 # Module 6: Q-Matrix  
 [Q-Matrix Conceptual Overview](https://laserkt.quarto.pub/module-6-q-matrix/#/title-slide)  
