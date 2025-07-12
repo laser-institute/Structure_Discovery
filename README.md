@@ -24,11 +24,11 @@ By the end of this course, fellows will be able to:
 # Module 2: Clustering  
 * [Clustering Conceptual Overview](https://laserkt.quarto.pub/module-7-unsupervised-machine-learning-400b/#/title-slide): Introductory slides covering core clustering concepts, algorithms, and use cases in education.
 
-* [Case Study/Essential Reading]()
+* [Case Study/Essential Reading](https://github.com/laser-institute/Structure_Discovery/blob/master/Module-2-Clustering/lit/kmeans%20case%20study.pdf): A foundational article demonstrating how clustering techniques are applied in real-world educational research.
 
 * [Clustering Case Study](https://laserkt.quarto.pub/module-2-case-review-activity-clustering-9c4d/): A guided analysis of a real-world study applying clustering to educational data.
 
-* [Clustering Badge Activity](https://laserkt.quarto.pub/module-2-badge-activity-094f/)  
+* [Clustering Badge Activity](https://laserkt.quarto.pub/module-2-badge-activity-094f/): Reflection activity.
 
 # Module 3: Clustering Validation  
 [Clustering Validation Conceptual Overview](https://laserkt.quarto.pub/module-3-clustering-validation-03d9/#/title-slide)  
