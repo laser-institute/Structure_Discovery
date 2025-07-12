@@ -33,7 +33,7 @@ By the end of this course, fellows will be able to:
 # Module 3: Clustering Validation  
 * [CConceptual Overview](https://laserkt.quarto.pub/module-3-clustering-validation-03d9/#/title-slide): Slides introducing key concepts in validating clustering results, including metrics like silhouette analysis.
 
-* [Case Study/Essential Reading](): A key reading demonstrating how clustering validation techniques are applied in practice. In this code-along, you will gain an understanding of how to assess and interpret the quality of clustering solutions.
+* [Case Study/Essential Reading](https://github.com/laser-institute/Structure_Discovery/blob/master/Module-3-Clustering-Validation/lit/Case%20study_clustering.pdf): A key reading demonstrating how clustering validation techniques are applied in practice. In this code-along, you will gain an understanding of how to assess and interpret the quality of clustering solutions.
 
 * [Code Along](https://laserkt.quarto.pub/module-3-case-review-activity-clustering-validation-9bcb/): A guided coding activity using real data to apply clustering validation metrics and interpret results.
 
