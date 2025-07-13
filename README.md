@@ -22,7 +22,7 @@ By the end of this course, fellows will be able to:
 * [Badge Activity](https://laserkt.quarto.pub/module-1-badge-discovering-patterns-without-labels-03e7/): A self-paced, reflection activity that promotes a deeper understanding of structure discovery methods.
 
 # Module 2: Clustering  
-* [Conceptual Overview](https://laserkt.quarto.pub/module-7-unsupervised-machine-learning-400b/#/title-slide): Introductory slides covering core clustering concepts, algorithms, and use cases in education.
+* [Conceptual Overview](https://ecloude.quarto.pub/module-2-structure-discovery/#/title-slide): Introductory slides covering core clustering concepts, algorithms, and use cases in education.
 
 * [Case Study/Essential Reading](https://github.com/laser-institute/Structure_Discovery/blob/master/Module-2-Clustering/lit/kmeans%20case%20study.pdf): A foundational article demonstrating how clustering techniques are applied in real-world educational research.
 
