@@ -1,6 +1,6 @@
 ---
-title: "Module 7: Unsupervised machine learning"
-subtitle: "Clustering Analysis"
+title: "Structure Discovery"
+subtitle: "Clustering"
 format:
   revealjs: 
     slide-number: c/t
@@ -14,13 +14,7 @@ format:
     height: 1080
     margin: 0.05
     footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
-resources:
-  - demo.pdf
 bibliography: lit/references.bib
-editor: visual
-csl: apa/apa-6th-edition.csl
-title-slide-attributes: 
-  data-notes: 
 ---
 
 ## Clustering
@@ -28,6 +22,10 @@ title-slide-attributes:
 -   A type of **Structure Discovery** algorithm
 
 -   This type of method is also referred to as **Dimensionality Reduction**, based on a common application
+
+::: notes
+Dimension reduction is used when we’re trying to take a number of dimension of data or data points and collapse them down into a smaller number.
+:::
 
 ## Clustering
 
@@ -38,6 +36,10 @@ title-slide-attributes:
 -   You don’t know anything a priori about the structure 
 
 -   Clustering tries to find data points that “group together”
+
+::: notes
+You do not know what that structure is going to be. It is not like prediction models where you know you want to predict a certain outcome. With cluster, you do not know the structure, except as much as you pick variables that might express it. So imagine all of your data points, and there are some that are clustered down here and others that are clustered up here such that data up here are different from data here but similar to data close to it.
+:::
 
 ## Trivial Example
 
@@ -51,19 +53,37 @@ title-slide-attributes:
 Note: clustering works for (and is effective in)\
 large feature spaces
 
+::: notes
+Clustering is good for really big feature spaces, where you have thousands of data points.
+:::
+
 ## Example
 
-![](images/clipboard-1931002701.png)
+![](images/clipboard-1931002701.png){fig-align="center" width="1425"}
+
+::: notes
+So we have the number of interactions on the x axis and the united time variables on the y axis.
+:::
 
 ## Example
 
-![](images/clipboard-2076597479.png)
+![](images/clipboard-2076597479.png){fig-align="center" width="1425"}
+
+::: notes
+And first we will talk about K-Means clustering. With K-means, it would says, well these five are our clusters. And I’ll talk about how we get those clusters in just a second.
+
+So we have clusters that correspond to the different colored regions. Each of the clusters defines their own regions, and every points will fit within these 5 regions
+:::
 
 ## Not the only clustering algorithm
 
 -   Just the simplest
 
 -   We’ll talk about fancier ones soon
+
+::: notes
+K-means is not the only clustering algorithms, but it is the easiest.
+:::
 
 ## How did we get these clusters?
 
@@ -77,9 +97,17 @@ large feature spaces
 
     -   Sometimes there are good reasons to start with specific initial values…
 
+::: notes
+Do you remember the green and purple points? That is a centroid. Once selected randomly, then we will use this as a baseline to select better ones. For example, clusters from another dataset may provide good starting points for another datasets.
+:::
+
 ## Example
 
-![](images/clipboard-3450141135.png)
+![](images/clipboard-3450141135.png){fig-align="center" width="1425"}
+
+::: notes
+So let’s choose five random points. None of them are at the center of clumps.
+:::
 
 ## Then…
 
@@ -91,13 +119,29 @@ large feature spaces
 
 ## Example
 
-![](images/clipboard-3370150073.png)
+![](images/clipboard-3370150073.png){fig-align="center" width="1452"}
+
+::: notes
+Voronoi diagram – you take every point and you classify it as being the centroid it is closest to, and then you draw a lines of equal distance to each of the centroids that correspond to the divisions in the space.
+
+You can see that when you create the lines that are equal distance from the points, then you can clearly see the clusters.
+:::
 
 ## Then…
 
 -   We re-fit the centroids as the center of the points in each cluster
 
+::: notes
+So in other words, we set the centroids, we set the Voronoi lines to split the space evenly between those centroids, and then define the clusters based on where those centroids are and then we move those centroids to be the center point in the cluster.
+:::
+
 ## Result
+
+![](images/clustering_analysis%20v1%2021%2001%2025.pptx.png){fig-align="center" width="1425"}
+
+::: notes
+So this green dot moved from the side to more of the center, and same fro the other ones. But the orange one ends up in the middle of two points, so this is not a very good cluster.
+:::
 
 ## Then...
 
@@ -105,41 +149,69 @@ large feature spaces
 
 -   “Convergence”
 
+::: notes
+Now we’re going to repeat the process until the centroids stop moving. This is called convergence. So what we will do is that we will move the centroid, change the clusters, move the centroids to the center of the clusters, and repeat this process all over again until the centroids stop moving.
+:::
+
 ## Result
 
-![](images/clipboard-2269082755.png)
+![](images/clipboard-2269082755.png){fig-align="center" width="1452"}
+
+::: notes
+So now we’re going to move the points to match the center of the cluster
+:::
 
 ## Then..
 
-![](images/clipboard-1578864945.png)
+![](images/clipboard-1578864945.png){fig-align="center" width="1452"}
 
 ## Result
 
-![](images/clipboard-3933824623.png)
+![](images/clipboard-3933824623.png){fig-align="center" width="1452"}
+
+::: notes
+So we redefined the clusters, and you can see that red grabbed a couple of data points from orange.
+:::
 
 ## Example
 
-![](images/clipboard-3659919062.png)
+![](images/clipboard-3659919062.png){fig-align="center" width="1452"}
+
+::: notes
+We move the centroids again.
+:::
 
 ## Example
 
-![](images/clipboard-374188952.png)
+![](images/clipboard-374188952.png){fig-align="center" width="1452"}
+
+::: notes
+And again we redefine the clusters.
+:::
 
 ## Example
 
-![](images/clipboard-408782288.png)
+![](images/clipboard-408782288.png){fig-align="center" width="1452"}
+
+::: notes
+And you can see here we, kind of converge the clusters. But then again, there are still some outliers, which don’t really fit the clusters.
+:::
 
 ## Result
 
-![](images/clipboard-1258975428.png)
+![](images/clipboard-1258975428.png){fig-align="center" width="1452"}
+
+::: notes
+Same distribution of points, and now with a different configuration of centroids. So what’s the final outcome we will get?
+:::
 
 ## Result
 
-![](images/clipboard-1258975428.png)
+![](images/clipboard-2077223518.png){fig-align="center" width="1452"}
 
-## Result
-
-![](images/clipboard-2077223518.png)
+::: notes
+Not very good clusters. Purple clearly has two clusters that are being treated as one.
+:::
 
 ## What happens?
 
@@ -153,14 +225,14 @@ large feature spaces
 
 -   cf. Conati & Amershi (2009)
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
-![](images/clipboard-1313312322.png){width="272"}
+![](images/clipboard-1313312322.png){fig-align="center" width="1425"}
 :::
 
 ::: {.column width="50%"}
 :::
-:::
+:::::
 
 ## Exercises
 
@@ -178,31 +250,31 @@ large feature spaces
 
 ## Exercise
 
-![](images/clipboard-1874222503.png)
+![](images/clipboard-1874222503.png){fig-align="center" width="1452"}
 
 ## Solution Step 1
 
-![](images/clipboard-2161112867.png)
+![](images/clipboard-2161112867.png){fig-align="center" width="1452"}
 
 ## Solution Step 2
 
-![](images/clipboard-3066135220.png)
+![](images/clipboard-3066135220.png){fig-align="center" width="1452"}
 
 ## Solution Step 3
 
-![](images/clipboard-3064832346.png)
+![](images/clipboard-3064832346.png){fig-align="center" width="1452"}
 
 ## Solution Step 4
 
-![](images/clipboard-747237576.png)
+![](images/clipboard-747237576.png){fig-align="center" width="1452"}
 
 ## Solution Step 5
 
-![](images/clipboard-502149451.png)
+![](images/clipboard-502149451.png){fig-align="center" width="1452"}
 
 ## No points switched -- convergence
 
-![](images/clipboard-1477530102.png)
+![](images/clipboard-1477530102.png){fig-align="center" width="1452"}
 
 ## Notes
 
@@ -210,27 +282,50 @@ large feature spaces
 
 ## Exercise
 
-![](images/clipboard-3148618175.png)
+![](images/clipboard-3148618175.png){fig-align="center" width="1452"}
 
 ## Solution Step 1
 
-![](images/clipboard-3617594761.png)
+![](images/clipboard-3617594761.png){fig-align="center" width="1452"}
+
+::: notes
+There are five clusters, and the two points near the yaxis will move toward the center.
+:::
 
 ## Solution Step 2
 
-![](images/clipboard-3929420004.png)
+![](images/clipboard-3929420004.png){fig-align="center" width="1452"}
 
 ## Solution Step 3
 
-![](images/clipboard-2471008245.png)
+![](images/clipboard-2471008245.png){fig-align="center" width="1452"}
 
 ## Solution Step 4
 
-![](images/clipboard-2679724777.png)
+![](images/clipboard-2679724777.png){fig-align="center" width="1452"}
 
 ## Solution Step 5
 
-![](images/clipboard-2388608535.png)
+![](images/clipboard-2388608535.png){fig-align="center" width="1452"}
+
+## Notes
+
+-   The three clusters in the same data lump might move around for a little while.
+
+-   But really, what we have here is one cluster and two outliers...
+
+-   K should be 3 rather than 5
+
+    -   We will review this more in the next module.
+
+## Exercise
+
+![](images/exercise_1.jpg){fig-align="center" width="1452"}
+
+## Solution
+
+![](images/exercise_1.1.jpg){fig-align="center" width="1452"}
+
 
 ## Notes
 
@@ -240,37 +335,43 @@ large feature spaces
 
 ## Exercise
 
+![](images/excercise.png){fig-align="center" width="1452"}
+
+::: notes
+We have four centroids and three data clumps
+:::
+
 ## Solution Step 1
 
-![](images/clipboard-3291472313.png)
+![](images/clipboard-3291472313.png){fig-align="center" width="1452"}
 
 ## Solution Step 2
 
-![](images/clipboard-2099743122.png)
+![](images/clipboard-2099743122.png){fig-align="center" width="1452"}
 
 ## Solution Step 3
 
-![](images/clipboard-526636562.png)
+![](images/clipboard-526636562.png){fig-align="center" width="1452"}
 
 ## Solution Step 4
 
-![](images/clipboard-1863268490.png)
+![](images/clipboard-1863268490.png){fig-align="center" width="1452"}
 
 ## Solution Step 5
 
-![](images/clipboard-3596438138.png)
+![](images/clipboard-3596438138.png){fig-align="center" width="1452"}
 
 ## Solution Step 6
 
-![](images/clipboard-2086868136.png)
+![](images/clipboard-2086868136.png){fig-align="center" width="1452"}
 
 ## Solution Step 7
 
-## ![](images/clipboard-200724290.png)
+![](images/clipboard-200724290.png){fig-align="center" width="1592"}
 
 ## Approximate Solution
 
-![](images/clipboard-148488759.png)
+![](images/clipboard-148488759.png){fig-align="center" width="1452"}
 
 ## Notes
 
@@ -286,8 +387,34 @@ large feature spaces
 
 ## Exercise
 
-![](images/clipboard-1427759649.png)
+![](images/clipboard-1427759649.png){fig-align="center" width="1452"}
 
 ## Exercise
 
-![](images/clipboard-825312414.png)
+![](images/clipboard-825312414.png){fig-align="center" width="1452"}
+
+::: notes
+Four empty clusters and 1 core cluster in the end.
+:::
+
+## Notes
+
+-   That actually kind of came out ok...
+
+## As you can see
+
+-   A lot depends on initial positioning
+
+-   And on the number of clusters
+
+-   How do you pick which final position and number of clusters to go with?
+
+## Next module
+
+-   Clustering -- Validation and Selection of K
+
+## Questions? Comments?
+
+## Closing thought
+
+-   How might you want to use clustering?
