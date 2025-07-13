@@ -12,7 +12,7 @@ By the end of this course, fellows will be able to:
 5. Connect unsupervised learning approaches to your teaching or research practice
 
 # Module-1: Introduction  
-* [Conceptual Overview](http://localhost:6695/#/title-slide): A slide-based overview introducing the core concepts of structure discovery. This includes key distinctions from supervised learning, common techniques (e.g., clustering, dimensionality reduction), and examples of real-world applications.
+* [Conceptual Overview](file:///C:/Users/cloudeel/OneDrive%20-%20Michigan%20State%20University/Documents/GitHub/UNsupervised-machine-learning/Module-1-Intro/mod_1_conceptual_slides.html#/title-slide): A slide-based overview introducing the core concepts of structure discovery. This includes key distinctions from supervised learning, common techniques (e.g., clustering, dimensionality reduction), and examples of real-world applications.
 * [Case Study/Essential Reading](https://github.com/laser-institute/UNsupervised-machine-learning/blob/master/Module-1-Intro/lit/Rahman%20et%20al.%20(2024)%20Case%20Review.pdf): This research article demonstrates the application of unsupervised methods (e.g., clustering) in an educational context.
     🔍 Suggested use: Students can annotate the reading, identify methods used, and reflect on findings in small group discussions.
 
