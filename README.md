@@ -42,7 +42,7 @@ By the end of this course, fellows will be able to:
 # Module 4: Advanced Clustering Algorithms
 * [Conceptual Overview](https://ecloude.quarto.pub/module-4-structure-discovery/#/title-slide): Slides introducing advanced clustering methods (e.g., hierarchical clustering, spectral clustering, Gaussian mixture models, etc.) and their applications in educational data.
 
-* [Case Study/Essential Reading](): A key reading showcasing the use of advanced clustering techniques in educational research. This reading helps contextualize when and why to use more sophisticated models.
+* [Case Study/Essential Reading](https://github.com/laser-institute/Structure_Discovery/blob/master/Module-4-Advanced-Clustering/lit/Case%20Review%20paper.pdf): A key reading showcasing the use of advanced clustering techniques in educational research. This reading helps contextualize when and why to use more sophisticated models.
 
 * [Code-Along](https://laserkt.quarto.pub/module-4-case-review-activity-advanced-clustering-f273/): A guided code-along activity exploring advanced clustering techniques, with space for discussion and reflection.
 
