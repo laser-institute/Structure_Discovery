@@ -1,6 +1,6 @@
 ---
-title: "Module 5: Factor Analysis"
-subtitle: ""
+title: "Structure Discovery"
+subtitle: "Factor Analysis"
 format:
   revealjs: 
     slide-number: c/t
@@ -14,13 +14,7 @@ format:
     height: 1080
     margin: 0.05
     footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
-resources:
-  - demo.pdf
 bibliography: lit/references.bib
-editor: visual
-csl: apa/apa-6th-edition.csl
-title-slide-attributes: 
-  data-notes: 
 ---
 
 ## Factor Analysis
@@ -47,32 +41,25 @@ In factor analysis, you have a lot of variables, and you want to group them into
 
 -   But conceptually still not the same thing
 
-\
-
 ::: notes
 It is important to note that factor analysis is not the same as cluster analysis. 
 :::
 
 ## Goal 1 of Factor Analysis
 
-::: notes
 -   You have a lot of quantitative\* variables
 
     -   And since you have a lot of variables you have high dimensionality
 
-\
-
--   You want to reduce the dimensionality into a smaller number of factors
-
-\
-\
-\
-:::
+    -   You want to reduce the dimensionality into a smaller number of factors
 
 ## Goal 1 of Factor Analysis
 
-\* -- there is also a variant for categorical and binary data, Latent Class Factor Analysis (LCFA --\
-@magidson2001latent; @magidson2004latent), as well as a variant for mixed data types, Exponential Family Principal Component Analysis (EPCA – @collins2001generalization)
+-   There is also a variant for categorical and binary data, Latent Class Factor Analysis (LCFA; @magidson2001latent; @magidson2004latent)
+
+<!-- -->
+
+-   As well as a variant for mixed data types, Exponential Family Principal Component Analysis (EPCA – @collins2001generalization)
 
 ::: notes
 And there are other variants as well!
@@ -166,30 +153,30 @@ So it’s not actually, for example, that these seven variables are in this fact
 
 ## Example
 
-![](images/clipboard-3105742570.png)
+![](images/clipboard-3105742570.png){fig-align="center" width="1400"}
 
 ::: notes
 Let’s take an example. Say you ran factor analysis with these 12 variables and here’s how much each one loads on each factor.
 :::
 
-## Computing a Factor Score: Can you write an equation for F1?
+## Computing a Factor Score
 
-![](images/clipboard-602728829.png)
+## Can you write an equation for F1?
+
+![](images/clipboard-602728829.png){fig-align="center" width="1400"}
 
 ::: notes
- So first question, can you write an equation for factor one? It turns out to be pretty easy.
+So first question, can you write an equation for factor one? It turns out to be pretty easy.
 :::
 
 ## Can you write an equation for F1?
 
-(It’s just a straight-up linear equation, like in linear regression! Cazart!)
+(It’s just a straight-up linear equation, like in linear regression!)
 
-![](images/clipboard-4003602932.png)
+![](images/clipboard-4003602932.png){fig-align="center" width="1400"}
 
 ::: notes
-You just take a straight-up linear equation like in linear regression. 
-
-\
+You just take a straight-up linear equation like in linear regression.
 :::
 
 ## Example
@@ -197,7 +184,7 @@ You just take a straight-up linear equation like in linear regression. 
 0.01V1-0.62V2+0.003V3+0.04V4+0.05V5-0.66V6\
 +0.04V7+0.02V8+0.32V9+0.01V10-0.03V11+0.55V12
 
-![](images/clipboard-415022354.png)
+![](images/clipboard-415022354.png){fig-align="center" width="1400"}
 
 ::: notes
 So, for example, what you’ll get for factor one is, look at the top left cell, .01 times V1, minus go one down, .62 times V2, and so on and so forth all the way to V12. Notice the top and you’ll see that every single thing in F1, whether it is negative or positive, is going to end up being in this equation.
@@ -207,7 +194,7 @@ So, for example, what you’ll get for factor one is, look at the top left cell,
 
 Can you write an equation for F2?
 
-![](images/clipboard-3916097341.png)
+![](images/clipboard-3916097341.png){fig-align="center" width="1400"}
 
 ::: notes
 Now try yourself to write the equation for F2.
@@ -224,7 +211,7 @@ If so, the answer is
 
 ## Which variables load strongly on F1?
 
-![](images/clipboard-3604735306.png)
+![](images/clipboard-3604735306.png){fig-align="center" width="1400"}
 
 ::: notes
 Well, what’s a strong loading? What’s actually a good number here?
@@ -272,7 +259,7 @@ Or maybe from .65, there’s a bunch of stuff above .65 but then nothing down to
 
 ## Which variables load strongly on F1?
 
-![](images/clipboard-2246840180.png)
+![](images/clipboard-2246840180.png){fig-align="center" width="1400"}
 
 ::: notes
 Well you know regardless of whether you’re going to treat .4 as the magic number or look for a big gap, it’s going to be the same answer here.
@@ -284,11 +271,11 @@ V2 is -.62, V6 is -.66, and V12 is .55. and there’s nothing else all the way d
 
 ## Which variables load strongly on F2?
 
-![](images/clipboard-1200402038.png)
+![](images/clipboard-1200402038.png){fig-align="center" width="1400"}
 
 ## Which variables load strongly on F2?
 
-![](images/clipboard-3575269147.png)
+![](images/clipboard-3575269147.png){fig-align="center" width="1400"}
 
 ::: notes
 Well, in this case, it’s V1 and V5. There’s a big gap between those and V9, -.34
@@ -296,7 +283,7 @@ Well, in this case, it’s V1 and V5. There’s a big gap between those and V9, 
 
 ## Quiz: Which variables load strongly on F3?
 
-![](images/clipboard-3877623191.png)
+![](images/clipboard-3877623191.png){fig-align="center" width="1400"}
 
 ::: notes
 The answer is A.
@@ -306,7 +293,7 @@ The answer is A.
 
 e.g. don’t load strongly on any factor
 
-![](images/clipboard-1584410816.png)
+![](images/clipboard-1584410816.png){fig-align="center" width="1400"}
 
 ::: notes
 So which variables do not fit this scheme? Or in other words, which variables don’t load strongly on any factor?
@@ -315,6 +302,8 @@ So which variables do not fit this scheme? Or in other words, which variables do
 ## Which variables don’t fit this scheme?
 
 e.g. don’t load strongly on any factor
+
+![](images/fig.1.png){fig-align="center" width="1400"}
 
 ::: notes
 You can see that we have V4, which has .04, .03, and .-.02.  So not good on any factor. 
@@ -334,7 +323,7 @@ If the magic number was lower, V9 would be find. In fact, V9 seems to load on tw
 
 ## Assigning items to factors to create scales
 
--   After loading is created, you can create one-factor-per-variable models (“scales”) by iteratively 
+-   After loading is created, you can create one-factor-per-variable models (“scales”) iteratively
 
     -   assigning each item to one factor
 
@@ -561,6 +550,14 @@ $\alpha = \frac{N·\overline{c}}{\overline{v}+(N-1)·\overline{c}}$
 -   C = average inter-item covariance (averaged at subject level)
 
 -   V = average variance (averaged at subject level)
+
+
+::: notes
+Alpha is the function of the items, the average covariance of those items, and the average variance overall.
+
+So when you do Cronbach’s alpha, it’ll give you an idea of how consistent each of your factors are internally. And this is important because if you want to do a questionnaire and you have and you want to publish your work, if you do not have Cronbach alphas, your reviewers will have some concerns and you may not be able to publish it. It gives you an idea of not just is there a factor, but how internally consistent is your factor.
+:::
+
 
 ## Cronbach’s α: magic numbers @mallery2005spss
 

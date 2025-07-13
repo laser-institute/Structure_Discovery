@@ -1,0 +1,4 @@
+- source: mod_6_Conceptual_Slides.qmd
+  quarto-pub:
+    - id: c6526ab2-2872-4d89-925b-a6b00d7ae202
+      url: https://ecloude.quarto.pub/module-6-structure-discovery

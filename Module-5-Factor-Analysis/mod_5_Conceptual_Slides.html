@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="mod_5_Conceptual_Slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="mod_5_Conceptual_Slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="mod_5_Conceptual_Slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="mod_5_Conceptual_Slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="mod_5_Conceptual_Slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="mod_5_Conceptual_Slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="mod_5_Conceptual_Slides_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.40">
+
+  <title>Structure Discovery</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="mod_5_Conceptual_Slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="mod_5_Conceptual_Slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="mod_5_Conceptual_Slides_files/libs/revealjs/dist/theme/quarto-8ad564f32177821a33a57da84bac16fa.css">
+  <link href="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Structure Discovery</h1>
+  <p class="subtitle">Factor Analysis</p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="factor-analysis" class="slide level2">
+<h2>Factor Analysis</h2>
+<ul>
+<li><p>You have a whole lot of variables</p></li>
+<li><p>Can you group them into “factors”?</p></li>
+</ul>
+<aside class="notes">
+<p>In factor analysis, you have a lot of variables, and you want to group them into factors which kind of are variables that express the center of several variables</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="factor-analysis-and-clustering" class="slide level2">
+<h2>Factor Analysis and Clustering</h2>
+<ul>
+<li><p>Not the same&nbsp;</p>
+<ul>
+<li><p>Clustering finds how data points group together</p></li>
+<li><p>Factor analysis finds how data features/variables/items group together</p></li>
+</ul></li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><p>In many cases, one problem can be transformed into the other</p></li>
+<li><p>But conceptually still not the same thing</p></li>
+</ul>
+<aside class="notes">
+<p>It is important to note that factor analysis is not the same as cluster analysis.&nbsp;</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="goal-1-of-factor-analysis" class="slide level2">
+<h2>Goal 1 of Factor Analysis</h2>
+<ul>
+<li><p>You have a lot of quantitative* variables</p>
+<ul>
+<li><p>And since you have a lot of variables you have high dimensionality</p></li>
+<li><p>You want to reduce the dimensionality into a smaller number of factors</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="goal-1-of-factor-analysis-1" class="slide level2">
+<h2>Goal 1 of Factor Analysis</h2>
+<ul>
+<li>There is also a variant for categorical and binary data, Latent Class Factor Analysis (LCFA; <span class="citation" data-cites="magidson2001latent">Magidson and Vermunt (<a href="#/reference" role="doc-biblioref" onclick="">2001</a>)</span>; <span class="citation" data-cites="magidson2004latent">Magidson and Vermunt (<a href="#/reference" role="doc-biblioref" onclick="">2004</a>)</span>)</li>
+</ul>
+<!-- -->
+<ul>
+<li>As well as a variant for mixed data types, Exponential Family Principal Component Analysis (EPCA – <span class="citation" data-cites="collins2001generalization">Collins, Dasgupta, and Schapire (<a href="#/reference" role="doc-biblioref" onclick="">2001</a>)</span>)</li>
+</ul>
+<aside class="notes">
+<p>And there are other variants as well!</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="goal-2-of-factor-analysis" class="slide level2">
+<h2>Goal 2 of Factor Analysis</h2>
+<ul>
+<li><p>You have a lot of quantitative* variables</p>
+<ul>
+<li>And since you have a lot of variables you have high dimensionality</li>
+</ul></li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>You want to understand the structure that unifies these variables</li>
+</ul>
+</section>
+<section id="classic-example" class="slide level2">
+<h2>Classic Example</h2>
+<ul>
+<li>You have a questionnaire with 100 items</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><p>Do the 100 items group into a smaller number of factors?</p>
+<ul>
+<li><p>E.g. Do the 100 items actually tap only 6 deeper constructs?</p></li>
+<li><p>Can the 100 items be divided into 6 scales?</p></li>
+<li><p>Which items fit poorly in their scales?</p></li>
+</ul></li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>Common in attempting to design questionnaire with scales and sub-scales</li>
+</ul>
+</section>
+<section id="another-example" class="slide level2">
+<h2>Another Example</h2>
+<ul>
+<li>You have a set of 600 features of student behavior</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>You want to reduce the data space before running a classification algorithm</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><p>Do the 600 features group into a smaller number of factors?</p>
+<ul>
+<li>E.g. Do the 600 features actually tap only 15 deeper constructs?</li>
+</ul></li>
+</ul>
+</section>
+<section id="another-example-1" class="slide level2">
+<h2>Another Example</h2>
+<ul>
+<li>You have a taxonomy of 120 design features that an e-learning lesson could possess</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>You want to reduce the data space before studying the relationship between these features and student learning</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><p>Do the 120 design features group into 8 factors?</p>
+<ul>
+<li>E.g. Do the 120 features actually group into a set of 8 dimensions of tutor design?</li>
+</ul></li>
+</ul>
+</section>
+<section id="two-types-of-factor-analysis" class="slide level2">
+<h2>Two types of Factor Analysis</h2>
+<ul>
+<li><p>Experimental</p>
+<ul>
+<li><p>Determine variable groupings in bottom-up fashion</p></li>
+<li><p>More common in EDM</p></li>
+</ul></li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><p>Confirmatory</p>
+<ul>
+<li><p>Take existing structure, verify its goodness</p></li>
+<li><p>More common in Psychometrics</p></li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>There are two types of factor analysis</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="mathematical-assumption-in-most-factor-analysis" class="slide level2">
+<h2>Mathematical Assumption in most Factor Analysis</h2>
+<ul>
+<li><p>Each variable loads onto every factor, but with different strengths</p>
+<ul>
+<li>Some strengths are infinitesimally small<br>
+</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>So it’s not actually, for example, that these seven variables are in this factor as much as that every variable is but only seven actually loads strongly to it. In other words, only seven participate substantially in its calculation.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+
+<img data-src="images/clipboard-3105742570.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>Let’s take an example. Say you ran factor analysis with these 12 variables and here’s how much each one loads on each factor.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="computing-a-factor-score" class="slide level2">
+<h2>Computing a Factor Score</h2>
+</section>
+<section id="can-you-write-an-equation-for-f1" class="slide level2">
+<h2>Can you write an equation for F1?</h2>
+
+<img data-src="images/clipboard-602728829.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>So first question, can you write an equation for factor one? It turns out to be pretty easy.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="can-you-write-an-equation-for-f1-1" class="slide level2">
+<h2>Can you write an equation for F1?</h2>
+<p>(It’s just a straight-up linear equation, like in linear regression!)</p>
+
+<img data-src="images/clipboard-4003602932.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>You just take a straight-up linear equation like in linear regression.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example</h2>
+<p>0.01V1-0.62V2+0.003V3+0.04V4+0.05V5-0.66V6<br>
++0.04V7+0.02V8+0.32V9+0.01V10-0.03V11+0.55V12</p>
+
+<img data-src="images/clipboard-415022354.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>So, for example, what you’ll get for factor one is, look at the top left cell, .01 times V1, minus go one down, .62 times V2, and so on and so forth all the way to V12. Notice the top and you’ll see that every single thing in F1, whether it is negative or positive, is going to end up being in this equation.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="popup-quiz" class="slide level2">
+<h2>Popup quiz</h2>
+<p>Can you write an equation for F2?</p>
+
+<img data-src="images/clipboard-3916097341.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>Now try yourself to write the equation for F2.</p>
+<p><br>
+</p>
+<p>If so, the answer is</p>
+<p><br>
+</p>
+<p>-0.7V1+0.1V2-0.14V3+0.03V4 +0.73V5+0.02V6-0.03V7-0.01V8<br>
+-0.34V9-0.02V10-0.02V11-0.32V12</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="which-variables-load-strongly-on-f1" class="slide level2">
+<h2>Which variables load strongly on F1?</h2>
+
+<img data-src="images/clipboard-3604735306.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>Well, what’s a strong loading? What’s actually a good number here?</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="wait-whats-a-strong-loading" class="slide level2">
+<h2>Wait… what’s a “strong” loading?</h2>
+<ul>
+<li>One common guideline: &gt; 0.4 or &lt; -0.4</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><p>Comrey &amp; Lee (1992)</p>
+<ul>
+<li><p>0.70 excellent (or -0.70)</p></li>
+<li><p>0.63 very good</p></li>
+<li><p>0.55 good</p></li>
+<li><p>0.45 fair</p></li>
+<li><p>0.32 poor</p></li>
+</ul></li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><p>One of those arbitrary things that people seem to take exceedingly seriously</p>
+<ul>
+<li>Another approach is to look for a gap in the loadings in your actual data</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>One common guideline is that the strong loading is above .4 or below -.4</p>
+<p><br>
+</p>
+<p>However, setting a “strong” vs.&nbsp;“not so strong” factor loading is rather arbitrary. Does .55 differ so much that .54 would be considered fair than good?</p>
+<p><br>
+</p>
+<p>Another approach folks use is to look at the gap in the loadings of their actual data. Such that instead of saying, well .4 is something I really care about. I’ve got a whole bunch here that are above. 55, but then from .55 to .37 there’s really nothing.</p>
+<p><br>
+</p>
+<p>Or maybe from .65, there’s a bunch of stuff above .65 but then nothing down to .42. Maybe we don’t want to include that .41 even though it’s above .4 if everything else that’s strongly loaded is above .65.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="which-variables-load-strongly-on-f1-1" class="slide level2">
+<h2>Which variables load strongly on F1?</h2>
+
+<img data-src="images/clipboard-2246840180.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>Well you know regardless of whether you’re going to treat .4 as the magic number or look for a big gap, it’s going to be the same answer here.</p>
+<p><br>
+</p>
+<p>V2 is -.62, V6 is -.66, and V12 is .55. and there’s nothing else all the way down to .32.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="which-variables-load-strongly-on-f2" class="slide level2">
+<h2>Which variables load strongly on F2?</h2>
+
+<img data-src="images/clipboard-1200402038.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"></section>
+<section id="which-variables-load-strongly-on-f2-1" class="slide level2">
+<h2>Which variables load strongly on F2?</h2>
+
+<img data-src="images/clipboard-3575269147.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>Well, in this case, it’s V1 and V5. There’s a big gap between those and V9, -.34</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="quiz-which-variables-load-strongly-on-f3" class="slide level2">
+<h2>Quiz: Which variables load strongly on F3?</h2>
+
+<img data-src="images/clipboard-3877623191.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>The answer is A.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="which-variables-dont-fit-this-scheme" class="slide level2">
+<h2>Which variables don’t fit this scheme?</h2>
+<p>e.g.&nbsp;don’t load strongly on any factor</p>
+
+<img data-src="images/clipboard-1584410816.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>So which variables do not fit this scheme? Or in other words, which variables don’t load strongly on any factor?</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="which-variables-dont-fit-this-scheme-1" class="slide level2">
+<h2>Which variables don’t fit this scheme?</h2>
+<p>e.g.&nbsp;don’t load strongly on any factor</p>
+
+<img data-src="images/fig.1.png" class="quarto-figure quarto-figure-center r-stretch" width="1400"><aside class="notes">
+<p>You can see that we have V4, which has .04, .03, and .-.02.&nbsp; So not good on any factor.&nbsp;</p>
+<p><br>
+</p>
+<p>And V10 is .01, -.02, and -.07.&nbsp;</p>
+<p><br>
+</p>
+<p>But what about V9? That’s kind of weird one, right? It actually has two reasonable strong loadings. It’s much weaker than any of the other ones in those two factors. And it’s below that major negative .4 or .4. But it is hard to say that this completely doesn’t fit. It kind of seems to fit two of them.</p>
+<p><br>
+</p>
+<p>If the magic number was lower, V9 would be find. In fact, V9 seems to load on two factors in a moderate degree. This probably means it’s actually an item that isn’t really quite right for this factor scheme.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="assigning-items-to-factors-to-create-scales" class="slide level2">
+<h2>Assigning items to factors to create scales</h2>
+<ul>
+<li><p>After loading is created, you can create one-factor-per-variable models (“scales”) iteratively</p>
+<ul>
+<li><p>assigning each item to one factor</p></li>
+<li><p>dropping the one item that loads most poorly in its factor, if it has no strong loading</p></li>
+<li><p>re-fitting factors</p></li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>Okay so we’ve got our factors. How do we create scales, for say, a questionnaire? Or for saying, okay I do not actually do not want to calculate across my 10,000 variables every single time. I just want to know which variables to calculate across. In that case, we can actually create scales by assigning items to specific factors.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="item-selection" class="slide level2">
+<h2>Item Selection</h2>
+<ul>
+<li><p>Some researchers recommend conducting item selection based on face validity – e.g.&nbsp;if it doesn’t look like it should fit, don’t include it</p></li>
+<li><p>Depends on how theory-driven you want to be</p>
+<ul>
+<li>And how much of a theory you actually have!</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>Some folks recommend that item selections should be based on the face validity, rather than only based on the fit to a factor. In other words, if it doesn’t look like it should fit, don’t include it.&nbsp;</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="how-does-it-work-mathematically" class="slide level2">
+<h2>How does it work mathematically?</h2>
+<p>Two algorithms (Ferguson, 1971)</p>
+<ul>
+<li><p>Principal axis factoring (PAF)</p>
+<ul>
+<li>Fits to shared variance between variables</li>
+</ul></li>
+<li><p>Principal components analysis (PCA)</p>
+<ul>
+<li>Fits to all variance between variables, including variance unique to specific variables</li>
+</ul></li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>PCA is more common these days</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>Similar, especially as number of variables increases<br>
+<br>
+</li>
+</ul>
+<aside class="notes">
+<p>But it really doesn’t matter so much, especially as the number of variables increases. PCA is also a little bit easier to compute.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="how-does-it-work-mathematically-1" class="slide level2">
+<h2>How does it work mathematically?</h2>
+<ul>
+<li><p>First factor tries to find a combination of variable-weightings that gets the best fit to the data</p></li>
+<li><p>Second factor tries to find a combination of variable-weightings that best fits the remaining unexplained variance</p></li>
+<li><p>Third factor tries to find a combination of variable-weightings that best fits the remaining unexplained variance…</p></li>
+</ul>
+<aside class="notes">
+<p>First, so we’re going to try to say, how can we most predict the variance in the data by finding a combination of variable weightings on the various variables? And then we take what is not fit, the residuals. We take the remaining unexplained variance and the second factor tries to find a combination of variable weightings, another linear regression equation, that best fits that.</p>
+<p><br>
+</p>
+<p>So imagine you’re doing a linear regression. The first of a factor analysis is just do a linear regression. And then take all the variance from that linear regression, all that unexplained variance, all the residuals, and fit a linear regression equation from that.&nbsp;</p>
+<p><br>
+</p>
+<p>And then, after you’ve done the second factor, take all the remaining variance, everything you haven’t fit so far, all the residuals, and try to fit that with another linear regression equation.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="how-does-it-work-mathematically-2" class="slide level2">
+<h2>How does it work mathematically?</h2>
+<ul>
+<li><p>Factors are then made orthogonal (e.g.&nbsp;uncorrelated to each other)</p>
+<ul>
+<li><p>Uses statistical process called factor rotation, which takes a set of factors and re-fits to maintain equal fit while minimizing factor correlation</p></li>
+<li><p>Essentially, there is a large equivalence class of possible solutions; factor rotation tries to find the solution that minimizes between-factor correlation</p></li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>You keep doing that until you cannot fit anything anymore. You then make the factors orthogonal, or in other words, uncorrelated to one another. Now how do we do that?<br>
+<br>
+Well, we use a statistical process that I’m we will not go too in-depth in, called factor rotation. Which takes a set of factors and refits to maintain equal fit while minimizing the factor correlation.</p>
+<p><br>
+</p>
+<p>Essentially there is going to be a large equivalence class of potential solutions, sets of for example, three linear regression equations that each do an equally good job of fitting the variance. And factor rotation ties to find the solution that minimizes the correlation between the factors. So it’s going to try to find factors that equally fit all the data while fitting each other, correlating to each other as little as possible.</p>
+<p><br>
+</p>
+<p>So trying to get orthogonal, one that goes this way, one that goes this way, and one that goes this way.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="looking-at-this-another-way" class="slide level2">
+<h2>Looking at this another way…</h2>
+<ul>
+<li>This approach tries to find lines, planes, and hyperplanes in the K-dimensional space (K variables)</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>Which best fit the data</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>This may remind you of spectral clustering…</li>
+</ul>
+<aside class="notes">
+<p>This may remind you of spectral clustering. Or you may have seen that there are a lot of things in educational data mining where the same math used in slightly different ways ends up being very different things.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="goodness" class="slide level2">
+<h2>Goodness</h2>
+<ul>
+<li>What proportion of the variance in the original variables is explained by the factoring?<br>
+(e.g.&nbsp;r2 – called in Factor Analysis land the estimate of the communality)</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><p>Better to use cross-validated r2</p>
+<ul>
+<li>Still not standard</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>So how do you compute the goodness of a factor analysis? Well, you look at what proportion of the variables in the original variables is explained by the factoring. This is typically computed as R squared, or the correlation squared, which in factor analysis land is often called the estimate of the communality.</p>
+<p><br>
+</p>
+<p>Once again, same thing, different terms.</p>
+<p><br>
+</p>
+<p>The only thing I’d add to this is it’s usually better to use cross-validated r squared than just the original r squared on all the training data being your test data.</p>
+<p><br>
+</p>
+<p>Typically, people will still use the test data as the training data in factor analysis. But if you cross-validate, you’ll get a better estimate of how good your factors really are.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="how-many-factors" class="slide level2">
+<h2>How many factors?</h2>
+<ul>
+<li>Best approach: decide using cross-validated r2</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>Alternate approach: drop any factor with fewer than 3 strong loadings</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li><p>Alternate approach: add factors until you get an incomprehensible factor</p>
+<ul>
+<li>But one person’s incomprehensible factor is another person’s research finding!</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>So how many factors should you use? Well, the best approach is to decide on using cross-validated r squared. But there is an alternative approach that some people use which is where they drop any factor that has fewer than three strong loadings.&nbsp;</p>
+<p><br>
+</p>
+<p>Now this makes sense if you’re doing questionnaires. But who wants a subscale with only two items on it? It doesn’t really make sense and it doesn’t give you enough data. But for other uses of factor analysis, this may make more sense. You may want factors that are outlier factors in various ways.&nbsp;</p>
+<p><br>
+</p>
+<p>Another alternative approach is adding factors until you get an incomprehensible factor. This is actually fairly common and fairly popular in the statistics community. You just keep going with more factors, until you get a factor that you say, I have no idea what that means.</p>
+<p>Now the only concern I have about this: At what point is one person’s incomprehensible finding another person’s research finding?</p>
+<p><br>
+</p>
+<p>So if you’re going to throw things out just because you don’t understand them, really make sure that it’s really just junk and not something that you just do not understand.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="desired-amount-of-data" class="slide level2">
+<h2>Desired Amount of Data</h2>
+<ul>
+<li><p>At least 5 data points per variable <span class="citation" data-cites="Gorsuch1983FactorAnalysis">Gorsuch (<a href="#/reference" role="doc-biblioref" onclick="">1983</a>)</span></p></li>
+<li><p>At least 3-6 data points per variable <span class="citation" data-cites="cattell1978scientific">Cattell (<a href="#/reference" role="doc-biblioref" onclick="">1978</a>)</span></p></li>
+<li><p>At least 100 total data points <span class="citation" data-cites="Gorsuch1983FactorAnalysis">Gorsuch (<a href="#/reference" role="doc-biblioref" onclick="">1983</a>)</span>=</p></li>
+<li><p><span class="citation" data-cites="comrey1992first">Comrey and Lee (<a href="#/reference" role="doc-biblioref" onclick="">1992</a>)</span> guidelines for total sample size</p>
+<ul>
+<li><p>100= poor&nbsp;</p></li>
+<li><p>200 = fair</p></li>
+<li><p>300 = good</p></li>
+<li><p>500 = very good&nbsp;</p></li>
+<li><p>1,000 or more = excellent</p></li>
+</ul></li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>My opinion: use cross-validation and see empirically</li>
+</ul>
+<aside class="notes">
+<p>So how much data should you have to do a factor analysis? Well, Gorsuch says at least five data points per variable. Cattell says at least three to six data points per variable, and so on and so forth.&nbsp;</p>
+<p><br>
+</p>
+<p>You know whenever you see wonderfully round numbers as guidelines, you should be just a little suspicious. It’s probably a magic number. And as far as I can tell, these were based on Gorsuch and Cattell and others’ personal experiences, which is good. You know you are taking this course, you’re getting suggestions and guidelines on things, it’s good to get peoples’ opinions on things, but it’s also important not to take it too too seriously.&nbsp;</p>
+<p><br>
+</p>
+<p>If you get good things out of a factor analysis with 99 data points or only four data points per variable, you know, if you get something useful, you’ve got something useful. If you get something that helps you think about your data, that’s good. If your factor analysis, leads to a better prediction model, then who cares?</p>
+<p><br>
+</p>
+<p>&nbsp;Use cross-validation and see empirically – see if it’s useful.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="ok-youve-done-a-factor-analysis-and-youve-got-scales" class="slide level2">
+<h2>OK you’ve done a factor analysis, and you’ve got scales</h2>
+<ul>
+<li>One more thing to do before you publish</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>Check internal reliability of scales</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>Cronbach’s α</li>
+</ul>
+</section>
+<section id="cronbachs-α" class="slide level2">
+<h2>Cronbach’s α</h2>
+<p><span class="math inline">\(\alpha = \frac{N·\overline{c}}{\overline{v}+(N-1)·\overline{c}}\)</span></p>
+<ul>
+<li><p>N = number of items</p></li>
+<li><p>C = average inter-item covariance (averaged at subject level)</p></li>
+<li><p>V = average variance (averaged at subject level)</p></li>
+</ul>
+<aside class="notes">
+<p>Alpha is the function of the items, the average covariance of those items, and the average variance overall.</p>
+<p>So when you do Cronbach’s alpha, it’ll give you an idea of how consistent each of your factors are internally. And this is important because if you want to do a questionnaire and you have and you want to publish your work, if you do not have Cronbach alphas, your reviewers will have some concerns and you may not be able to publish it. It gives you an idea of not just is there a factor, but how internally consistent is your factor.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="cronbachs-α-magic-numbers-mallery2005spss" class="slide level2">
+<h2>Cronbach’s α: magic numbers <span class="citation" data-cites="mallery2005spss">Mallery and George (<a href="#/reference" role="doc-biblioref" onclick="">2003</a>)</span></h2>
+<ul>
+<li><p>&gt; 0.9 Excellent</p></li>
+<li><p>0.8-0.9 Good</p></li>
+<li><p>0.7-0.8 Acceptable</p></li>
+<li><p>0.6-0.7 Questionable</p></li>
+<li><p>0.5-0.6 Poor</p></li>
+<li><p>&lt; 0.5 Unacceptable</p></li>
+</ul>
+<aside class="notes">
+<p>So here are some magic numbers for interpreting Cronbach’s alpha.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="factor-analysis-1" class="slide level2">
+<h2>Factor Analysis</h2>
+<ul>
+<li>A powerful tool for discovering unknown structure in data</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>Conceptually similar to clustering</li>
+</ul>
+<p><br>
+</p>
+<ul>
+<li>Finds an orthogonal type of structure</li>
+</ul>
+</section>
+<section id="next-module" class="slide level2">
+<h2>Next module</h2>
+<p>Q-Matrix</p>
+</section>
+<section id="reference" class="slide level2 smaller scrollable">
+<h2>Reference</h2>
+<a href="https://www.go.ncsu.edu/laser-institute">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-cattell1978scientific" class="csl-entry" role="listitem">
+Cattell, Raymond. 1978. <em>The Scientific Use of Factor Analysis in Behavioral and Life Sciences</em>. Springer Science &amp; Business Media.
+</div>
+<div id="ref-collins2001generalization" class="csl-entry" role="listitem">
+Collins, Michael, Sanjoy Dasgupta, and Robert E Schapire. 2001. <span>“A Generalization of Principal Components Analysis to the Exponential Family.”</span> <em>Advances in Neural Information Processing Systems</em> 14.
+</div>
+<div id="ref-comrey1992first" class="csl-entry" role="listitem">
+Comrey, Andrew L, and Howard B Lee. 1992. <em>A First Course in Factor Analysis</em>. Psychology press.
+</div>
+<div id="ref-Gorsuch1983FactorAnalysis" class="csl-entry" role="listitem">
+Gorsuch, Richard L. 1983. <em>Factor Analysis 2nd Edition</em>. Psychology Press.
+</div>
+<div id="ref-magidson2001latent" class="csl-entry" role="listitem">
+Magidson, Jay, and Jeroen K Vermunt. 2001. <span>“Latent Class Factor and Cluster Models, Bi-Plots, and Related Graphical Displays.”</span> <em>Sociological Methodology</em> 31 (1): 223–64.
+</div>
+<div id="ref-magidson2004latent" class="csl-entry" role="listitem">
+———. 2004. <span>“Latent Class Models.”</span> <em>The Sage Handbook of Quantitative Methodology for the Social Sciences</em>, 175–98.
+</div>
+<div id="ref-mallery2005spss" class="csl-entry" role="listitem">
+Mallery, Paul, and Darren George. 2003. <em>SPSS for Windows Step by Step: A Simple Guide and Reference 11.0 Update</em>. Boston, MA: Allyn &amp; Bacon.
+</div>
+</div>
+</a></section><a href="https://www.go.ncsu.edu/laser-institute">
+    </a></div><a href="https://www.go.ncsu.edu/laser-institute">
+  </a><div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="images/LASERLogoB.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p><a href="https://www.go.ncsu.edu/laser-institute">go.ncsu.edu/laser-institute</a></p><a href="https://www.go.ncsu.edu/laser-institute">
+</a></div><a href="https://www.go.ncsu.edu/laser-institute">
+</a></div></div><a href="https://www.go.ncsu.edu/laser-institute">
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="mod_5_Conceptual_Slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":false},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+
+        height: 1080,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 5.0e-2,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</a></body></html>

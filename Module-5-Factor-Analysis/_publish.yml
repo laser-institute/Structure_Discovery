@@ -6,3 +6,7 @@
   quarto-pub:
     - id: a1151893-8502-47d5-b36b-01636927ee9b
       url: https://laserkt.quarto.pub/module-5-case-review-activity-factor-analysis
+- source: mod_5_Conceptual_Slides.qmd
+  quarto-pub:
+    - id: c397c5f2-3401-4847-9c87-4c7d0dfc8835
+      url: https://ecloude.quarto.pub/module-5-structure-discovery

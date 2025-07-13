@@ -14,13 +14,7 @@ format:
     height: 1080
     margin: 0.05
     footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
-resources:
-  - demo.pdf
 bibliography: lit/references.bib
-editor: visual
-csl: apa/apa-6th-edition.csl
-title-slide-attributes: 
-  data-notes: 
 ---
 
 ## What is the Q-Matrix?
@@ -31,7 +25,7 @@ title-slide-attributes:
 
 -   And columns are skills
 
-    @tatsuoka1983rule @barnes2005practice
+-   @tatsuoka1983rule @barnes2005practice
 
 -   Also called a KC \[knowledge component\] Model
 
@@ -80,11 +74,7 @@ title-slide-attributes:
 ::: notes
 The initial way that people did this was a hill climbing based method that came from Barnes et al. But more common methods that have been used lately involve a method called “non-negative matrix factorization” which is mathematically intense and we will not go into those details. 
 
-\
-
 It’s worth noting, by the way, that you can actually combine these two methods. And Picones et al. provide a nice example of combining non-negative matrix factorization with hill climbing.
-
-\
 :::
 
 ## First question
@@ -105,8 +95,6 @@ It’s worth noting, by the way, that you can actually combine these two methods
 
 ::: notes
 So, the first question you ask yourself when doing this is, how many skills should we use? And this is determined empirically. First, we try one skill. Then we try one more skill than the previous model, then two, three, four and so on.
-
-\
 
 And we look, every time we add a new skill, at whether the new model fit the data better than the previous model. And if so, we go to the next step. However, if the model is not a better fit, then we quit and we use our best that we have so far.
 :::
@@ -139,10 +127,7 @@ In other words, when two items that involve the same skill, should be connected.
 
 ## Barnes et al.’s definition
 
--   Given a skill-item mapping, you can predict, for each combination of skills whether a student should get each item correct or not
-
-\
-
+-   Given a skill-item mapping, you can predict, for each combination of skills whether a student should get each item correct or not\
 -   A model’s degree of error is based on how many item-student pairs the prediction gets wrong
 
 ::: notes
@@ -168,9 +153,7 @@ However, you’re typically going to get better fit for having more possible ski
     -   Any relevant skill leads to getting an item right
 
 ::: notes
-Is the skill conjunctive? Which means, as in Barnes, if an item has multiple skills, you need every relevant skill to get an item right. If an item involves skills 1, 2, and 3, you need to have 1, 2, and 3 or you’re going to get it wrong.
-
-\
+Is the skill conjunctive? Which means, as in Barnes, if an item has multiple skills, you need every relevant skill to get an item right. If an item involves skills 1, 2, and 3, you need to have 1, 2, and 3 or you’re going to get it wrong.\
 
 Or is skill compensatory, as Pardo et al proposes, where having any relevant skill leads to getting an item right? In other words, if you have skill 1 or 2 or 3, any one of them, you’re going to get the item right.
 :::
@@ -191,7 +174,7 @@ So one thing that’s worth mentioning is that Barnes’ approach and non-negati
 
     -   No point to doing this with DKT-family, since they either skip or fit their own q-matrix!\
 
--   @liu2017going, @effenberger2020exploration, @picones2022combining Give examples\
+-   @liu2017going, @effenberger2020exploration, @picones2022combining give examples\
     \
 
 ::: notes
@@ -358,9 +341,5 @@ If you’ve got an item that has an error rate that’s much higher than what yo
 ::: notes
 So once you’ve built a skill out of mapping, the Data Shop can actually test how good it is for you. It applies a mathematical model call LFA, which is similar to PFA, to the data, and then gives you AIC and BIC goodness of fit measures for the different skill out of mappings you might have created.
 :::
-
-## Next Up
-
-Case Activity
 
 ## References
