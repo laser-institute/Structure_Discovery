@@ -31,7 +31,7 @@ By the end of this course, fellows will be able to:
 * [Badge Activity](https://laserkt.quarto.pub/module-2-badge-activity-094f/): A reflection activity to connect clusering to your own research or teaching practices.
 
 # Module 3: Clustering Validation  
-* [CConceptual Overview](https://laserkt.quarto.pub/module-3-clustering-validation-03d9/#/title-slide): Slides introducing key concepts in validating clustering results, including metrics like silhouette analysis.
+* [Conceptual Overview](https://ecloude.quarto.pub/module-3-structure-discovery/#/title-slide): Slides introducing key concepts in validating clustering results, including metrics like silhouette analysis and many others.
 
 * [Case Study/Essential Reading](https://github.com/laser-institute/Structure_Discovery/blob/master/Module-3-Clustering-Validation/lit/Case%20study_clustering.pdf): A key reading demonstrating how clustering validation techniques are applied in practice. In this code-along, you will gain an understanding of how to assess and interpret the quality of clustering solutions.
 
