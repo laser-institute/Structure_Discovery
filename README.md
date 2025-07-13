@@ -39,8 +39,8 @@ By the end of this course, fellows will be able to:
 
 * [Badge Activity](https://laserkt.quarto.pub/module-3-badge-activity-2b85/): A reflection activity to connect clustering validation to your own research or instructional practice.
 
-# Module 4: Advanced Clustering  
-* [Conceptual Overview](https://laserkt.quarto.pub/module-4-advanced-cluster-analysis-1b4f/#/title-slide): Slides introducing advanced clustering methods (e.g., hierarchical clustering) and their applications in educational data.
+# Module 4: Advanced Clustering Algorithms
+* [Conceptual Overview](https://ecloude.quarto.pub/module-4-structure-discovery/#/title-slide): Slides introducing advanced clustering methods (e.g., hierarchical clustering, spectral clustering, Gaussian mixture models, etc.) and their applications in educational data.
 
 * [Case Study/Essential Reading](): A key reading showcasing the use of advanced clustering techniques in educational research. This reading helps contextualize when and why to use more sophisticated models.
 
