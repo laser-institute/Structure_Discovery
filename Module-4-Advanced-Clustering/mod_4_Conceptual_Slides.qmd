@@ -1,6 +1,6 @@
 ---
-title: "Module 4: Advanced Cluster Analysis"
-subtitle: ""
+title: "Structure Discovery"
+subtitle: "Advanced Clustering Algorithms"
 format:
   revealjs: 
     slide-number: c/t
@@ -14,13 +14,7 @@ format:
     height: 1080
     margin: 0.05
     footer: <a href=https://www.go.ncsu.edu/laser-institute>go.ncsu.edu/laser-institute
-resources:
-  - demo.pdf
-bibliography: lit/references.bib
-editor: visual
-csl: apa/apa-6th-edition.csl
-title-slide-attributes: 
-  data-notes: 
+bibliography: references.bib
 ---
 
 ## Today…
@@ -31,7 +25,7 @@ title-slide-attributes:
 A lot of algorithms behind k-means
 :::
 
-##  Gaussian Mixture Models
+## Gaussian Mixture Models
 
 -   Often called EM-based clustering
 
@@ -47,7 +41,7 @@ A lot of algorithms behind k-means
 
 -   I’ll use the terminology Andrew Moore uses, but note that it’s frequently called EM these days
 
-## Gaussian Mixture Models  
+## Gaussian Mixture Models
 
 A centroid **and** a radius\
 
@@ -72,7 +66,7 @@ A flaw in k-means is that it does not handle outliers well.
 
 ## Example
 
-![](images/clipboard-1955655578.png)
+![](images/clipboard-1955655578.png){fig-align="center" width="1400"}
 
 ## Nifty Subtlety
 
@@ -82,9 +76,9 @@ A flaw in k-means is that it does not handle outliers well.
 
 -   Used during model calculation
 
-##  Example
+## Example
 
-![](images/clipboard-2360860354.png)
+![](images/clipboard-2360860354.png){fig-align="center" width="1400"}
 
 ::: notes
 For example, this point right here at the top is mathematically closer to the red cluster, but it is outside of that radius threshold, so it is treating it as an outlier.
@@ -128,7 +122,7 @@ And it assesses each point’s probability, given the set of clusters, and adds 
 
 ## For Instance....
 
-![](images/clipboard-419327094.png)
+![](images/clipboard-419327094.png){fig-align="center" width="1400"}
 
 ::: notes
 These are very slikely points because they are very close to a centroid, while the ones farther from the centroid are more unlikely points since it does not fit this clustering scheme. 
@@ -160,7 +154,7 @@ Another advanced method is spectral clustering.
 
 ## Spectral Clustering
 
-![](images/clipboard-2119975957.png)
+![](images/clipboard-2119975957.png){fig-align="center" width="1400"}
 
 ::: notes
 And here we see an example of spectral clustering.
@@ -190,13 +184,17 @@ So why would you want to do spectral clustering? It is because it allows you to 
 
 -   Clusters can contain sub-clusters
 
-## Example  ![](https://lh7-rt.googleusercontent.com/slidesz/AGV_vUcIYFSxu_fiDj3chpKxrb4u50Hr3zJzM-CPI9-f0gKCOMWR4v8oYEhUPZS66Obxr5m8a1c_FrwTBXlriMLCpuuD2tuBYCeMuoboznAPmUWs1Hqp0XxVUfo_o626zwjmYvD3U0XnHE-4T70qfVc8-NE=s2048?key=kEH-rc39vkHwJZiev6tvTx1p)  
+## Example 
+
+![](images/exercise.mod.4.jpg){fig-align="center" width="1452"}
 
 ::: notes
 So let’s take this previous example. We have these two overall clusters, but then there are more clusters within each the bigger clusters. So this will allow you to see the structure within your cluster.
 :::
 
-##  Dendrogram  ![](images/clipboard-212659515.png)
+## Dendrogram 
+
+![](images/clipboard-212659515.png){fig-align="center" width="1452"}
 
 ::: notes
 Another way you can look at your clusters is by using a dendrogram. Where you can see that each cluster is broken into subclusters.
@@ -229,7 +227,7 @@ You repeatedly try to find the best way to combine multiple clusters, whether th
     -   If point does not fit well with existing clusters, creates a new cluster
 
 ::: notes
-It just repeates that iteratively until all points are a cluster, or outliers. 
+It just repeats that iteratively until all points are a cluster, or outliers. 
 :::
 
 ## Sequence clustering

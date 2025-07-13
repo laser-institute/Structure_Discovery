@@ -10,3 +10,7 @@
   quarto-pub:
     - id: 9d6d508d-5887-4a6a-a9df-ca93e1def416
       url: https://laserkt.quarto.pub/module-2-badge-activity
+- source: mod_2_Conceptual_Slides.qmd
+  quarto-pub:
+    - id: 9b6fade0-18ad-4316-9566-cc0c33ab969d
+      url: https://ecloude.quarto.pub/module-2-structure-discovery

@@ -10,3 +10,7 @@
   quarto-pub:
     - id: 88c78924-55e4-4551-9f42-aa9b742133a1
       url: https://laserkt.quarto.pub/module-3-case-review-activity-clustering-validation
+- source: mod_3_Conceptual_Slides.qmd
+  quarto-pub:
+    - id: ed908a21-d593-4098-8ec0-3f5e0cba1c6d
+      url: https://ecloude.quarto.pub/module_3_structure-discovery

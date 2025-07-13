@@ -10,3 +10,7 @@
   quarto-pub:
     - id: b227116d-92bf-4f46-b659-adf1812e608e
       url: https://laserkt.quarto.pub/module-4-advanced-cluster-analysis
+- source: mod_4_Conceptual_Slides.qmd
+  quarto-pub:
+    - id: 185c9adb-3281-4fe1-9c3f-33c997d0df85
+      url: https://ecloude.quarto.pub/module-4-structure-discovery
