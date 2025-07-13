@@ -49,7 +49,7 @@ By the end of this course, fellows will be able to:
 * [Badge Activity](https://laserkt.quarto.pub/module-4-badge-activity-27bc/): A reflective activity to connect advanced clustering approaches to your own research or teaching.
 
 # Module 5: Factor Analysis  
-* [Conceptual Overview](https://laserkt.quarto.pub/module-5-factor-analysis/#/title-slide): Slides introducing factor analysis, including exploratory and confirmatory approaches, latent constructs, and their role in measuring psychological and educational variables.
+* [Conceptual Overview](https://ecloude.quarto.pub/module-5-structure-discovery/#/title-slide): Slides introducing factor analysis, including exploratory and confirmatory approaches, latent constructs, and their role in measuring psychological and educational variables.
 
 * [Case Study/Essential Reading](https://github.com/laser-institute/Structure_Discovery/blob/master/Module-5-Factor-Analysis/lit/Application%20of%20Exploratory%20Structural%20Equation%20Modeling%20to%20Evaluate%20the%20Academic%20Motivation%20Scale%20(1)%20(2).pdf): A foundational reading applying exploratory structural equation modeling (ESEM) to assess academic motivation. Illustrates how factor models are evaluated and interpreted in practice.
 
@@ -58,7 +58,7 @@ By the end of this course, fellows will be able to:
 * [Badge Activity](https://laserkt.quarto.pub/module-5-badge-activity-e182/): A reflective task to connect factor analysis to your teaching or research.
 
 # Module 6: Q-Matrix  
-* [Conceptual Overview](https://laserkt.quarto.pub/module-6-q-matrix/#/title-slide): Slides introducing Q-matrix analysis, and how skills or attributes are mapped to items in assessments.
+* [Conceptual Overview](https://ecloude.quarto.pub/module-6-structure-discovery/#/title-slide): Slides introducing Q-matrix analysis, and how skills or attributes are mapped to items in assessments.
 
 * [Case Study/Essential Reading](https://github.com/laser-institute/Structure_Discovery/blob/master/Module-6-Q-Matrix/lit/WS05-02-006.pdf): A key reading outlining how Q-matrices are constructed and validated in educational research.
 
